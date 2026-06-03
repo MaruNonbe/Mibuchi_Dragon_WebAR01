@@ -13,6 +13,8 @@ Mibuchi_Dragon_WebAR/
    ├─ dragon_web.usdz
    ├─ dragon_web_sky.glb
    ├─ dragon_web_sky.usdz
+   ├─ dragon_web_flight.glb
+   ├─ dragon_web_flight.usdz
    ├─ audio/
    │  ├─ dragon_flight.mp3
    │  └─ dragon_flight.wav
@@ -64,6 +66,32 @@ ar-scale="fixed"
 - GLB animation: `Idle_S_Curve_Loop`, `Scene`
 - USDZ animation: `SkelAnimation` あり
 - USDZ rotations time samples: 97
+
+## 飛行ルート版
+
+現在の `index.html` は飛行ルート版を参照します。
+
+```html
+src="assets/dragon_web_flight.glb"
+ios-src="assets/dragon_web_flight.usdz"
+ar-placement="floor"
+ar-scale="fixed"
+animation-name="Flight_Loop_12s"
+```
+
+飛行ルート版の内容:
+
+- animation: `Flight_Loop_12s`
+- duration: 12秒
+- frame range: 0-288
+- fps: 24
+- 高さ: 約2.88m〜3.82m
+- 横幅: 約5.2m
+- 奥行き: 約3.4m
+- 床面付近: `FlightFloorShadowAnchor` の薄い影
+- 龍本体: 空中を楕円状に旋回し、前方上空を横切って戻る
+- spine_00〜spine_11、head、tail_tipのうねりを同じアニメーション内に焼き込み
+- USDZ: `SkelAnimation` あり、root translate/rotate と bone rotations に289サンプル
 
 ## iOS Safari
 

@@ -154,5 +154,83 @@
       }
     ],
     "usdzAnimationExists": true
+  },
+  {
+    "usdzPath": "C:\\Users\\user\\Documents\\ARDragon\\ARDragon\\Mibuchi_Dragon_WebAR01\\assets\\dragon_web_flight.usdz",
+    "startTimeCode": 0.0,
+    "endTimeCode": 288.0,
+    "framesPerSecond": 24.0,
+    "timeCodesPerSecond": 24.0,
+    "primTypes": {
+      "Xform": 5,
+      "SkelRoot": 1,
+      "Skeleton": 1,
+      "SkelAnimation": 1,
+      "Mesh": 4,
+      "Scope": 1,
+      "Material": 2,
+      "Shader": 2,
+      "DomeLight": 1
+    },
+    "timeSampledAttributeCount": 7,
+    "timeSampledAttributes": [
+      {
+        "prim": "/DragonFlight/ARDragonArmature",
+        "type": "SkelRoot",
+        "attribute": "xformOp:rotateXYZ",
+        "sampleCount": 289,
+        "firstSample": 0.0,
+        "lastSample": 288.0
+      },
+      {
+        "prim": "/DragonFlight/ARDragonArmature",
+        "type": "SkelRoot",
+        "attribute": "xformOp:scale",
+        "sampleCount": 1,
+        "firstSample": 0.0,
+        "lastSample": 0.0
+      },
+      {
+        "prim": "/DragonFlight/ARDragonArmature",
+        "type": "SkelRoot",
+        "attribute": "xformOp:translate",
+        "sampleCount": 289,
+        "firstSample": 0.0,
+        "lastSample": 288.0
+      },
+      {
+        "prim": "/DragonFlight/ARDragonArmature/ARDragonArmature/Flight_Loop_12s",
+        "type": "SkelAnimation",
+        "attribute": "rotations",
+        "sampleCount": 289,
+        "firstSample": 0.0,
+        "lastSample": 288.0
+      },
+      {
+        "prim": "/DragonFlight/ARDragonArmature/Head_Static",
+        "type": "Xform",
+        "attribute": "xformOp:rotateXYZ",
+        "sampleCount": 289,
+        "firstSample": 0.0,
+        "lastSample": 288.0
+      },
+      {
+        "prim": "/DragonFlight/ARDragonArmature/Head_Static",
+        "type": "Xform",
+        "attribute": "xformOp:scale",
+        "sampleCount": 1,
+        "firstSample": 0.0,
+        "lastSample": 0.0
+      },
+      {
+        "prim": "/DragonFlight/ARDragonArmature/Head_Static",
+        "type": "Xform",
+        "attribute": "xformOp:translate",
+        "sampleCount": 289,
+        "firstSample": 0.0,
+        "lastSample": 288.0
+      }
+    ],
+    "usdzAnimationExists": true
   }
 ]

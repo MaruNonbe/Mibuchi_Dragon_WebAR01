@@ -154,8 +154,8 @@
   <main>
     <model-viewer
       id="dragonViewer"
-      src="assets/dragon_web_sky.glb"
-      ios-src="assets/dragon_web_sky.usdz"
+      src="assets/dragon_web_flight.glb"
+      ios-src="assets/dragon_web_flight.usdz"
       poster="assets/images/thumbnail.jpg"
       alt="三淵渓谷の龍モデル"
       ar
@@ -165,7 +165,7 @@
       camera-controls
       touch-action="pan-y"
       autoplay
-      animation-name="Idle_S_Curve_Loop"
+      animation-name="Flight_Loop_12s"
       auto-rotate
       auto-rotate-delay="1200"
       rotation-per-second="18deg"
@@ -207,7 +207,7 @@
     const status = document.querySelector("#status");
     const audio = document.querySelector("#dragonAudio");
     const audioButton = document.querySelector("#audioButton");
-    const preferredAnimation = "Idle_S_Curve_Loop";
+    const preferredAnimation = "Flight_Loop_12s";
 
     viewer.addEventListener("load", async () => {
       const animations = viewer.availableAnimations || [];
@@ -231,7 +231,7 @@
     });
 
     viewer.addEventListener("error", () => {
-      status.textContent = "dragon_web_sky.glb / dragon_web_sky.usdz を assets フォルダーに配置してください。";
+      status.textContent = "dragon_web_flight.glb / dragon_web_flight.usdz を assets フォルダーに配置してください。";
     });
 
     viewer.addEventListener("ar-status", (event) => {
