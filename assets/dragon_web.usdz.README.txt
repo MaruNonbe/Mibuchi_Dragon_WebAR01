@@ -1,0 +1,4 @@
+assets/dragon_web.usdz is present for iOS Quick Look.
+
+Note: the new GLB animation was added to assets/dragon_web.glb.
+Regenerate this USDZ from the animated GLB if animated Quick Look playback is required.

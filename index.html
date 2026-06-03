@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#082223">
+  <meta name="description" content="三淵渓谷の龍伝説をスマートフォンブラウザで体験するWebARプレビュー">
+  <meta property="og:title" content="Mibuchi Dragon WebAR">
+  <meta property="og:description" content="iPhone Safari / Android Chrome対応の龍ARプレビュー">
+  <meta property="og:image" content="assets/images/thumbnail.jpg">
+  <title>Mibuchi Dragon WebAR</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #061a1c;
+      --panel: rgba(9, 35, 37, 0.78);
+      --line: rgba(174, 229, 216, 0.22);
+      --text: #edf8f4;
+      --muted: #aac8c0;
+      --accent: #66d9be;
+      --accent-strong: #d9fff4;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, rgba(6, 26, 28, 0.72), rgba(6, 26, 28, 0.95)),
+        url("assets/images/thumbnail.jpg") center / cover no-repeat;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    main {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      min-height: 58vh;
+      background: transparent;
+      --poster-color: transparent;
+      --progress-bar-color: var(--accent);
+      --progress-mask: rgba(6, 26, 28, 0.45);
+    }
+
+    .hud {
+      position: fixed;
+      inset: auto 0 0 0;
+      padding: 18px max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+      background: linear-gradient(180deg, transparent, rgba(4, 14, 15, 0.72) 18%, rgba(4, 14, 15, 0.94));
+      pointer-events: none;
+    }
+
+    .hud-inner {
+      display: grid;
+      gap: 14px;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border-radius: 8px;
+      pointer-events: auto;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 5vw, 44px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button,
+    a.action {
+      appearance: none;
+      border: 1px solid rgba(217, 255, 244, 0.3);
+      border-radius: 8px;
+      background: rgba(102, 217, 190, 0.13);
+      color: var(--accent-strong);
+      min-height: 44px;
+      padding: 0 14px;
+      font: inherit;
+      font-weight: 650;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    button:hover,
+    a.action:hover {
+      background: rgba(102, 217, 190, 0.22);
+    }
+
+    .status {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .ar-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(217, 255, 244, 0.46);
+      background: #e8fff7;
+      color: #062123;
+      font-weight: 750;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+    }
+
+    .unsupported {
+      display: none;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 212, 116, 0.34);
+      border-radius: 8px;
+      color: #ffe4a8;
+      background: rgba(70, 47, 0, 0.28);
+      font-size: 13px;
+    }
+
+    model-viewer[ar-status="failed"] + .hud .unsupported {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <model-viewer
+      id="dragonViewer"
+      src="assets/dragon_web.glb"
+      ios-src="assets/dragon_web.usdz"
+      poster="assets/images/thumbnail.jpg"
+      alt="三淵渓谷の龍モデル"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      camera-controls
+      touch-action="pan-y"
+      autoplay
+      animation-name="Idle_S_Curve_Loop"
+      auto-rotate
+      auto-rotate-delay="1200"
+      rotation-per-second="18deg"
+      shadow-intensity="0.7"
+      shadow-softness="0.55"
+      exposure="1.05"
+      environment-image="neutral"
+      camera-orbit="35deg 68deg 8m"
+      min-camera-orbit="auto auto 3m"
+      max-camera-orbit="auto auto 18m"
+      field-of-view="35deg"
+      reveal="auto">
+      <button slot="ar-button" class="ar-button">ARで龍を見る</button>
+    </model-viewer>
+
+    <section class="hud" aria-label="三淵渓谷 龍 WebAR">
+      <div class="hud-inner">
+        <div>
+          <h1>三淵渓谷 龍 WebAR</h1>
+          <p>スマートフォンで龍モデルを表示し、ARボタンから現実空間に配置できます。iPhoneはSafari、AndroidはChromeで開いてください。</p>
+        </div>
+        <div class="unsupported">AR表示を開始できませんでした。HTTPSで公開されているか、端末がAR表示に対応しているか確認してください。</div>
+        <div class="actions">
+          <button id="audioButton" type="button">飛行音を再生</button>
+          <a class="action" href="assets/dragon_web.glb" download>GLBを確認</a>
+        </div>
+        <div id="status" class="status">3Dモデルを読み込み中です。</div>
+      </div>
+    </section>
+  </main>
+
+  <audio id="dragonAudio" preload="none" loop>
+    <source src="assets/audio/dragon_flight.mp3" type="audio/mpeg">
+    <source src="assets/audio/dragon_flight.wav" type="audio/wav">
+  </audio>
+
+  <script>
+    const viewer = document.querySelector("#dragonViewer");
+    const status = document.querySelector("#status");
+    const audio = document.querySelector("#dragonAudio");
+    const audioButton = document.querySelector("#audioButton");
+    const preferredAnimation = "Idle_S_Curve_Loop";
+
+    viewer.addEventListener("load", async () => {
+      const animations = viewer.availableAnimations || [];
+      console.log("[WEBAR_ANIMATIONS]", animations);
+
+      if (animations.includes(preferredAnimation)) {
+        viewer.animationName = preferredAnimation;
+        await viewer.play({ repetitions: Infinity });
+        status.textContent = `3D表示の準備ができました。再生中: ${preferredAnimation}`;
+        return;
+      }
+
+      if (animations.length > 0) {
+        viewer.animationName = animations[0];
+        await viewer.play({ repetitions: Infinity });
+        status.textContent = `3D表示の準備ができました。再生中: ${animations[0]}`;
+        return;
+      }
+
+      status.textContent = "3D表示の準備ができました。GLB内に再生可能なアニメーションが見つかりません。";
+    });
+
+    viewer.addEventListener("error", () => {
+      status.textContent = "dragon_web.glb / dragon_web.usdz を assets フォルダーに配置してください。";
+    });
+
+    viewer.addEventListener("ar-status", (event) => {
+      if (event.detail.status === "session-started") {
+        status.textContent = "AR表示中です。周囲の安全を確認して体験してください。";
+      }
+    });
+
+    audioButton.addEventListener("click", async () => {
+      try {
+        if (audio.paused) {
+          await audio.play();
+          audioButton.textContent = "飛行音を停止";
+          status.textContent = "飛行音を再生しています。";
+        } else {
+          audio.pause();
+          audioButton.textContent = "飛行音を再生";
+          status.textContent = "飛行音を停止しました。";
+        }
+      } catch (error) {
+        status.textContent = "音声ファイルを確認してください。dragon_flight.mp3 または dragon_flight.wav が必要です。";
+      }
+    });
+  </script>
+</body>
+</html>

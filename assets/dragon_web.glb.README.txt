@@ -1,0 +1,4 @@
+assets/dragon_web.glb is present.
+
+It contains the original Scene animation plus the WebAR test loop:
+Idle_S_Curve_Loop
