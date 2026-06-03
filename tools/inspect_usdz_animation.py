@@ -5,12 +5,12 @@ from pxr import Usd
 
 
 PROJECT_ROOT = r"C:\Users\user\Documents\ARDragon\ARDragon\Mibuchi_Dragon_WebAR01"
-USDZ_PATH = os.path.join(PROJECT_ROOT, "assets", "dragon_web.usdz")
-REPORT_PATH = os.path.join(PROJECT_ROOT, "assets", "backup", "webar_usdz_anim_inspect.json")
+ASSETS_DIR = os.path.join(PROJECT_ROOT, "assets")
+REPORT_PATH = os.path.join(ASSETS_DIR, "backup", "webar_usdz_anim_inspect.json")
 
 
-def main():
-    stage = Usd.Stage.Open(USDZ_PATH)
+def inspect_usdz(usdz_path):
+    stage = Usd.Stage.Open(usdz_path)
     time_sampled_attrs = []
     prim_types = {}
 
@@ -31,8 +31,8 @@ def main():
                     }
                 )
 
-    report = {
-        "usdzPath": USDZ_PATH,
+    return {
+        "usdzPath": usdz_path,
         "startTimeCode": float(stage.GetStartTimeCode()),
         "endTimeCode": float(stage.GetEndTimeCode()),
         "framesPerSecond": float(stage.GetFramesPerSecond()),
@@ -43,11 +43,21 @@ def main():
         "usdzAnimationExists": len(time_sampled_attrs) > 0,
     }
 
-    with open(REPORT_PATH, "w", encoding="utf-8") as f:
-        json.dump(report, f, ensure_ascii=False, indent=2)
 
-    print("[WEBAR_ANIM_CHECK] usdzAnimationExists=" + str(report["usdzAnimationExists"]))
-    print("[WEBAR_USDZ_ANIM_INSPECT]" + json.dumps(report, ensure_ascii=False))
+def main():
+    reports = []
+    for name in ("dragon_web.usdz", "dragon_web_sky.usdz"):
+        usdz_path = os.path.join(ASSETS_DIR, name)
+        if os.path.exists(usdz_path):
+            reports.append(inspect_usdz(usdz_path))
+
+    with open(REPORT_PATH, "w", encoding="utf-8") as f:
+        json.dump(reports, f, ensure_ascii=False, indent=2)
+
+    for report in reports:
+        print("[WEBAR_ANIM_CHECK] usdzPath=" + report["usdzPath"])
+        print("[WEBAR_ANIM_CHECK] usdzAnimationExists=" + str(report["usdzAnimationExists"]))
+        print("[WEBAR_USDZ_ANIM_INSPECT]" + json.dumps(report, ensure_ascii=False))
 
 
 if __name__ == "__main__":

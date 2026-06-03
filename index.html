@@ -154,12 +154,14 @@
   <main>
     <model-viewer
       id="dragonViewer"
-      src="assets/dragon_web.glb"
-      ios-src="assets/dragon_web.usdz"
+      src="assets/dragon_web_sky.glb"
+      ios-src="assets/dragon_web_sky.usdz"
       poster="assets/images/thumbnail.jpg"
       alt="三淵渓谷の龍モデル"
       ar
       ar-modes="webxr scene-viewer quick-look"
+      ar-placement="floor"
+      ar-scale="fixed"
       camera-controls
       touch-action="pan-y"
       autoplay
@@ -229,7 +231,7 @@
     });
 
     viewer.addEventListener("error", () => {
-      status.textContent = "dragon_web.glb / dragon_web.usdz を assets フォルダーに配置してください。";
+      status.textContent = "dragon_web_sky.glb / dragon_web_sky.usdz を assets フォルダーに配置してください。";
     });
 
     viewer.addEventListener("ar-status", (event) => {

@@ -11,6 +11,8 @@ Mibuchi_Dragon_WebAR/
 └─ assets/
    ├─ dragon_web.glb
    ├─ dragon_web.usdz
+   ├─ dragon_web_sky.glb
+   ├─ dragon_web_sky.usdz
    ├─ audio/
    │  ├─ dragon_flight.mp3
    │  └─ dragon_flight.wav
@@ -41,6 +43,27 @@ WebAR表示で確実に動きが分かるように、`assets/dragon_web.glb` に
 ```text
 [WEBAR_ANIMATIONS] ["Scene", "Idle_S_Curve_Loop"]
 ```
+
+## 空中表示版
+
+ARビューアは床面にモデルを配置するため、空中表示版ではモデル内部で龍本体を上方向へ移動しています。
+
+現在の `index.html` は以下を参照します。
+
+```html
+src="assets/dragon_web_sky.glb"
+ios-src="assets/dragon_web_sky.usdz"
+ar-placement="floor"
+ar-scale="fixed"
+```
+
+空中表示版の内容:
+
+- 龍本体の高さ: 3.2m
+- 床面付近: `FloorShadowAnchor` の薄い影
+- GLB animation: `Idle_S_Curve_Loop`, `Scene`
+- USDZ animation: `SkelAnimation` あり
+- USDZ rotations time samples: 97
 
 ## iOS Safari
 
