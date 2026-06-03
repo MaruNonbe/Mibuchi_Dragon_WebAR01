@@ -1,0 +1,34 @@
+{
+  "glbPath": "C:\\Users\\user\\Documents\\ARDragon\\ARDragon\\Mibuchi_Dragon_WebAR01\\assets\\dragon_web.glb",
+  "usdzPath": "C:\\Users\\user\\Documents\\ARDragon\\ARDragon\\Mibuchi_Dragon_WebAR01\\assets\\dragon_web.usdz",
+  "backupPath": "C:\\Users\\user\\Documents\\ARDragon\\ARDragon\\Mibuchi_Dragon_WebAR01\\assets\\backup\\dragon_web_static.usdz",
+  "preferredAction": "Idle_S_Curve_Loop",
+  "actions": [
+    "Idle_S_Curve_Loop",
+    "Scene"
+  ],
+  "selectedAction": "Idle_S_Curve_Loop",
+  "frameStart": 0,
+  "frameEnd": 96,
+  "fps": 24,
+  "armatures": [
+    "ARDragonArmature"
+  ],
+  "skinnedMeshes": [
+    "Body_Skinned",
+    "Tail_Skinned"
+  ],
+  "usdzEntries": [
+    {
+      "name": "dragon_web.usdc",
+      "compressedSize": 17109244,
+      "fileSize": 17109244
+    },
+    {
+      "name": "textures/color_0C0C0C.exr",
+      "compressedSize": 461,
+      "fileSize": 461
+    }
+  ],
+  "usdzRebuilt": true
+}

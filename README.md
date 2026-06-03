@@ -49,7 +49,16 @@ WebAR表示で確実に動きが分かるように、`assets/dragon_web.glb` に
 3. ページ上の3D表示では `dragon_web.glb` のアニメーションを確認できます。
 4. `ARで龍を見る` を押すと、Quick Lookで `dragon_web.usdz` が開きます。
 
-注意: iOSのAR Quick Lookは `dragon_web.usdz` を使います。今回追加したGLB内アニメーションをAR Quick Lookにも反映するには、アニメーション付きGLBからUSDZを再生成してください。
+注意: iOSのAR Quick Lookは `dragon_web.usdz` を使います。現在の `assets/dragon_web.usdz` は、Blender 5.0で `assets/dragon_web.glb` の `Idle_S_Curve_Loop` を選択して再生成したアニメーション付きUSDZです。
+
+USDZ検査結果:
+
+- `SkelRoot`: 1
+- `Skeleton`: 1
+- `SkelAnimation`: 1
+- `rotations` time samples: 97
+- frame range: 0-96
+- fps: 24
 
 ## Android Chrome
 

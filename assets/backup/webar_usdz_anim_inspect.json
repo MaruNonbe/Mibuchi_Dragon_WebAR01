@@ -1,0 +1,78 @@
+{
+  "usdzPath": "C:\\Users\\user\\Documents\\ARDragon\\ARDragon\\Mibuchi_Dragon_WebAR01\\assets\\dragon_web.usdz",
+  "startTimeCode": 0.0,
+  "endTimeCode": 96.0,
+  "framesPerSecond": 24.0,
+  "timeCodesPerSecond": 24.0,
+  "primTypes": {
+    "Xform": 4,
+    "SkelRoot": 1,
+    "Skeleton": 1,
+    "SkelAnimation": 1,
+    "Mesh": 3,
+    "Scope": 1,
+    "Material": 1,
+    "Shader": 1,
+    "DomeLight": 1
+  },
+  "timeSampledAttributeCount": 7,
+  "timeSampledAttributes": [
+    {
+      "prim": "/Dragon/ARDragonArmature",
+      "type": "SkelRoot",
+      "attribute": "xformOp:rotateXYZ",
+      "sampleCount": 1,
+      "firstSample": 0.0,
+      "lastSample": 0.0
+    },
+    {
+      "prim": "/Dragon/ARDragonArmature",
+      "type": "SkelRoot",
+      "attribute": "xformOp:scale",
+      "sampleCount": 1,
+      "firstSample": 0.0,
+      "lastSample": 0.0
+    },
+    {
+      "prim": "/Dragon/ARDragonArmature",
+      "type": "SkelRoot",
+      "attribute": "xformOp:translate",
+      "sampleCount": 1,
+      "firstSample": 0.0,
+      "lastSample": 0.0
+    },
+    {
+      "prim": "/Dragon/ARDragonArmature/ARDragonArmature/Idle_S_Curve_Loop",
+      "type": "SkelAnimation",
+      "attribute": "rotations",
+      "sampleCount": 97,
+      "firstSample": 0.0,
+      "lastSample": 96.0
+    },
+    {
+      "prim": "/Dragon/ARDragonArmature/Head_Static",
+      "type": "Xform",
+      "attribute": "xformOp:rotateXYZ",
+      "sampleCount": 97,
+      "firstSample": 0.0,
+      "lastSample": 96.0
+    },
+    {
+      "prim": "/Dragon/ARDragonArmature/Head_Static",
+      "type": "Xform",
+      "attribute": "xformOp:scale",
+      "sampleCount": 1,
+      "firstSample": 0.0,
+      "lastSample": 0.0
+    },
+    {
+      "prim": "/Dragon/ARDragonArmature/Head_Static",
+      "type": "Xform",
+      "attribute": "xformOp:translate",
+      "sampleCount": 97,
+      "firstSample": 0.0,
+      "lastSample": 96.0
+    }
+  ],
+  "usdzAnimationExists": true
+}
