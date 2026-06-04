@@ -108,8 +108,13 @@ ios-src="assets/dragon_web_giant_approach.usdz"
 
 - iPhone AR Quick Look: `dragon_web_giant_approach.usdz`
 - Android / ページ内3D: `dragon_web_giant_approach.glb`
-- `dragon_web_giant_approach.glb` は `dragon_web_giant_approach.usdz` からBlenderで生成
-- 現時点では巨大龍版にBlenderで読めるActionはありません
+- animation: `Giant_Approach_Overhead_Circle`
+- duration: 16秒
+- scale: 2.8倍
+- start: 遠方約15m、高さ約6.2m
+- overhead: 前方上空約4.15m、最短距離約4.35m
+- finish: 上空約7mで旋回
+- ひげ離れ対策: head / spine / whisker ボーンは個別回転させず、Armature全体のルート移動で飛行
 - 飛行アニメーション付きモデルは `飛行する龍` ボタンで選択
 
 ## iOS Safari

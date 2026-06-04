@@ -1,0 +1,31 @@
+{
+  "sourceGlb": "C:\\Users\\user\\Documents\\ARDragon\\ARDragon\\Mibuchi_Dragon_WebAR01\\assets\\dragon_web.glb",
+  "outputGlb": "C:\\Users\\user\\Documents\\ARDragon\\ARDragon\\Mibuchi_Dragon_WebAR01\\assets\\dragon_web_giant_approach.glb",
+  "outputUsdz": "C:\\Users\\user\\Documents\\ARDragon\\ARDragon\\Mibuchi_Dragon_WebAR01\\assets\\dragon_web_giant_approach.usdz",
+  "actionName": "Giant_Approach_Overhead_Circle",
+  "outputGlbCreated": true,
+  "outputUsdzCreated": true,
+  "outputGlbBytes": 9687272,
+  "outputUsdzBytes": 17102299,
+  "durationSeconds": 16.0,
+  "giantScale": 2.8,
+  "startPosition": [
+    -4.800000190734863,
+    -15.0,
+    6.199999809265137
+  ],
+  "overheadPosition": [
+    0.0,
+    -1.350000023841858,
+    4.150000095367432
+  ],
+  "circleCenterApprox": [
+    0.0,
+    4.2,
+    7.0
+  ],
+  "heightMin": 4.1500163078308105,
+  "heightMax": 7.449822425842285,
+  "minDistanceToViewer": 4.346141892796019,
+  "whiskerFix": "No head/spine/whisker bone animation; route is applied to ARDragonArmature root only."
+}
