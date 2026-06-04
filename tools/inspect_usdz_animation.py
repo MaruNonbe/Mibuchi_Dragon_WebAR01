@@ -46,7 +46,7 @@ def inspect_usdz(usdz_path):
 
 def main():
     reports = []
-    for name in ("dragon_web.usdz", "dragon_web_sky.usdz", "dragon_web_flight.usdz"):
+    for name in ("dragon_web.usdz", "dragon_web_sky.usdz", "dragon_web_flight.usdz", "dragon_web_giant_approach.usdz"):
         usdz_path = os.path.join(ASSETS_DIR, name)
         if os.path.exists(usdz_path):
             reports.append(inspect_usdz(usdz_path))

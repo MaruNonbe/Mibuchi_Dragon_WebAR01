@@ -1,0 +1,18 @@
+{
+  "sourceUsdz": "C:\\Users\\user\\Documents\\ARDragon\\ARDragon\\Mibuchi_Dragon_WebAR01\\assets\\dragon_web_giant_approach.usdz",
+  "outputGlb": "C:\\Users\\user\\Documents\\ARDragon\\ARDragon\\Mibuchi_Dragon_WebAR01\\assets\\dragon_web_giant_approach.glb",
+  "sourceUsdzExists": true,
+  "outputGlbCreated": true,
+  "outputGlbBytes": 9628432,
+  "actions": [],
+  "armatures": [
+    "ARDragonArmature"
+  ],
+  "meshes": [
+    "Mesh_0_009",
+    "Mesh_0_010",
+    "Mesh_0_011"
+  ],
+  "frameStart": 0,
+  "frameEnd": 0
+}

@@ -15,6 +15,8 @@ Mibuchi_Dragon_WebAR/
    ├─ dragon_web_sky.usdz
    ├─ dragon_web_flight.glb
    ├─ dragon_web_flight.usdz
+   ├─ dragon_web_giant_approach.glb
+   ├─ dragon_web_giant_approach.usdz
    ├─ audio/
    │  ├─ dragon_flight.mp3
    │  └─ dragon_flight.wav
@@ -69,7 +71,7 @@ ar-scale="fixed"
 
 ## 飛行ルート版
 
-現在の `index.html` は飛行ルート版を参照します。
+現在の `index.html` は、ページ上のボタンで飛行ルート版と巨大龍版を切り替えられます。
 
 ```html
 src="assets/dragon_web_flight.glb"
@@ -92,6 +94,23 @@ animation-name="Flight_Loop_12s"
 - 龍本体: 空中を楕円状に旋回し、前方上空を横切って戻る
 - spine_00〜spine_11、head、tail_tipのうねりを同じアニメーション内に焼き込み
 - USDZ: `SkelAnimation` あり、root translate/rotate と bone rotations に289サンプル
+
+## 巨大龍版
+
+`巨大な龍` ボタンを押すと、以下のモデルへ切り替わります。
+
+```html
+src="assets/dragon_web_giant_approach.glb"
+ios-src="assets/dragon_web_giant_approach.usdz"
+```
+
+巨大龍版の内容:
+
+- iPhone AR Quick Look: `dragon_web_giant_approach.usdz`
+- Android / ページ内3D: `dragon_web_giant_approach.glb`
+- `dragon_web_giant_approach.glb` は `dragon_web_giant_approach.usdz` からBlenderで生成
+- 現時点では巨大龍版にBlenderで読めるActionはありません
+- 飛行アニメーション付きモデルは `飛行する龍` ボタンで選択
 
 ## iOS Safari
 

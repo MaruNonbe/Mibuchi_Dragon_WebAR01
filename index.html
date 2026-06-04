@@ -13,7 +13,6 @@
   <style>
     :root {
       color-scheme: dark;
-      --bg: #061a1c;
       --panel: rgba(9, 35, 37, 0.78);
       --line: rgba(174, 229, 216, 0.22);
       --text: #edf8f4;
@@ -25,7 +24,7 @@
 
     * {
       box-sizing: border-box;
-    }　　　　
+    }
 
     body {
       margin: 0;
@@ -65,7 +64,7 @@
     .hud-inner {
       display: grid;
       gap: 14px;
-      max-width: 880px;
+      max-width: 920px;
       margin: 0 auto;
       padding: 16px;
       border: 1px solid var(--line);
@@ -89,6 +88,7 @@
       font-size: 15px;
     }
 
+    .model-switcher,
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -114,6 +114,12 @@
     button:hover,
     a.action:hover {
       background: rgba(102, 217, 190, 0.22);
+    }
+
+    .model-button[aria-pressed="true"] {
+      background: #e8fff7;
+      border-color: rgba(232, 255, 247, 0.85);
+      color: #062123;
     }
 
     .status {
@@ -175,7 +181,7 @@
       environment-image="neutral"
       camera-orbit="35deg 68deg 8m"
       min-camera-orbit="auto auto 3m"
-      max-camera-orbit="auto auto 18m"
+      max-camera-orbit="auto auto 26m"
       field-of-view="35deg"
       reveal="auto">
       <button slot="ar-button" class="ar-button">ARで龍を見る</button>
@@ -185,14 +191,18 @@
       <div class="hud-inner">
         <div>
           <h1>三淵渓谷 龍 WebAR</h1>
-          <p>スマートフォンで龍モデルを表示し、ARボタンから現実空間に配置できます。iPhoneはSafari、AndroidはChromeで開いてください。</p>
+          <p>表示する龍を選んでから、ARボタンで現実空間に配置できます。iPhoneはSafari、AndroidはChromeで開いてください。</p>
         </div>
         <div class="unsupported">AR表示を開始できませんでした。HTTPSで公開されているか、端末がAR表示に対応しているか確認してください。</div>
+        <div class="model-switcher" aria-label="龍モデル選択">
+          <button class="model-button" type="button" data-model="flight" aria-pressed="true">飛行する龍</button>
+          <button class="model-button" type="button" data-model="giant" aria-pressed="false">巨大な龍</button>
+        </div>
         <div class="actions">
           <button id="audioButton" type="button">飛行音を再生</button>
-          <a class="action" href="assets/dragon_web.glb" download>GLBを確認</a>
+          <a id="downloadLink" class="action" href="assets/dragon_web_flight.glb" download>GLBを確認</a>
         </div>
-        <div id="status" class="status">3Dモデルを読み込み中です。</div>
+        <div id="status" class="status">飛行する龍を読み込み中です。</div>
       </div>
     </section>
   </main>
@@ -207,31 +217,83 @@
     const status = document.querySelector("#status");
     const audio = document.querySelector("#dragonAudio");
     const audioButton = document.querySelector("#audioButton");
-    const preferredAnimation = "Flight_Loop_12s";
+    const downloadLink = document.querySelector("#downloadLink");
+    const modelButtons = Array.from(document.querySelectorAll(".model-button"));
 
-    viewer.addEventListener("load", async () => {
+    const models = {
+      flight: {
+        label: "飛行する龍",
+        src: "assets/dragon_web_flight.glb",
+        iosSrc: "assets/dragon_web_flight.usdz",
+        animation: "Flight_Loop_12s",
+        orbit: "35deg 68deg 8m",
+        maxOrbit: "auto auto 26m"
+      },
+      giant: {
+        label: "巨大な龍",
+        src: "assets/dragon_web_giant_approach.glb",
+        iosSrc: "assets/dragon_web_giant_approach.usdz",
+        animation: "Giant_Idle_S_Curve_Loop",
+        orbit: "35deg 70deg 14m",
+        maxOrbit: "auto auto 40m"
+      }
+    };
+
+    let currentModelKey = "flight";
+
+    async function playAvailableAnimation() {
+      const model = models[currentModelKey];
       const animations = viewer.availableAnimations || [];
-      console.log("[WEBAR_ANIMATIONS]", animations);
+      console.log("[WEBAR_ANIMATIONS]", model.label, animations);
 
-      if (animations.includes(preferredAnimation)) {
-        viewer.animationName = preferredAnimation;
+      if (model.animation && animations.includes(model.animation)) {
+        viewer.animationName = model.animation;
         await viewer.play({ repetitions: Infinity });
-        status.textContent = `3D表示の準備ができました。再生中: ${preferredAnimation}`;
+        status.textContent = `${model.label}の準備ができました。再生中: ${model.animation}`;
         return;
       }
 
       if (animations.length > 0) {
         viewer.animationName = animations[0];
         await viewer.play({ repetitions: Infinity });
-        status.textContent = `3D表示の準備ができました。再生中: ${animations[0]}`;
+        status.textContent = `${model.label}の準備ができました。再生中: ${animations[0]}`;
         return;
       }
 
-      status.textContent = "3D表示の準備ができました。GLB内に再生可能なアニメーションが見つかりません。";
+      viewer.animationName = "";
+      status.textContent = `${model.label}の準備ができました。`;
+    }
+
+    function setModel(key) {
+      const model = models[key];
+      if (!model || key === currentModelKey) {
+        return;
+      }
+
+      currentModelKey = key;
+      modelButtons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.model === key));
+      });
+
+      status.textContent = `${model.label}を読み込み中です。`;
+      viewer.pause();
+      viewer.src = model.src;
+      viewer.setAttribute("ios-src", model.iosSrc);
+      viewer.setAttribute("camera-orbit", model.orbit);
+      viewer.setAttribute("max-camera-orbit", model.maxOrbit);
+      viewer.setAttribute("animation-name", model.animation);
+      downloadLink.href = model.src;
+    }
+
+    modelButtons.forEach((button) => {
+      button.addEventListener("click", () => setModel(button.dataset.model));
     });
 
+    viewer.addEventListener("load", playAvailableAnimation);
+
     viewer.addEventListener("error", () => {
-      status.textContent = "dragon_web_flight.glb / dragon_web_flight.usdz を assets フォルダーに配置してください。";
+      const model = models[currentModelKey];
+      status.textContent = `${model.src} / ${model.iosSrc} を assets フォルダーに配置してください。`;
     });
 
     viewer.addEventListener("ar-status", (event) => {
