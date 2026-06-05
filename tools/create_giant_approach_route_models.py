@@ -4,7 +4,7 @@ import os
 import shutil
 
 import bpy
-from mathutils import Vector
+from mathutils import Euler, Vector
 
 
 PROJECT_ROOT = r"C:\Users\user\Documents\ARDragon\ARDragon\Mibuchi_Dragon_WebAR01"
@@ -21,6 +21,11 @@ DURATION_SECONDS = 16.0
 FRAME_START = 0
 FRAME_END = int(DURATION_SECONDS * FPS)
 GIANT_SCALE = 2.8
+BODY_WAVE_BONES = [f"spine_{i:02d}" for i in range(12)]
+BODY_WAVE_CYCLES = 3.0
+BODY_WAVE_YAW_DEGREES = 5.5
+BODY_WAVE_PITCH_DEGREES = 2.6
+BODY_WAVE_DELAY = 0.52
 
 
 def clear_scene():
@@ -65,6 +70,20 @@ def create_floor_shadow_anchor():
     mat.blend_method = "BLEND"
     anchor.data.materials.append(mat)
     return anchor
+
+
+def parent_static_head_to_head_bone(armature):
+    head_static = bpy.data.objects.get("Head_Static")
+    head_bone = armature.data.bones.get("head") if armature and armature.type == "ARMATURE" else None
+    if head_static is None or head_bone is None:
+        return False
+
+    world_matrix = head_static.matrix_world.copy()
+    head_static.parent = armature
+    head_static.parent_type = "BONE"
+    head_static.parent_bone = "head"
+    head_static.matrix_world = world_matrix
+    return True
 
 
 def smoothstep(x):
@@ -134,6 +153,15 @@ def insert_route_animation(armature):
     armature.animation_data_create()
     armature.animation_data.action = action
     armature.rotation_mode = "QUATERNION"
+    pose_bones = []
+    base_rotations = {}
+    for bone_name in BODY_WAVE_BONES:
+        pose_bone = armature.pose.bones.get(bone_name)
+        if pose_bone is None:
+            continue
+        pose_bone.rotation_mode = "QUATERNION"
+        base_rotations[bone_name] = pose_bone.rotation_quaternion.copy()
+        pose_bones.append(pose_bone)
 
     for frame in range(FRAME_START, FRAME_END + 1):
         t = (frame - FRAME_START) / (FRAME_END - FRAME_START)
@@ -144,6 +172,19 @@ def insert_route_animation(armature):
         armature.keyframe_insert(data_path="location", frame=frame)
         armature.keyframe_insert(data_path="rotation_quaternion", frame=frame)
         armature.keyframe_insert(data_path="scale", frame=frame)
+
+        # Body-only wave. Head/jaw/whisker bones are not keyed directly; the static
+        # head mesh is parented to the head bone so whiskers stay attached.
+        route_vertical = abs(tangent_at(t).z)
+        vertical_boost = 1.0 + route_vertical * 0.65
+        for index, pose_bone in enumerate(pose_bones):
+            phase = math.tau * BODY_WAVE_CYCLES * t - index * BODY_WAVE_DELAY
+            head_fade = 1.0 - smoothstep(max(0.0, (index - 8.0) / 3.0))
+            yaw = math.sin(phase) * BODY_WAVE_YAW_DEGREES * head_fade
+            pitch = math.sin(phase + 1.15) * BODY_WAVE_PITCH_DEGREES * vertical_boost * head_fade
+            wave_rotation = Euler((math.radians(pitch), 0.0, math.radians(yaw)), "XYZ").to_quaternion()
+            pose_bone.rotation_quaternion = base_rotations[pose_bone.name] @ wave_rotation
+            pose_bone.keyframe_insert(data_path="rotation_quaternion", frame=frame)
 
     return action
 
@@ -161,7 +202,12 @@ def route_report():
         "heightMin": min(heights),
         "heightMax": max(heights),
         "minDistanceToViewer": min(distances_to_viewer),
-        "whiskerFix": "No head/spine/whisker bone animation; route is applied to ARDragonArmature root only.",
+        "bodyWaveEnabled": True,
+        "bodyWaveBones": BODY_WAVE_BONES,
+        "bodyWaveYawDegrees": BODY_WAVE_YAW_DEGREES,
+        "bodyWavePitchDegrees": BODY_WAVE_PITCH_DEGREES,
+        "bodyWaveCycles": BODY_WAVE_CYCLES,
+        "whiskerFix": "Head_Static is parented to the head bone; head/jaw/whisker bones are not keyed directly.",
     }
 
 
@@ -204,6 +250,7 @@ def main():
     remove_all_actions()
 
     armature = find_armature()
+    head_static_bone_parented = parent_static_head_to_head_bone(armature)
     create_floor_shadow_anchor()
     action = insert_route_animation(armature)
 
@@ -219,6 +266,7 @@ def main():
         "outputUsdzCreated": os.path.exists(OUTPUT_USDZ),
         "outputGlbBytes": os.path.getsize(OUTPUT_GLB) if os.path.exists(OUTPUT_GLB) else 0,
         "outputUsdzBytes": os.path.getsize(OUTPUT_USDZ) if os.path.exists(OUTPUT_USDZ) else 0,
+        "headStaticBoneParented": head_static_bone_parented,
         **route_report(),
     }
     with open(REPORT_PATH, "w", encoding="utf-8") as f:
@@ -231,6 +279,12 @@ def main():
     print("[GIANT_APPROACH_ROUTE] heightRange=" + f"{report['heightMin']:.2f}-{report['heightMax']:.2f}")
     print("[GIANT_APPROACH_ROUTE] minDistanceToViewer=" + f"{report['minDistanceToViewer']:.2f}")
     print("[GIANT_APPROACH_ROUTE] whiskerDetachedFix=True")
+    print("[GIANT_BODY_WAVE] enabled=True")
+    print("[GIANT_BODY_WAVE] bones=" + ",".join(BODY_WAVE_BONES))
+    print("[GIANT_BODY_WAVE] yawDegrees=" + str(BODY_WAVE_YAW_DEGREES))
+    print("[GIANT_BODY_WAVE] pitchDegrees=" + str(BODY_WAVE_PITCH_DEGREES))
+    print("[GIANT_BODY_WAVE] headStaticBoneParented=" + str(head_static_bone_parented))
+    print("[GIANT_BODY_WAVE] headJawWhiskerKeyed=False")
     print("[GIANT_APPROACH_ROUTE_REPORT]" + json.dumps(report, ensure_ascii=False))
 
 
