@@ -11,12 +11,28 @@
 
 座標は Wikipedia の Nagai Station (Yamagata) ページに掲載されている座標を使用しています。
 
+## 検証用GPS
+
+長井駅以外に、検証用としてタスパークホテル長井のGPSも追加しています。
+
+- 対象: タスパークホテル長井 検証地点
+- 緯度: `38.1013040`
+- 経度: `140.0433785`
+- 表示半径: `100m`
+
+座標は OpenStreetMap / Overpass API の `タス・パーク・ホテル` POI を使用しています。
+
 ## ファイル構成
 
 - `index.html`: GPS WebARページ
 - `main.js`: 100m判定、アナウンス、表示制御
 - `styles.css`: スマホ向けUI
 - `assets/nagai_station_quartet.glb`: Blenderから書き出されるモデル
+
+## アニメーション
+
+GLB内のアニメーション再生には `aframe-extras` の `animation-mixer` を使用しています。
+`index.html` でCDNから読み込んでいるため、公開時はインターネット接続が必要です。
 
 ## GLBを書き出す
 

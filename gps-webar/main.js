@@ -1,9 +1,21 @@
-const TARGET = {
-  name: "長井駅",
-  latitude: 38.106518,
-  longitude: 140.033583,
-  radiusMeters: 100,
-};
+const TARGETS = [
+  {
+    name: "長井駅",
+    latitude: 38.106518,
+    longitude: 140.033583,
+    radiusMeters: 100,
+    modelId: "quartetStation",
+    fallbackId: "fallbackStation",
+  },
+  {
+    name: "タスパークホテル長井 検証地点",
+    latitude: 38.1013040,
+    longitude: 140.0433785,
+    radiusMeters: 100,
+    modelId: "quartetHotelTest",
+    fallbackId: "fallbackHotelTest",
+  },
+];
 
 const gate = document.getElementById("gate");
 const startButton = document.getElementById("startButton");
@@ -11,8 +23,10 @@ const statusTitle = document.getElementById("statusTitle");
 const distanceText = document.getElementById("distanceText");
 const outside = document.getElementById("outside");
 const outsideDistance = document.getElementById("outsideDistance");
-const quartet = document.getElementById("nagaiQuartet");
-const fallbackSign = document.getElementById("fallbackSign");
+const arEntities = TARGETS.flatMap((target) => [
+  document.getElementById(target.modelId),
+  document.getElementById(target.fallbackId),
+]).filter(Boolean);
 
 let announced = false;
 let started = false;
@@ -44,13 +58,13 @@ async function requestMotionPermissionIfNeeded() {
   }
 }
 
-function speakArrival() {
+function speakArrival(targetName) {
   if (announced || !("speechSynthesis" in window)) {
     return;
   }
 
   announced = true;
-  const utterance = new SpeechSynthesisUtterance("長井駅到着。動物たちの演奏が始まります。");
+  const utterance = new SpeechSynthesisUtterance(`${targetName}に到着。動物たちの演奏が始まります。`);
   utterance.lang = "ja-JP";
   utterance.rate = 0.92;
   utterance.pitch = 1.08;
@@ -58,26 +72,39 @@ function speakArrival() {
   window.speechSynthesis.speak(utterance);
 }
 
-function setVisible(isVisible) {
-  quartet.setAttribute("visible", isVisible);
-  fallbackSign.setAttribute("visible", isVisible);
-  outside.classList.toggle("hidden", isVisible);
+function setVisible(activeTarget) {
+  for (const entity of arEntities) {
+    entity.setAttribute("visible", false);
+  }
+
+  if (activeTarget) {
+    document.getElementById(activeTarget.modelId)?.setAttribute("visible", true);
+    document.getElementById(activeTarget.fallbackId)?.setAttribute("visible", true);
+  }
+
+  outside.classList.toggle("hidden", Boolean(activeTarget));
 }
 
 function updateByPosition(position) {
   const { latitude, longitude, accuracy } = position.coords;
-  const distance = distanceMeters(latitude, longitude, TARGET.latitude, TARGET.longitude);
-  const roundedDistance = Math.round(distance);
+  const nearest = TARGETS
+    .map((target) => ({
+      ...target,
+      distance: distanceMeters(latitude, longitude, target.latitude, target.longitude),
+    }))
+    .sort((a, b) => a.distance - b.distance)[0];
+
+  const roundedDistance = Math.round(nearest.distance);
   const roundedAccuracy = Math.round(accuracy || 0);
-  const isInside = distance <= TARGET.radiusMeters;
+  const isInside = nearest.distance <= nearest.radiusMeters;
 
   statusTitle.textContent = isInside ? "表示エリア内" : "表示エリア外";
-  distanceText.textContent = `${TARGET.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
-  outsideDistance.textContent = `${TARGET.name}まで約${roundedDistance}mです。半径${TARGET.radiusMeters}m以内で表示されます。`;
+  distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
+  outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
 
-  setVisible(isInside);
+  setVisible(isInside ? nearest : null);
   if (isInside) {
-    speakArrival();
+    speakArrival(nearest.name);
   }
 }
 
@@ -116,16 +143,19 @@ async function start() {
   });
 }
 
-quartet.addEventListener("model-error", () => {
-  statusTitle.textContent = "モデル未読込";
-  distanceText.textContent = "GLBを書き出してください: gps-webar/assets/nagai_station_quartet.glb";
-});
+for (const target of TARGETS) {
+  const model = document.getElementById(target.modelId);
+  model?.addEventListener("model-error", () => {
+    statusTitle.textContent = "モデル未読込";
+    distanceText.textContent = "GLBを書き出してください: gps-webar/assets/nagai_station_quartet.glb";
+  });
 
-quartet.addEventListener("model-loaded", () => {
-  if (!started) {
-    statusTitle.textContent = "モデル読込済み";
-    distanceText.textContent = "開始ボタンを押してください";
-  }
-});
+  model?.addEventListener("model-loaded", () => {
+    if (!started) {
+      statusTitle.textContent = "モデル読込済み";
+      distanceText.textContent = "開始ボタンを押してください";
+    }
+  });
+}
 
 startButton.addEventListener("click", start);

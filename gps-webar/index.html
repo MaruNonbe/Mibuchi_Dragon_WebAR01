@@ -7,6 +7,7 @@
     <title>長井駅到着 GPS WebAR</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar-nft.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -38,24 +39,46 @@
       </a-assets>
 
       <a-entity
-        id="nagaiQuartet"
+        id="quartetStation"
         gps-new-entity-place="latitude: 38.106518; longitude: 140.033583"
         gltf-model="#quartetModel"
         position="0 0 -8"
         rotation="0 180 0"
         scale="0.72 0.72 0.72"
-        animation-mixer
+        animation-mixer="loop: repeat"
         visible="false"
       ></a-entity>
 
       <a-entity
-        id="fallbackSign"
+        id="quartetHotelTest"
+        gps-new-entity-place="latitude: 38.1013040; longitude: 140.0433785"
+        gltf-model="#quartetModel"
+        position="0 0 -8"
+        rotation="0 180 0"
+        scale="0.72 0.72 0.72"
+        animation-mixer="loop: repeat"
+        visible="false"
+      ></a-entity>
+
+      <a-entity
+        id="fallbackStation"
         gps-new-entity-place="latitude: 38.106518; longitude: 140.033583"
         position="0 1.4 -6"
         rotation="0 180 0"
         visible="false"
       >
         <a-text value="長井駅到着" align="center" color="#ffd36a" width="5"></a-text>
+        <a-box position="0 -0.45 0" width="2.4" height="0.35" depth="0.05" color="#0b65c2"></a-box>
+      </a-entity>
+
+      <a-entity
+        id="fallbackHotelTest"
+        gps-new-entity-place="latitude: 38.1013040; longitude: 140.0433785"
+        position="0 1.4 -6"
+        rotation="0 180 0"
+        visible="false"
+      >
+        <a-text value="検証地点 到着" align="center" color="#ffd36a" width="5"></a-text>
         <a-box position="0 -0.45 0" width="2.4" height="0.35" depth="0.05" color="#0b65c2"></a-box>
       </a-entity>
 
