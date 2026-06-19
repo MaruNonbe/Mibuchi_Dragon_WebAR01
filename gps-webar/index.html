@@ -40,30 +40,27 @@
 
       <a-entity
         id="quartetStation"
-        gps-new-entity-place="latitude: 38.106518; longitude: 140.033583"
         gltf-model="#quartetModel"
-        position="0 0 -8"
+        position="0 -1.25 -4"
         rotation="0 180 0"
-        scale="0.72 0.72 0.72"
+        scale="0.42 0.42 0.42"
         animation-mixer="loop: repeat"
         visible="false"
       ></a-entity>
 
       <a-entity
         id="quartetHotelTest"
-        gps-new-entity-place="latitude: 38.1013040; longitude: 140.0433785"
         gltf-model="#quartetModel"
-        position="0 0 -8"
+        position="0 -1.25 -4"
         rotation="0 180 0"
-        scale="0.72 0.72 0.72"
+        scale="0.42 0.42 0.42"
         animation-mixer="loop: repeat"
         visible="false"
       ></a-entity>
 
       <a-entity
         id="fallbackStation"
-        gps-new-entity-place="latitude: 38.106518; longitude: 140.033583"
-        position="0 1.4 -6"
+        position="0 1.15 -3"
         rotation="0 180 0"
         visible="false"
       >
@@ -73,8 +70,7 @@
 
       <a-entity
         id="fallbackHotelTest"
-        gps-new-entity-place="latitude: 38.1013040; longitude: 140.0433785"
-        position="0 1.4 -6"
+        position="0 1.15 -3"
         rotation="0 180 0"
         visible="false"
       >
@@ -82,7 +78,7 @@
         <a-box position="0 -0.45 0" width="2.4" height="0.35" depth="0.05" color="#0b65c2"></a-box>
       </a-entity>
 
-      <a-camera gps-new-camera="gpsMinDistance: 2" look-controls-enabled="false"></a-camera>
+      <a-camera look-controls="enabled: false"></a-camera>
     </a-scene>
 
     <script src="./main.js"></script>
