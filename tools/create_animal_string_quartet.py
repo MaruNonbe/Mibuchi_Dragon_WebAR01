@@ -47,6 +47,9 @@ MAT_STATION_BLUE = None
 MAT_STATION_RED = None
 MAT_WHITE = None
 MAT_TRAIN_GREEN = None
+MAT_BRASS = None
+MAT_SILVER = None
+MAT_DRUM = None
 JAPANESE_FONT = None
 
 
@@ -323,7 +326,7 @@ def create_arms(parent, species, fur_mat, cello=False):
         sphere(f"{species}_right_paw", (0.50, -0.76, 1.57), (0.06, 0.055, 0.06), fur_mat, parent)
 
 
-def create_instrument(parent, name, kind):
+def create_string_instrument(parent, name, kind):
     inst = empty(f"{name}_{kind}", parent=parent)
     if kind == "violin":
         inst.location = (0.05, -0.50, 1.45)
@@ -360,6 +363,99 @@ def create_instrument(parent, name, kind):
         cylinder_between(f"{name}_cello_endpin", (0, 0.02, -0.44 * scale), (0, 0.02, -0.80 * scale), 0.01, MAT_STRING, inst)
 
     return inst
+
+
+def create_wind_instrument(parent, name, kind, phase=0):
+    inst = empty(f"{name}_{kind}_wind_anim", parent=parent)
+    inst.location = (0.04, -0.56, 1.47)
+    inst.rotation_euler = (math.radians(82), 0, math.radians(-6))
+
+    if kind == "flute":
+        cylinder_between(f"{name}_flute_body", (-0.46, 0, 0), (0.46, 0, 0), 0.030, MAT_SILVER, inst, vertices=24)
+        for i, x in enumerate([-0.28, -0.16, -0.04, 0.08, 0.20, 0.32]):
+            sphere(f"{name}_flute_key_{i}", (x, -0.032, 0.025), (0.026, 0.010, 0.026), MAT_DARK, inst, segments=12)
+    elif kind == "clarinet":
+        cylinder_between(f"{name}_clarinet_body", (-0.42, 0, 0), (0.38, 0, 0), 0.036, MAT_DARK, inst, vertices=24)
+        cone(f"{name}_clarinet_bell", (0.48, 0, 0), 0.075, 0.036, 0.16, MAT_DARK, inst, vertices=24, rot=(0, math.radians(90), 0))
+        cube(f"{name}_clarinet_reed", (-0.48, 0.015, 0), (0.055, 0.010, 0.018), MAT_WOOD_DARK, inst)
+        for i, x in enumerate([-0.22, -0.09, 0.04, 0.17, 0.30]):
+            sphere(f"{name}_clarinet_key_{i}", (x, -0.038, 0.028), (0.023, 0.008, 0.023), MAT_SILVER, inst, segments=12)
+    elif kind == "trumpet":
+        inst.location = (0.08, -0.56, 1.43)
+        inst.rotation_euler = (math.radians(88), 0, math.radians(-2))
+        cylinder_between(f"{name}_trumpet_pipe", (-0.35, 0, 0), (0.28, 0, 0), 0.030, MAT_BRASS, inst, vertices=24)
+        cone(f"{name}_trumpet_bell", (0.48, 0, 0), 0.18, 0.04, 0.28, MAT_BRASS, inst, vertices=32, rot=(0, math.radians(90), 0))
+        for i, x in enumerate([-0.10, 0.02, 0.14]):
+            cylinder(f"{name}_trumpet_valve_{i}", (x, -0.03, 0.105), 0.025, 0.16, MAT_BRASS, inst, vertices=16, rot=(math.radians(90), 0, 0))
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.16, minor_radius=0.018, major_segments=32, minor_segments=8, location=(-0.18, 0.0, -0.05))
+        loop = bpy.context.object
+        loop.name = f"{name}_trumpet_loop"
+        loop.parent = inst
+        loop.rotation_euler = (math.radians(90), 0, 0)
+        loop.data.materials.append(MAT_BRASS)
+    else:
+        inst.location = (0.05, -0.50, 1.34)
+        inst.rotation_euler = (math.radians(85), 0, math.radians(-8))
+        cylinder_between(f"{name}_trombone_slide_outer", (-0.44, -0.04, 0.05), (0.42, -0.04, 0.05), 0.018, MAT_BRASS, inst, vertices=16)
+        cylinder_between(f"{name}_trombone_slide_inner", (-0.44, 0.04, -0.05), (0.42, 0.04, -0.05), 0.018, MAT_BRASS, inst, vertices=16)
+        cone(f"{name}_trombone_bell", (0.55, 0, 0.08), 0.16, 0.045, 0.25, MAT_BRASS, inst, vertices=32, rot=(0, math.radians(90), 0))
+
+    base_loc = inst.location.copy()
+    for frame, lift in [(1, 0), (42, 0.035), (84, -0.010), (126, 0.030), (160, 0)]:
+        inst.location = (base_loc.x, base_loc.y, base_loc.z + lift)
+        inst.keyframe_insert(data_path="location", frame=frame + phase)
+    finalize_animation(inst)
+    return inst
+
+
+def create_percussion_instrument(parent, name, kind, phase=0):
+    inst = empty(f"{name}_{kind}_percussion_anim", parent=parent)
+
+    if kind == "snare":
+        inst.location = (0.03, -0.58, 1.08)
+        cylinder(f"{name}_snare_shell", (0, 0, 0), 0.23, 0.18, MAT_DRUM, inst, vertices=48, rot=(math.radians(90), 0, 0))
+        cylinder(f"{name}_snare_top", (0, -0.095, 0), 0.235, 0.012, MAT_CREAM, inst, vertices=48, rot=(math.radians(90), 0, 0))
+    elif kind == "tambourine":
+        inst.location = (0.04, -0.55, 1.38)
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.22, minor_radius=0.030, major_segments=48, minor_segments=10, location=(0, 0, 0))
+        ring = bpy.context.object
+        ring.name = f"{name}_tambourine_ring"
+        ring.parent = inst
+        ring.rotation_euler = (math.radians(90), 0, 0)
+        ring.data.materials.append(MAT_WOOD)
+        for i in range(8):
+            angle = i * math.tau / 8
+            sphere(f"{name}_tambourine_jingle_{i}", (math.cos(angle) * 0.22, 0, math.sin(angle) * 0.22), (0.035, 0.008, 0.035), MAT_SILVER, inst, segments=12)
+    elif kind == "marimba":
+        inst.location = (0.02, -0.72, 0.92)
+        for i, x in enumerate([-0.32, -0.20, -0.08, 0.04, 0.16, 0.28]):
+            cube(f"{name}_marimba_bar_{i}", (x, 0, 0.22), (0.045, 0.12, 0.025), MAT_WOOD, inst)
+            cylinder_between(f"{name}_marimba_pipe_{i}", (x, 0, -0.12), (x, 0, 0.15), 0.018, MAT_BRASS, inst, vertices=16)
+        cylinder_between(f"{name}_marimba_rail_front", (-0.42, -0.13, 0.08), (0.40, -0.13, 0.08), 0.014, MAT_DARK, inst, vertices=12)
+        cylinder_between(f"{name}_marimba_rail_back", (-0.42, 0.13, 0.08), (0.40, 0.13, 0.08), 0.014, MAT_DARK, inst, vertices=12)
+    else:
+        inst.location = (0.00, -0.62, 1.00)
+        cylinder(f"{name}_bass_drum_shell", (0, 0, 0), 0.34, 0.20, MAT_DRUM, inst, vertices=48, rot=(math.radians(90), 0, 0))
+        cylinder(f"{name}_bass_drum_head", (0, -0.105, 0), 0.345, 0.012, MAT_CREAM, inst, vertices=48, rot=(math.radians(90), 0, 0))
+
+    for side, x in [("L", -0.14), ("R", 0.14)]:
+        cylinder_between(f"{name}_{kind}_mallet_{side}", (x, -0.42, 1.36), (x * 0.5, -0.78, 1.62), 0.010, MAT_BOW, parent, vertices=12)
+        sphere(f"{name}_{kind}_mallet_head_{side}", (x * 0.5, -0.78, 1.62), (0.040, 0.040, 0.040), MAT_GOLD, parent, segments=12)
+
+    base_rot = inst.rotation_euler.copy()
+    for frame, rz in [(1, -0.05), (38, 0.06), (76, -0.04), (114, 0.05), (160, -0.05)]:
+        inst.rotation_euler = (base_rot.x, base_rot.y, base_rot.z + rz)
+        inst.keyframe_insert(data_path="rotation_euler", frame=frame + phase)
+    finalize_animation(inst)
+    return inst
+
+
+def create_instrument(parent, name, kind, phase=0):
+    if kind in {"violin", "viola", "cello"}:
+        return create_string_instrument(parent, name, kind)
+    if kind in {"flute", "clarinet", "trumpet", "trombone"}:
+        return create_wind_instrument(parent, name, kind, phase=phase)
+    return create_percussion_instrument(parent, name, kind, phase=phase)
 
 
 def create_bow(parent, name, cello=False, phase=0):
@@ -424,8 +520,9 @@ def create_character(species, fur_mat, accent_mat, instrument, loc, rot_z, phase
     create_body(root, species, fur_mat, accent_mat)
     head = create_face(root, species, fur_mat, accent_mat)
     create_arms(root, species, fur_mat, cello=(instrument == "cello"))
-    create_instrument(root, species, instrument)
-    create_bow(root, species, cello=(instrument == "cello"), phase=phase)
+    create_instrument(root, species, instrument, phase=phase)
+    if instrument in {"violin", "viola", "cello"}:
+        create_bow(root, species, cello=(instrument == "cello"), phase=phase)
     add_music_notes(root, species, phase=phase)
     animate_loop(root, phase=phase)
 
@@ -584,6 +681,7 @@ def setup_materials():
     global MAT_FOX, MAT_RABBIT, MAT_BEAR, MAT_CAT, MAT_CREAM, MAT_DARK
     global MAT_PINK, MAT_WOOD, MAT_WOOD_DARK, MAT_STRING, MAT_BOW, MAT_STAGE, MAT_GOLD
     global MAT_STATION_BLUE, MAT_STATION_RED, MAT_WHITE, MAT_TRAIN_GREEN
+    global MAT_BRASS, MAT_SILVER, MAT_DRUM
 
     MAT_FOX = make_mat("fox_orange_fur", (0.95, 0.36, 0.10, 1))
     MAT_RABBIT = make_mat("rabbit_ivory_fur", (0.86, 0.82, 0.74, 1))
@@ -602,6 +700,9 @@ def setup_materials():
     MAT_STATION_RED = make_mat("arrival_event_red", (0.88, 0.06, 0.06, 1), 0.40)
     MAT_WHITE = make_mat("train_and_sign_white", (0.96, 0.96, 0.92, 1), 0.48)
     MAT_TRAIN_GREEN = make_mat("flower_train_green", (0.08, 0.56, 0.34, 1), 0.45)
+    MAT_BRASS = make_mat("warm_brass_metal", (0.95, 0.62, 0.18, 1), 0.28, 0.55)
+    MAT_SILVER = make_mat("soft_silver_metal", (0.78, 0.82, 0.86, 1), 0.22, 0.65)
+    MAT_DRUM = make_mat("festival_drum_shell", (0.72, 0.16, 0.12, 1), 0.38)
 
 
 def setup_render():
@@ -618,20 +719,71 @@ def setup_render():
     scene.world.color = (0.025, 0.027, 0.03)
 
 
-def export_webar_glb():
+VARIANT_CONFIGS = {
+    "strings": {
+        "filename": "nagai_station_strings.glb",
+        "players": [
+            ("fox", "violin", (-1.95, -0.62, 0), 28, 0),
+            ("rabbit", "violin", (1.95, -0.62, 0), -28, 12),
+            ("bear", "viola", (-1.35, 0.88, 0), 18, 24),
+            ("cat", "cello", (1.35, 0.88, 0), -18, 36),
+        ],
+    },
+    "winds": {
+        "filename": "nagai_station_winds.glb",
+        "players": [
+            ("cat", "flute", (-1.95, -0.62, 0), 26, 0),
+            ("rabbit", "clarinet", (1.95, -0.62, 0), -26, 12),
+            ("fox", "trumpet", (-1.35, 0.88, 0), 18, 24),
+            ("bear", "trombone", (1.35, 0.88, 0), -18, 36),
+        ],
+    },
+    "percussion": {
+        "filename": "nagai_station_percussion.glb",
+        "players": [
+            ("bear", "snare", (-1.95, -0.62, 0), 26, 0),
+            ("fox", "tambourine", (1.95, -0.62, 0), -26, 12),
+            ("rabbit", "marimba", (-1.35, 0.88, 0), 18, 24),
+            ("cat", "bass_drum", (1.35, 0.88, 0), -18, 36),
+        ],
+    },
+}
+
+
+def species_material(species):
+    return {
+        "fox": MAT_FOX,
+        "rabbit": MAT_RABBIT,
+        "bear": MAT_BEAR,
+        "cat": MAT_CAT,
+    }[species]
+
+
+def resolve_variant_config(variant):
+    config = VARIANT_CONFIGS[variant]
+    return {
+        "filename": config["filename"],
+        "players": [
+            (species, species_material(species), MAT_CREAM, instrument, loc, rot_z, phase)
+            for species, instrument, loc, rot_z, phase in config["players"]
+        ],
+    }
+
+
+def export_webar_glb(filename):
     if not EXPORT_GLTF_FOR_WEBAR:
         return
 
-    base_dir = PROJECT_DIR
+    base_dir = os.path.join(PROJECT_DIR, "ARDragon", "Mibuchi_Dragon_WebAR01")
     if not os.path.isdir(base_dir):
         try:
-            base_dir = os.path.dirname(os.path.abspath(__file__))
+            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         except NameError:
             base_dir = os.getcwd()
 
     export_dir = os.path.join(base_dir, "gps-webar", "assets")
     os.makedirs(export_dir, exist_ok=True)
-    export_path = os.path.join(export_dir, "nagai_station_quartet.glb")
+    export_path = os.path.join(export_dir, filename)
 
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.gltf(
@@ -644,24 +796,32 @@ def export_webar_glb():
     print(f"Exported GPS WebAR GLB: {export_path}")
 
 
-def main():
+def build_scene(variant):
     clear_scene()
     setup_materials()
+    config = resolve_variant_config(variant)
     setup_render()
     create_stage()
     create_backdrop()
     create_station_arrival_event()
 
-    create_character("fox", MAT_FOX, MAT_CREAM, "violin", (-1.55, -0.62, 0), 26, 0)
-    create_character("rabbit", MAT_RABBIT, MAT_CREAM, "violin", (1.55, -0.62, 0), -26, 12)
-    create_character("bear", MAT_BEAR, MAT_CREAM, "viola", (-1.55, 0.88, 0), 18, 24)
-    create_character("cat", MAT_CAT, MAT_CREAM, "cello", (1.55, 0.88, 0), -18, 36)
+    for player in config["players"]:
+        create_character(*player)
 
     create_lighting_and_camera()
 
     bpy.context.scene.frame_set(FRAME_START)
-    export_webar_glb()
-    print("Created animated animal string quartet scene.")
+    export_webar_glb(config["filename"])
+    print(f"Created animated animal {variant} scene.")
+
+
+def main():
+    requested = os.environ.get("NAGAI_AR_VARIANT", "all")
+    variants = ["strings", "winds", "percussion"] if requested == "all" else [requested]
+    for variant in variants:
+        if variant not in VARIANT_CONFIGS:
+            raise ValueError(f"Unknown NAGAI_AR_VARIANT: {variant}")
+        build_scene(variant)
 
 
 if __name__ == "__main__":

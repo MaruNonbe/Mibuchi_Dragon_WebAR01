@@ -8,8 +8,8 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar-nft.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
-    <script src="./animation-player.js?v=20"></script>
-    <link rel="stylesheet" href="./styles.css?v=20" />
+    <script src="./animation-player.js?v=21"></script>
+    <link rel="stylesheet" href="./styles.css?v=21" />
   </head>
   <body>
     <video id="cameraFeed" class="camera-feed" autoplay playsinline muted></video>
@@ -34,12 +34,14 @@
 
     <a-scene vr-mode-ui="enabled: false" renderer="antialias: true; alpha: true; precision: mediump" embedded>
       <a-assets>
-        <a-asset-item id="quartetModel" src="./assets/nagai_station_quartet.glb"></a-asset-item>
+        <a-asset-item id="stringsModel" src="./assets/nagai_station_strings.glb"></a-asset-item>
+        <a-asset-item id="windsModel" src="./assets/nagai_station_winds.glb"></a-asset-item>
+        <a-asset-item id="percussionModel" src="./assets/nagai_station_percussion.glb"></a-asset-item>
       </a-assets>
 
       <a-entity
-        id="quartetStation"
-        gltf-model="#quartetModel"
+        id="quartetStrings"
+        gltf-model="#stringsModel"
         position="0 -1.25 -7.5"
         rotation="0 0 0"
         scale="0.80 0.80 0.80"
@@ -49,8 +51,8 @@
       ></a-entity>
 
       <a-entity
-        id="quartetHotelTest"
-        gltf-model="#quartetModel"
+        id="quartetWinds"
+        gltf-model="#windsModel"
         position="0 -1.25 -7.5"
         rotation="0 0 0"
         scale="0.80 0.80 0.80"
@@ -60,28 +62,49 @@
       ></a-entity>
 
       <a-entity
-        id="fallbackStation"
+        id="quartetPercussion"
+        gltf-model="#percussionModel"
+        position="0 -1.25 -7.5"
+        rotation="0 0 0"
+        scale="0.80 0.80 0.80"
+        animation-mixer="loop: repeat"
+        play-all-model-animations="timeScale: 1"
+        visible="false"
+      ></a-entity>
+
+      <a-entity
+        id="fallbackStrings"
         position="0 1.15 -3"
         rotation="0 180 0"
         visible="false"
       >
-        <a-text value="フラワー長井線 到着" align="center" color="#ffd36a" width="5"></a-text>
+        <a-text value="弦楽アンサンブル 到着" align="center" color="#ffd36a" width="5"></a-text>
         <a-box position="0 -0.45 0" width="2.4" height="0.35" depth="0.05" color="#0b65c2"></a-box>
       </a-entity>
 
       <a-entity
-        id="fallbackHotelTest"
+        id="fallbackWinds"
         position="0 1.15 -3"
         rotation="0 180 0"
         visible="false"
       >
-        <a-text value="検証地点 到着" align="center" color="#ffd36a" width="5"></a-text>
+        <a-text value="管楽アンサンブル 到着" align="center" color="#ffd36a" width="5"></a-text>
+        <a-box position="0 -0.45 0" width="2.4" height="0.35" depth="0.05" color="#0b65c2"></a-box>
+      </a-entity>
+
+      <a-entity
+        id="fallbackPercussion"
+        position="0 1.15 -3"
+        rotation="0 180 0"
+        visible="false"
+      >
+        <a-text value="打楽器アンサンブル 到着" align="center" color="#ffd36a" width="5"></a-text>
         <a-box position="0 -0.45 0" width="2.4" height="0.35" depth="0.05" color="#0b65c2"></a-box>
       </a-entity>
 
       <a-camera look-controls="enabled: false"></a-camera>
     </a-scene>
 
-    <script src="./main.js?v=20"></script>
+    <script src="./main.js?v=21"></script>
   </body>
 </html>

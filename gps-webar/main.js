@@ -1,9 +1,43 @@
 const HOME_STORAGE_KEY = "nagaiQuartetHomeTarget";
 const DEFAULT_RADIUS_METERS = 100;
 
-const STATION_MODEL = {
-  modelId: "quartetStation",
-  fallbackId: "fallbackStation",
+const MODEL_DEFINITIONS = {
+  strings: {
+    modelId: "quartetStrings",
+    fallbackId: "fallbackStrings",
+    assetPath: "gps-webar/assets/nagai_station_strings.glb",
+  },
+  winds: {
+    modelId: "quartetWinds",
+    fallbackId: "fallbackWinds",
+    assetPath: "gps-webar/assets/nagai_station_winds.glb",
+  },
+  percussion: {
+    modelId: "quartetPercussion",
+    fallbackId: "fallbackPercussion",
+    assetPath: "gps-webar/assets/nagai_station_percussion.glb",
+  },
+};
+
+const ENSEMBLE_MODEL_KEY = {
+  strings: "strings",
+  woodwinds: "winds",
+  brass: "winds",
+  percussion: "percussion",
+  jazz: "winds",
+  taiko: "percussion",
+  flute: "winds",
+  "low-brass": "winds",
+  clarinet: "winds",
+  piccolo: "winds",
+  sax: "winds",
+  handbell: "percussion",
+  horn: "winds",
+  marimba: "percussion",
+  trombone: "winds",
+  finale: "percussion",
+  test: "strings",
+  "home-test": "strings",
 };
 
 const STATION_VARIANTS = [
@@ -49,8 +83,8 @@ const FLOWER_NAGAI_STATIONS = [
 const TARGETS = [
   ...FLOWER_NAGAI_STATIONS.map((station, index) => ({
     ...station,
-    ...STATION_MODEL,
     ...STATION_VARIANTS[index % STATION_VARIANTS.length],
+    ...MODEL_DEFINITIONS[ENSEMBLE_MODEL_KEY[STATION_VARIANTS[index % STATION_VARIANTS.length].ensemble]],
     radiusMeters: DEFAULT_RADIUS_METERS,
   })),
   {
@@ -58,8 +92,7 @@ const TARGETS = [
     latitude: 38.1013040,
     longitude: 140.0433785,
     radiusMeters: DEFAULT_RADIUS_METERS,
-    modelId: "quartetHotelTest",
-    fallbackId: "fallbackHotelTest",
+    ...MODEL_DEFINITIONS.strings,
     variantLabel: "検証用どうぶつアンサンブル",
     ensemble: "test",
   },
@@ -73,12 +106,10 @@ const distanceText = document.getElementById("distanceText");
 const outside = document.getElementById("outside");
 const outsideDistance = document.getElementById("outsideDistance");
 const cameraFeed = document.getElementById("cameraFeed");
-const arEntities = [
-  document.getElementById("quartetStation"),
-  document.getElementById("fallbackStation"),
-  document.getElementById("quartetHotelTest"),
-  document.getElementById("fallbackHotelTest"),
-].filter(Boolean);
+const arEntities = Object.values(MODEL_DEFINITIONS).flatMap((definition) => [
+  document.getElementById(definition.modelId),
+  document.getElementById(definition.fallbackId),
+]).filter(Boolean);
 
 let announcedTargetName = "";
 let started = false;
@@ -88,13 +119,15 @@ let hasLatchedVisibleTarget = false;
 let lastStatusUpdateMs = 0;
 
 const runtimeAnimation = {
-  quartetStation: null,
-  quartetHotelTest: null,
+  quartetStrings: null,
+  quartetWinds: null,
+  quartetPercussion: null,
 };
 
 const modelLoadState = {
-  quartetStation: "pending",
-  quartetHotelTest: "pending",
+  quartetStrings: "pending",
+  quartetWinds: "pending",
+  quartetPercussion: "pending",
 };
 
 function loadSavedHomeTarget() {
@@ -114,8 +147,7 @@ function loadSavedHomeTarget() {
       latitude: parsed.latitude,
       longitude: parsed.longitude,
       radiusMeters: parsed.radiusMeters || DEFAULT_RADIUS_METERS,
-      modelId: "quartetHotelTest",
-      fallbackId: "fallbackHotelTest",
+      ...MODEL_DEFINITIONS.strings,
       variantLabel: "自宅検証用どうぶつアンサンブル",
       ensemble: "home-test",
     };
@@ -287,21 +319,17 @@ function hideWebARBackdropNodes(model) {
 }
 
 function adjustWebARQuartetLayout(model) {
-  const layoutOverrides = {
-    fox_quartet_player: { x: -4.2 },
-    rabbit_quartet_player: { x: 4.2 },
-    fox_music_stand: { x: -2.9 },
-    rabbit_music_stand: { x: 2.9 },
-  };
-
   model.traverse((node) => {
-    const override = layoutOverrides[node.name];
-    if (!override) {
+    if (!node.name) {
       return;
     }
 
-    if (typeof override.x === "number") {
-      node.position.x = override.x;
+    if (node.name.endsWith("_quartet_player") && node.position.y < 0) {
+      const side = node.position.x < 0 ? -1 : 1;
+      node.position.x = side * 2.65;
+    } else if (node.name.endsWith("_music_stand") && node.position.y < -0.5) {
+      const side = node.position.x < 0 ? -1 : 1;
+      node.position.x = side * 1.65;
     }
   });
 }
@@ -322,7 +350,7 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 安定表示 v20" : "表示エリア外";
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別モデル v21" : "表示エリア外";
     const variantText = nearest.variantLabel ? ` / ${nearest.variantLabel}` : "";
     distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m${variantText}`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
@@ -352,6 +380,8 @@ function collectRuntimeAnimationNodes(model) {
 
   const state = {
     bows: [],
+    winds: [],
+    percussion: [],
     heads: [],
     notes: [],
     text: [],
@@ -366,6 +396,10 @@ function collectRuntimeAnimationNodes(model) {
 
     if (node.name.includes("_bow_anim")) {
       state.bows.push(node);
+    } else if (node.name.includes("_wind_anim")) {
+      state.winds.push(node);
+    } else if (node.name.includes("_percussion_anim")) {
+      state.percussion.push(node);
     } else if (node.name.endsWith("_head")) {
       state.heads.push(node);
     } else if (node.name.includes("_note_")) {
@@ -397,6 +431,22 @@ function animateRuntimeNodes(state, seconds) {
     const phase = seconds * 5.6 + index * 0.7;
     node.position.x = base.position.x + Math.sin(phase) * 0.22;
     node.rotation.y = base.rotation.y + Math.sin(phase) * 0.18;
+  });
+
+  state.winds.forEach((node, index) => {
+    const base = state.bases.get(node.uuid);
+    if (!base) return;
+    const phase = seconds * 3.2 + index * 0.7;
+    node.position.z = base.position.z + Math.sin(phase) * 0.045;
+    node.rotation.z = base.rotation.z + Math.sin(phase * 0.75) * 0.055;
+  });
+
+  state.percussion.forEach((node, index) => {
+    const base = state.bases.get(node.uuid);
+    if (!base) return;
+    const phase = seconds * 6.0 + index * 0.9;
+    node.rotation.z = base.rotation.z + Math.sin(phase) * 0.12;
+    node.position.z = base.position.z + Math.abs(Math.sin(phase)) * 0.030;
   });
 
   state.heads.forEach((node, index) => {
@@ -499,30 +549,33 @@ async function start() {
   });
 }
 
-for (const target of TARGETS) {
-  const model = document.getElementById(target.modelId);
+for (const definition of Object.values(MODEL_DEFINITIONS)) {
+  const model = document.getElementById(definition.modelId);
   model?.addEventListener("model-error", () => {
-    modelLoadState[target.modelId] = "error";
+    modelLoadState[definition.modelId] = "error";
     visibleStateKey = "";
     setVisible(activeTarget);
     statusTitle.textContent = "モデル未読込";
-    distanceText.textContent = "GLBを書き出してください: gps-webar/assets/nagai_station_quartet.glb";
+    distanceText.textContent = `GLBを書き出してください: ${definition.assetPath}`;
   });
 
   model?.addEventListener("model-loaded", () => {
-    modelLoadState[target.modelId] = "loaded";
-    runtimeAnimation[target.modelId] = collectRuntimeAnimationNodes(model.object3D);
+    modelLoadState[definition.modelId] = "loaded";
+    runtimeAnimation[definition.modelId] = collectRuntimeAnimationNodes(model.object3D);
     visibleStateKey = "";
     setVisible(activeTarget);
     if (!started) {
-      const nodeCount = runtimeAnimation[target.modelId]
-        ? runtimeAnimation[target.modelId].bows.length +
-          runtimeAnimation[target.modelId].heads.length +
-          runtimeAnimation[target.modelId].notes.length +
-          runtimeAnimation[target.modelId].text.length +
-          runtimeAnimation[target.modelId].waves.length
+      const animationState = runtimeAnimation[definition.modelId];
+      const nodeCount = animationState
+        ? animationState.bows.length +
+          animationState.winds.length +
+          animationState.percussion.length +
+          animationState.heads.length +
+          animationState.notes.length +
+          animationState.text.length +
+          animationState.waves.length
         : 0;
-      statusTitle.textContent = `モデル読込済み v8`;
+      statusTitle.textContent = `モデル読込済み v21`;
       distanceText.textContent = `アニメ対象 ${nodeCount} 個 / 開始ボタンを押してください`;
     }
   });
