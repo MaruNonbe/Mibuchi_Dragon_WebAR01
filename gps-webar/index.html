@@ -6,10 +6,9 @@
     <meta name="theme-color" content="#0b2830" />
     <title>フラワー長井線 到着 GPS WebAR</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar-nft.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
-    <script src="./animation-player.js?v=23"></script>
-    <link rel="stylesheet" href="./styles.css?v=23" />
+    <script src="./animation-player.js?v=24"></script>
+    <link rel="stylesheet" href="./styles.css?v=24" />
   </head>
   <body>
     <video id="cameraFeed" class="camera-feed" autoplay playsinline muted></video>
@@ -19,7 +18,7 @@
       <p>フラワー長井線の各駅から半径100m以内で、駅ごとの動物アンサンブルが表示されます。</p>
       <button id="startButton" type="button">GPS WebARを開始</button>
       <button id="saveHomeButton" class="secondary" type="button">現在地を自宅テスト地点に保存</button>
-      <p class="small">iOS / Android ともに、カメラ・位置情報・モーションの許可が必要です。</p>
+      <p class="small">iOS / Android ともに、カメラ・位置情報の許可が必要です。</p>
     </div>
 
     <div id="status" class="status">
@@ -39,7 +38,12 @@
       <span id="outsideDistance">現在地を確認中...</span>
     </div>
 
-    <a-scene vr-mode-ui="enabled: false" renderer="antialias: true; alpha: true; precision: mediump" embedded>
+    <a-scene
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+      renderer="antialias: true; alpha: true; precision: mediump"
+      embedded
+    >
       <a-entity
         id="stationModel"
         position="0 -1.25 -7.5"
@@ -63,6 +67,6 @@
       <a-camera look-controls="enabled: false"></a-camera>
     </a-scene>
 
-    <script src="./main.js?v=23"></script>
+    <script src="./main.js?v=24"></script>
   </body>
 </html>

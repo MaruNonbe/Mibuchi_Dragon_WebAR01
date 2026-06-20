@@ -176,7 +176,7 @@ function updatePreviewStatus() {
     distancePart = `本来の駅まで約${Math.round(distance)}m / GPS精度 約${accuracy}m`;
   }
 
-  statusTitle.textContent = `評価モード / 駅別キャラ v23`;
+  statusTitle.textContent = `評価モード / 駅別キャラ v24`;
   distanceText.textContent = `${previewTarget.name} / ${previewTarget.variantLabel} / ${distancePart}`;
 }
 
@@ -205,17 +205,7 @@ function distanceMeters(aLat, aLon, bLat, bLon) {
 }
 
 async function requestMotionPermissionIfNeeded() {
-  const deviceOrientation = window.DeviceOrientationEvent;
-  if (!deviceOrientation || typeof deviceOrientation.requestPermission !== "function") {
-    return true;
-  }
-
-  try {
-    const result = await deviceOrientation.requestPermission();
-    return result === "granted";
-  } catch {
-    return false;
-  }
+  return true;
 }
 
 async function startCamera() {
@@ -392,7 +382,7 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別キャラ v23" : "表示エリア外";
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別キャラ v24" : "表示エリア外";
     const variantText = nearest.variantLabel ? ` / ${nearest.variantLabel}` : "";
     distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m${variantText}`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
@@ -620,7 +610,7 @@ stationModel?.addEventListener("model-loaded", () => {
         runtimeAnimation.text.length +
         runtimeAnimation.waves.length
       : 0;
-    statusTitle.textContent = `モデル読込済み v23`;
+    statusTitle.textContent = `モデル読込済み v24`;
     distanceText.textContent = `アニメ対象 ${nodeCount} 個 / 開始ボタンを押してください`;
   }
 });

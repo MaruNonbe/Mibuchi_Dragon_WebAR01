@@ -190,3 +190,9 @@ button.secondary {
 .hidden {
   display: none;
 }
+
+.a-dialog,
+.a-dialog-allow-button,
+.a-dialog-deny-button {
+  display: none !important;
+}
