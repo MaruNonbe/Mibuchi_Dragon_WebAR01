@@ -1,21 +1,67 @@
 const HOME_STORAGE_KEY = "nagaiQuartetHomeTarget";
+const DEFAULT_RADIUS_METERS = 100;
+
+const STATION_MODEL = {
+  modelId: "quartetStation",
+  fallbackId: "fallbackStation",
+};
+
+const STATION_VARIANTS = [
+  { variantLabel: "きつねとウサギの弦楽四重奏", ensemble: "strings" },
+  { variantLabel: "ネコたちの木管アンサンブル", ensemble: "woodwinds" },
+  { variantLabel: "イヌたちの金管ファンファーレ", ensemble: "brass" },
+  { variantLabel: "リスたちの打楽器パレード", ensemble: "percussion" },
+  { variantLabel: "パンダとペンギンの駅前ジャズ", ensemble: "jazz" },
+  { variantLabel: "タヌキたちの和太鼓リズム", ensemble: "taiko" },
+  { variantLabel: "シカたちのフルート合奏", ensemble: "flute" },
+  { variantLabel: "クマたちの低音ブラス", ensemble: "low-brass" },
+  { variantLabel: "ウサギたちのクラリネット隊", ensemble: "clarinet" },
+  { variantLabel: "どうぶつ弦楽四重奏", ensemble: "strings" },
+  { variantLabel: "小鳥たちのピッコロ行進曲", ensemble: "piccolo" },
+  { variantLabel: "キツネたちのサックスバンド", ensemble: "sax" },
+  { variantLabel: "白ウサギのハンドベル隊", ensemble: "handbell" },
+  { variantLabel: "カモシカたちのホルン合奏", ensemble: "horn" },
+  { variantLabel: "カエルたちのマリンバ隊", ensemble: "marimba" },
+  { variantLabel: "ヒツジたちのトロンボーン隊", ensemble: "trombone" },
+  { variantLabel: "全員集合フィナーレ", ensemble: "finale" },
+];
+
+const FLOWER_NAGAI_STATIONS = [
+  { name: "赤湯駅", latitude: 38.0477732, longitude: 140.1489173 },
+  { name: "南陽市役所駅", latitude: 38.0553737, longitude: 140.1491345 },
+  { name: "宮内駅", latitude: 38.0709227, longitude: 140.1350999 },
+  { name: "おりはた駅", latitude: 38.0664757, longitude: 140.1225351 },
+  { name: "梨郷駅", latitude: 38.0573441, longitude: 140.0985199 },
+  { name: "西大塚駅", latitude: 38.0553858, longitude: 140.0643104 },
+  { name: "今泉駅", latitude: 38.0570157, longitude: 140.0442391 },
+  { name: "時庭駅", latitude: 38.0768771, longitude: 140.0297508 },
+  { name: "南長井駅", latitude: 38.0974434, longitude: 140.0346592 },
+  { name: "長井駅", latitude: 38.1065942, longitude: 140.0336548 },
+  { name: "あやめ公園駅", latitude: 38.1140176, longitude: 140.0326945 },
+  { name: "羽前成田駅", latitude: 38.1309784, longitude: 140.0351477 },
+  { name: "白兎駅", latitude: 38.1501321, longitude: 140.0410764 },
+  { name: "蚕桑駅", latitude: 38.1613789, longitude: 140.0468579 },
+  { name: "鮎貝駅", latitude: 38.1826087, longitude: 140.0710219 },
+  { name: "四季の郷駅", latitude: 38.1858218, longitude: 140.0776309 },
+  { name: "荒砥駅", latitude: 38.1879827, longitude: 140.0975825 },
+];
 
 const TARGETS = [
-  {
-    name: "長井駅",
-    latitude: 38.106518,
-    longitude: 140.033583,
-    radiusMeters: 100,
-    modelId: "quartetStation",
-    fallbackId: "fallbackStation",
-  },
+  ...FLOWER_NAGAI_STATIONS.map((station, index) => ({
+    ...station,
+    ...STATION_MODEL,
+    ...STATION_VARIANTS[index % STATION_VARIANTS.length],
+    radiusMeters: DEFAULT_RADIUS_METERS,
+  })),
   {
     name: "タスパークホテル長井 検証地点",
     latitude: 38.1013040,
     longitude: 140.0433785,
-    radiusMeters: 100,
+    radiusMeters: DEFAULT_RADIUS_METERS,
     modelId: "quartetHotelTest",
     fallbackId: "fallbackHotelTest",
+    variantLabel: "検証用どうぶつアンサンブル",
+    ensemble: "test",
   },
 ];
 
@@ -27,12 +73,14 @@ const distanceText = document.getElementById("distanceText");
 const outside = document.getElementById("outside");
 const outsideDistance = document.getElementById("outsideDistance");
 const cameraFeed = document.getElementById("cameraFeed");
-const arEntities = TARGETS.flatMap((target) => [
-  document.getElementById(target.modelId),
-  document.getElementById(target.fallbackId),
-]).filter(Boolean);
+const arEntities = [
+  document.getElementById("quartetStation"),
+  document.getElementById("fallbackStation"),
+  document.getElementById("quartetHotelTest"),
+  document.getElementById("fallbackHotelTest"),
+].filter(Boolean);
 
-let announced = false;
+let announcedTargetName = "";
 let started = false;
 let activeTarget = null;
 let visibleStateKey = "";
@@ -65,9 +113,11 @@ function loadSavedHomeTarget() {
       name: "自宅テスト地点",
       latitude: parsed.latitude,
       longitude: parsed.longitude,
-      radiusMeters: parsed.radiusMeters || 100,
+      radiusMeters: parsed.radiusMeters || DEFAULT_RADIUS_METERS,
       modelId: "quartetHotelTest",
       fallbackId: "fallbackHotelTest",
+      variantLabel: "自宅検証用どうぶつアンサンブル",
+      ensemble: "home-test",
     };
   } catch {
     return null;
@@ -159,7 +209,7 @@ async function saveCurrentLocationAsHome() {
     const homeTarget = {
       latitude: position.coords.latitude,
       longitude: position.coords.longitude,
-      radiusMeters: 100,
+      radiusMeters: DEFAULT_RADIUS_METERS,
       savedAt: new Date().toISOString(),
     };
 
@@ -176,13 +226,14 @@ async function saveCurrentLocationAsHome() {
   }
 }
 
-function speakArrival(targetName) {
-  if (announced || !("speechSynthesis" in window)) {
+function speakArrival(target) {
+  if (announcedTargetName === target.name || !("speechSynthesis" in window)) {
     return;
   }
 
-  announced = true;
-  const utterance = new SpeechSynthesisUtterance(`${targetName}に到着。動物たちの演奏が始まります。`);
+  announcedTargetName = target.name;
+  const variant = target.variantLabel || "動物たち";
+  const utterance = new SpeechSynthesisUtterance(`${target.name}に到着。${variant}の演奏が始まります。`);
   utterance.lang = "ja-JP";
   utterance.rate = 0.92;
   utterance.pitch = 1.08;
@@ -237,10 +288,10 @@ function hideWebARBackdropNodes(model) {
 
 function adjustWebARQuartetLayout(model) {
   const layoutOverrides = {
-    fox_quartet_player: { x: -3.15 },
-    rabbit_quartet_player: { x: 3.15 },
-    fox_music_stand: { x: -2.05 },
-    rabbit_music_stand: { x: 2.05 },
+    fox_quartet_player: { x: -4.2 },
+    rabbit_quartet_player: { x: 4.2 },
+    fox_music_stand: { x: -2.9 },
+    rabbit_music_stand: { x: 2.9 },
   };
 
   model.traverse((node) => {
@@ -271,8 +322,9 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 安定表示 v19" : "表示エリア外";
-    distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 安定表示 v20" : "表示エリア外";
+    const variantText = nearest.variantLabel ? ` / ${nearest.variantLabel}` : "";
+    distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m${variantText}`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
     lastStatusUpdateMs = now;
   }
@@ -290,7 +342,7 @@ function updateByPosition(position) {
   }
 
   if (isInside) {
-    speakArrival(nearest.name);
+    speakArrival(nearest);
   }
 }
 
