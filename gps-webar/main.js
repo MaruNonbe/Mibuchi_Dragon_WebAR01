@@ -35,6 +35,8 @@ let activeTarget = null;
 let visibleStateKey = "";
 let hasLatchedVisibleTarget = false;
 let lastStatusUpdateMs = 0;
+let initialHeading = null;
+let headingRotation = 0;
 
 const runtimeAnimation = {
   quartetStation: null,
@@ -71,6 +73,40 @@ async function requestMotionPermissionIfNeeded() {
   } catch {
     return false;
   }
+}
+
+function normalizeDegrees(value) {
+  return ((value % 360) + 360) % 360;
+}
+
+function shortestAngleDeltaDegrees(from, to) {
+  return ((to - from + 540) % 360) - 180;
+}
+
+function readDeviceHeading(event) {
+  if (typeof event.webkitCompassHeading === "number") {
+    return event.webkitCompassHeading;
+  }
+
+  if (typeof event.alpha === "number") {
+    return normalizeDegrees(360 - event.alpha);
+  }
+
+  return null;
+}
+
+function handleDeviceOrientation(event) {
+  const heading = readDeviceHeading(event);
+  if (heading === null) {
+    return;
+  }
+
+  if (initialHeading === null) {
+    initialHeading = heading;
+  }
+
+  const delta = shortestAngleDeltaDegrees(initialHeading, heading);
+  headingRotation = THREE.MathUtils.degToRad(delta);
 }
 
 async function startCamera() {
@@ -167,7 +203,7 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 見回し対応 v13" : "表示エリア外";
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 安定回転 v14" : "表示エリア外";
     distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
     lastStatusUpdateMs = now;
@@ -284,7 +320,7 @@ function animateVisibleContent(timeMs) {
 
     if (modelEntity) {
       modelEntity.object3D.position.y = -1.05;
-      modelEntity.object3D.rotation.y = 0;
+      modelEntity.object3D.rotation.y = headingRotation;
       animateRuntimeNodes(runtimeAnimation[activeTarget.modelId], seconds);
     }
 
@@ -317,6 +353,8 @@ async function start() {
     statusTitle.textContent = "モーション未許可";
     distanceText.textContent = "iOSではモーション許可が必要です。";
   }
+
+  window.addEventListener("deviceorientation", handleDeviceOrientation, true);
 
   try {
     await startCamera();
