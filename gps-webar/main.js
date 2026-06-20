@@ -30,6 +30,12 @@ const arEntities = TARGETS.flatMap((target) => [
 
 let announced = false;
 let started = false;
+let activeTarget = null;
+
+const runtimeAnimation = {
+  quartetStation: null,
+  quartetHotelTest: null,
+};
 
 function distanceMeters(aLat, aLon, bLat, bLon) {
   const earthRadius = 6371000;
@@ -102,10 +108,115 @@ function updateByPosition(position) {
   distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
   outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
 
-  setVisible(isInside ? nearest : null);
+  activeTarget = isInside ? nearest : null;
+  setVisible(activeTarget);
   if (isInside) {
     speakArrival(nearest.name);
   }
+}
+
+function collectRuntimeAnimationNodes(model) {
+  const state = {
+    bows: [],
+    heads: [],
+    notes: [],
+    text: [],
+    waves: [],
+    bases: new Map(),
+  };
+
+  model.traverse((node) => {
+    if (!node.name) {
+      return;
+    }
+
+    if (node.name.includes("_bow_anim")) {
+      state.bows.push(node);
+    } else if (node.name.endsWith("_head")) {
+      state.heads.push(node);
+    } else if (node.name.includes("_note_")) {
+      state.notes.push(node);
+    } else if (node.name.includes("dancing_arrival_char") || node.name.includes("announcement_caption")) {
+      state.text.push(node);
+    } else if (node.name.includes("announcement_sound_wave")) {
+      state.waves.push(node);
+    }
+
+    state.bases.set(node.uuid, {
+      position: node.position.clone(),
+      rotation: node.rotation.clone(),
+      scale: node.scale.clone(),
+    });
+  });
+
+  return state;
+}
+
+function animateRuntimeNodes(state, seconds) {
+  if (!state) {
+    return;
+  }
+
+  state.bows.forEach((node, index) => {
+    const base = state.bases.get(node.uuid);
+    if (!base) return;
+    const phase = seconds * 5.6 + index * 0.7;
+    node.position.x = base.position.x + Math.sin(phase) * 0.22;
+    node.rotation.y = base.rotation.y + Math.sin(phase) * 0.18;
+  });
+
+  state.heads.forEach((node, index) => {
+    const base = state.bases.get(node.uuid);
+    if (!base) return;
+    const phase = seconds * 2.8 + index * 0.8;
+    node.rotation.x = base.rotation.x + Math.sin(phase) * 0.13;
+    node.rotation.z = base.rotation.z + Math.sin(phase * 0.75) * 0.05;
+  });
+
+  state.notes.forEach((node, index) => {
+    const base = state.bases.get(node.uuid);
+    if (!base) return;
+    const phase = seconds * 2.0 + index * 0.9;
+    node.position.y = base.position.y + Math.sin(phase) * 0.16;
+    node.rotation.z = base.rotation.z + Math.sin(phase) * 0.16;
+  });
+
+  state.text.forEach((node, index) => {
+    const base = state.bases.get(node.uuid);
+    if (!base) return;
+    const phase = seconds * 3.5 + index * 0.42;
+    node.position.y = base.position.y + Math.abs(Math.sin(phase)) * 0.13;
+    node.rotation.z = base.rotation.z + Math.sin(phase) * 0.11;
+  });
+
+  state.waves.forEach((node, index) => {
+    const base = state.bases.get(node.uuid);
+    if (!base) return;
+    const phase = seconds * 4.0 + index * 0.65;
+    const pulse = 1 + Math.abs(Math.sin(phase)) * 0.35;
+    node.scale.set(base.scale.x * pulse, base.scale.y * pulse, base.scale.z * pulse);
+  });
+}
+
+function animateVisibleContent(timeMs) {
+  const seconds = timeMs / 1000;
+
+  if (activeTarget) {
+    const modelEntity = document.getElementById(activeTarget.modelId);
+    const fallbackEntity = document.getElementById(activeTarget.fallbackId);
+
+    if (modelEntity) {
+      modelEntity.object3D.position.y = -0.75 + Math.sin(seconds * 2.2) * 0.06;
+      modelEntity.object3D.rotation.y = Math.PI + Math.sin(seconds * 0.9) * 0.05;
+      animateRuntimeNodes(runtimeAnimation[activeTarget.modelId], seconds);
+    }
+
+    if (fallbackEntity) {
+      fallbackEntity.object3D.rotation.z = Math.sin(seconds * 2.4) * 0.035;
+    }
+  }
+
+  window.requestAnimationFrame(animateVisibleContent);
 }
 
 function handleGeoError(error) {
@@ -151,11 +262,20 @@ for (const target of TARGETS) {
   });
 
   model?.addEventListener("model-loaded", () => {
+    runtimeAnimation[target.modelId] = collectRuntimeAnimationNodes(model.object3D);
     if (!started) {
-      statusTitle.textContent = "モデル読込済み";
-      distanceText.textContent = "開始ボタンを押してください";
+      const nodeCount = runtimeAnimation[target.modelId]
+        ? runtimeAnimation[target.modelId].bows.length +
+          runtimeAnimation[target.modelId].heads.length +
+          runtimeAnimation[target.modelId].notes.length +
+          runtimeAnimation[target.modelId].text.length +
+          runtimeAnimation[target.modelId].waves.length
+        : 0;
+      statusTitle.textContent = `モデル読込済み v5`;
+      distanceText.textContent = `アニメ対象 ${nodeCount} 個 / 開始ボタンを押してください`;
     }
   });
 }
 
 startButton.addEventListener("click", start);
+window.requestAnimationFrame(animateVisibleContent);
