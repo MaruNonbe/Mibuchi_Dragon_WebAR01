@@ -106,17 +106,25 @@ const distanceText = document.getElementById("distanceText");
 const outside = document.getElementById("outside");
 const outsideDistance = document.getElementById("outsideDistance");
 const cameraFeed = document.getElementById("cameraFeed");
+const previewPanel = document.getElementById("previewPanel");
+const previewStationSelect = document.getElementById("previewStationSelect");
+const previewPrev = document.getElementById("previewPrev");
+const previewNext = document.getElementById("previewNext");
+const gpsModeButton = document.getElementById("gpsModeButton");
 const arEntities = Object.values(MODEL_DEFINITIONS).flatMap((definition) => [
   document.getElementById(definition.modelId),
   document.getElementById(definition.fallbackId),
 ]).filter(Boolean);
+const stationTargets = TARGETS.slice(0, FLOWER_NAGAI_STATIONS.length);
 
 let announcedTargetName = "";
 let started = false;
 let activeTarget = null;
+let previewTarget = null;
 let visibleStateKey = "";
 let hasLatchedVisibleTarget = false;
 let lastStatusUpdateMs = 0;
+let latestPosition = null;
 
 const runtimeAnimation = {
   quartetStrings: null,
@@ -169,6 +177,60 @@ function addSavedHomeTarget() {
 }
 
 addSavedHomeTarget();
+
+function setupPreviewControls() {
+  stationTargets.forEach((target, index) => {
+    const option = document.createElement("option");
+    option.value = String(index);
+    option.textContent = `${target.name} / ${target.variantLabel}`;
+    previewStationSelect.appendChild(option);
+  });
+}
+
+function activatePreviewTarget(index) {
+  const normalizedIndex = (index + stationTargets.length) % stationTargets.length;
+  previewStationSelect.value = String(normalizedIndex);
+  previewTarget = stationTargets[normalizedIndex];
+  activeTarget = previewTarget;
+  hasLatchedVisibleTarget = true;
+  visibleStateKey = "";
+  setVisible(activeTarget);
+  outside.classList.add("hidden");
+  announcedTargetName = "";
+  updatePreviewStatus();
+}
+
+function updatePreviewStatus() {
+  if (!previewTarget) {
+    return;
+  }
+
+  let distancePart = "現在地で評価表示中";
+  if (latestPosition) {
+    const distance = distanceMeters(
+      latestPosition.coords.latitude,
+      latestPosition.coords.longitude,
+      previewTarget.latitude,
+      previewTarget.longitude,
+    );
+    const accuracy = Math.round(latestPosition.coords.accuracy || 0);
+    distancePart = `本来の駅まで約${Math.round(distance)}m / GPS精度 約${accuracy}m`;
+  }
+
+  statusTitle.textContent = `評価モード / 駅別モデル v22`;
+  distanceText.textContent = `${previewTarget.name} / ${previewTarget.variantLabel} / ${distancePart}`;
+}
+
+function clearPreviewTarget() {
+  previewTarget = null;
+  activeTarget = null;
+  hasLatchedVisibleTarget = false;
+  announcedTargetName = "";
+  visibleStateKey = "";
+  setVisible(null);
+  statusTitle.textContent = "GPSモード";
+  distanceText.textContent = "現在地が表示エリアに入るとARが表示されます";
+}
 
 function distanceMeters(aLat, aLon, bLat, bLon) {
   const earthRadius = 6371000;
@@ -336,6 +398,20 @@ function adjustWebARQuartetLayout(model) {
 
 function updateByPosition(position) {
   const now = Date.now();
+  latestPosition = position;
+
+  if (previewTarget) {
+    if (now - lastStatusUpdateMs > 800) {
+      updatePreviewStatus();
+      lastStatusUpdateMs = now;
+    }
+    if (activeTarget !== previewTarget) {
+      activeTarget = previewTarget;
+      setVisible(activeTarget);
+    }
+    return;
+  }
+
   const { latitude, longitude, accuracy } = position.coords;
   const nearest = TARGETS
     .map((target) => ({
@@ -536,12 +612,15 @@ async function start() {
     return;
   }
 
+  gate.classList.add("hidden");
+  previewPanel.classList.remove("hidden");
+  activatePreviewTarget(Number(previewStationSelect.value || 0));
+
   if (!navigator.geolocation) {
-    handleGeoError({ message: "このブラウザはGeolocationに対応していません。" });
+    handleGeoError({ message: "このブラウザはGeolocationに対応していません。評価モードは使用できます。" });
     return;
   }
 
-  gate.classList.add("hidden");
   navigator.geolocation.watchPosition(updateByPosition, handleGeoError, {
     enableHighAccuracy: true,
     maximumAge: 1000,
@@ -575,12 +654,23 @@ for (const definition of Object.values(MODEL_DEFINITIONS)) {
           animationState.text.length +
           animationState.waves.length
         : 0;
-      statusTitle.textContent = `モデル読込済み v21`;
+      statusTitle.textContent = `モデル読込済み v22`;
       distanceText.textContent = `アニメ対象 ${nodeCount} 個 / 開始ボタンを押してください`;
     }
   });
 }
 
+setupPreviewControls();
+previewStationSelect.addEventListener("change", () => {
+  activatePreviewTarget(Number(previewStationSelect.value || 0));
+});
+previewPrev.addEventListener("click", () => {
+  activatePreviewTarget(Number(previewStationSelect.value || 0) - 1);
+});
+previewNext.addEventListener("click", () => {
+  activatePreviewTarget(Number(previewStationSelect.value || 0) + 1);
+});
+gpsModeButton.addEventListener("click", clearPreviewTarget);
 startButton.addEventListener("click", start);
 saveHomeButton.addEventListener("click", saveCurrentLocationAsHome);
 window.requestAnimationFrame(animateVisibleContent);

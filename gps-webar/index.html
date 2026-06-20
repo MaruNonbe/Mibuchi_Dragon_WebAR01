@@ -8,8 +8,8 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar-nft.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
-    <script src="./animation-player.js?v=21"></script>
-    <link rel="stylesheet" href="./styles.css?v=21" />
+    <script src="./animation-player.js?v=22"></script>
+    <link rel="stylesheet" href="./styles.css?v=22" />
   </head>
   <body>
     <video id="cameraFeed" class="camera-feed" autoplay playsinline muted></video>
@@ -25,6 +25,13 @@
     <div id="status" class="status">
       <strong id="statusTitle">準備中</strong>
       <span id="distanceText">位置情報を待っています</span>
+    </div>
+
+    <div id="previewPanel" class="preview-panel hidden">
+      <button id="previewPrev" class="preview-step" type="button" aria-label="前の駅">‹</button>
+      <select id="previewStationSelect" aria-label="評価する駅"></select>
+      <button id="previewNext" class="preview-step" type="button" aria-label="次の駅">›</button>
+      <button id="gpsModeButton" class="preview-gps" type="button">GPS</button>
     </div>
 
     <div id="outside" class="outside hidden">
@@ -105,6 +112,6 @@
       <a-camera look-controls="enabled: false"></a-camera>
     </a-scene>
 
-    <script src="./main.js?v=21"></script>
+    <script src="./main.js?v=22"></script>
   </body>
 </html>

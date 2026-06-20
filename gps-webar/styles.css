@@ -93,6 +93,58 @@ button.secondary {
   color: #edf8f4;
 }
 
+.preview-panel {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 22;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px 58px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(7, 27, 32, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+.preview-panel select,
+.preview-panel button {
+  height: 42px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.preview-panel select {
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+  padding: 0 10px;
+}
+
+.preview-panel option {
+  color: #172025;
+}
+
+.preview-step,
+.preview-gps {
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+
+.preview-step {
+  font-size: 26px;
+}
+
+.preview-gps {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 12px;
+}
+
 .status {
   position: fixed;
   top: max(12px, env(safe-area-inset-top));
