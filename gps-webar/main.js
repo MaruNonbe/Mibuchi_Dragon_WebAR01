@@ -237,10 +237,10 @@ function hideWebARBackdropNodes(model) {
 
 function adjustWebARQuartetLayout(model) {
   const layoutOverrides = {
-    fox_quartet_player: { x: -2.25 },
-    rabbit_quartet_player: { x: 2.25 },
-    fox_music_stand: { x: -1.35 },
-    rabbit_music_stand: { x: 1.35 },
+    fox_quartet_player: { x: -3.15 },
+    rabbit_quartet_player: { x: 3.15 },
+    fox_music_stand: { x: -2.05 },
+    rabbit_music_stand: { x: 2.05 },
   };
 
   model.traverse((node) => {
@@ -271,7 +271,7 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 安定表示 v18" : "表示エリア外";
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 安定表示 v19" : "表示エリア外";
     distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
     lastStatusUpdateMs = now;
