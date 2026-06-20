@@ -206,8 +206,8 @@ function animateVisibleContent(timeMs) {
     const fallbackEntity = document.getElementById(activeTarget.fallbackId);
 
     if (modelEntity) {
-      modelEntity.object3D.position.y = -0.75 + Math.sin(seconds * 2.2) * 0.06;
-      modelEntity.object3D.rotation.y = Math.PI + Math.sin(seconds * 0.9) * 0.05;
+      modelEntity.object3D.position.y = -0.95 + Math.sin(seconds * 2.2) * 0.06;
+      modelEntity.object3D.rotation.y = Math.sin(seconds * 0.9) * 0.05;
       animateRuntimeNodes(runtimeAnimation[activeTarget.modelId], seconds);
     }
 
