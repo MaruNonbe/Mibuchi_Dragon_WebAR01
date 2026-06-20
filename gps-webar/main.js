@@ -37,6 +37,11 @@ const runtimeAnimation = {
   quartetHotelTest: null,
 };
 
+const modelLoadState = {
+  quartetStation: "pending",
+  quartetHotelTest: "pending",
+};
+
 function distanceMeters(aLat, aLon, bLat, bLon) {
   const earthRadius = 6371000;
   const toRad = (value) => (value * Math.PI) / 180;
@@ -84,8 +89,12 @@ function setVisible(activeTarget) {
   }
 
   if (activeTarget) {
-    document.getElementById(activeTarget.modelId)?.setAttribute("visible", true);
-    document.getElementById(activeTarget.fallbackId)?.setAttribute("visible", true);
+    const model = document.getElementById(activeTarget.modelId);
+    const fallback = document.getElementById(activeTarget.fallbackId);
+    const failed = modelLoadState[activeTarget.modelId] === "error";
+
+    model?.setAttribute("visible", !failed);
+    fallback?.setAttribute("visible", failed);
   }
 
   outside.classList.toggle("hidden", Boolean(activeTarget));
@@ -206,7 +215,7 @@ function animateVisibleContent(timeMs) {
     const fallbackEntity = document.getElementById(activeTarget.fallbackId);
 
     if (modelEntity) {
-      modelEntity.object3D.position.y = -0.95 + Math.sin(seconds * 2.2) * 0.06;
+      modelEntity.object3D.position.y = -0.85 + Math.sin(seconds * 2.2) * 0.06;
       modelEntity.object3D.rotation.y = Math.sin(seconds * 0.9) * 0.05;
       animateRuntimeNodes(runtimeAnimation[activeTarget.modelId], seconds);
     }
@@ -257,11 +266,13 @@ async function start() {
 for (const target of TARGETS) {
   const model = document.getElementById(target.modelId);
   model?.addEventListener("model-error", () => {
+    modelLoadState[target.modelId] = "error";
     statusTitle.textContent = "モデル未読込";
     distanceText.textContent = "GLBを書き出してください: gps-webar/assets/nagai_station_quartet.glb";
   });
 
   model?.addEventListener("model-loaded", () => {
+    modelLoadState[target.modelId] = "loaded";
     runtimeAnimation[target.modelId] = collectRuntimeAnimationNodes(model.object3D);
     if (!started) {
       const nodeCount = runtimeAnimation[target.modelId]
