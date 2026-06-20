@@ -33,6 +33,8 @@ let announced = false;
 let started = false;
 let activeTarget = null;
 let visibleStateKey = "";
+let hasLatchedVisibleTarget = false;
+let lastStatusUpdateMs = 0;
 
 const runtimeAnimation = {
   quartetStation: null,
@@ -150,6 +152,7 @@ function hideWebARBackdropNodes(model) {
 }
 
 function updateByPosition(position) {
+  const now = Date.now();
   const { latitude, longitude, accuracy } = position.coords;
   const nearest = TARGETS
     .map((target) => ({
@@ -161,13 +164,27 @@ function updateByPosition(position) {
   const roundedDistance = Math.round(nearest.distance);
   const roundedAccuracy = Math.round(accuracy || 0);
   const isInside = nearest.distance <= nearest.radiusMeters;
+  const shouldShow = hasLatchedVisibleTarget || isInside;
 
-  statusTitle.textContent = isInside ? "表示エリア内 / モデル表示中 v11" : "表示エリア外";
-  distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
-  outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
+  if (now - lastStatusUpdateMs > 1500) {
+    statusTitle.textContent = shouldShow ? "表示エリア内 / モデル表示中 v12" : "表示エリア外";
+    distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
+    outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
+    lastStatusUpdateMs = now;
+  }
 
-  activeTarget = isInside ? nearest : null;
-  setVisible(activeTarget);
+  if (isInside && !hasLatchedVisibleTarget) {
+    hasLatchedVisibleTarget = true;
+    activeTarget = nearest;
+    setVisible(activeTarget);
+  } else if (!activeTarget && shouldShow) {
+    activeTarget = nearest;
+    setVisible(activeTarget);
+  } else if (!shouldShow) {
+    activeTarget = null;
+    setVisible(null);
+  }
+
   if (isInside) {
     speakArrival(nearest.name);
   }
@@ -266,8 +283,8 @@ function animateVisibleContent(timeMs) {
     const fallbackEntity = document.getElementById(activeTarget.fallbackId);
 
     if (modelEntity) {
-      modelEntity.object3D.position.y = -1.05 + Math.sin(seconds * 2.2) * 0.06;
-      modelEntity.object3D.rotation.y = Math.sin(seconds * 0.9) * 0.05;
+      modelEntity.object3D.position.y = -1.05;
+      modelEntity.object3D.rotation.y = 0;
       animateRuntimeNodes(runtimeAnimation[activeTarget.modelId], seconds);
     }
 
