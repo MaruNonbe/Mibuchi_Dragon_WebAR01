@@ -23,6 +23,7 @@ const statusTitle = document.getElementById("statusTitle");
 const distanceText = document.getElementById("distanceText");
 const outside = document.getElementById("outside");
 const outsideDistance = document.getElementById("outsideDistance");
+const cameraFeed = document.getElementById("cameraFeed");
 const arEntities = TARGETS.flatMap((target) => [
   document.getElementById(target.modelId),
   document.getElementById(target.fallbackId),
@@ -67,6 +68,25 @@ async function requestMotionPermissionIfNeeded() {
   } catch {
     return false;
   }
+}
+
+async function startCamera() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    throw new Error("このブラウザはカメラ取得に対応していません。");
+  }
+
+  const constraints = {
+    audio: false,
+    video: {
+      facingMode: { ideal: "environment" },
+      width: { ideal: 1280 },
+      height: { ideal: 720 },
+    },
+  };
+
+  const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  cameraFeed.srcObject = stream;
+  await cameraFeed.play();
 }
 
 function speakArrival(targetName) {
@@ -250,6 +270,17 @@ async function start() {
     distanceText.textContent = "iOSではモーション許可が必要です。";
   }
 
+  try {
+    await startCamera();
+  } catch (error) {
+    statusTitle.textContent = "カメラエラー";
+    distanceText.textContent = error.message || "カメラを起動できませんでした";
+    startButton.disabled = false;
+    startButton.textContent = "GPS WebARを開始";
+    started = false;
+    return;
+  }
+
   if (!navigator.geolocation) {
     handleGeoError({ message: "このブラウザはGeolocationに対応していません。" });
     return;
@@ -282,7 +313,7 @@ for (const target of TARGETS) {
           runtimeAnimation[target.modelId].text.length +
           runtimeAnimation[target.modelId].waves.length
         : 0;
-      statusTitle.textContent = `モデル読込済み v5`;
+      statusTitle.textContent = `モデル読込済み v8`;
       distanceText.textContent = `アニメ対象 ${nodeCount} 個 / 開始ボタンを押してください`;
     }
   });
