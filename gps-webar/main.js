@@ -167,7 +167,7 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 安定表示 v15" : "表示エリア外";
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 安定表示 v16" : "表示エリア外";
     distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
     lastStatusUpdateMs = now;
@@ -283,7 +283,7 @@ function animateVisibleContent(timeMs) {
     const fallbackEntity = document.getElementById(activeTarget.fallbackId);
 
     if (modelEntity) {
-      modelEntity.object3D.position.y = -1.05;
+      modelEntity.object3D.position.y = -1.25;
       modelEntity.object3D.rotation.y = 0;
       animateRuntimeNodes(runtimeAnimation[activeTarget.modelId], seconds);
     }
