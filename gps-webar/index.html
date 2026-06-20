@@ -8,8 +8,8 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar-nft.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
-    <script src="./animation-player.js?v=10"></script>
-    <link rel="stylesheet" href="./styles.css?v=10" />
+    <script src="./animation-player.js?v=11"></script>
+    <link rel="stylesheet" href="./styles.css?v=11" />
   </head>
   <body>
     <video id="cameraFeed" class="camera-feed" autoplay playsinline muted></video>
@@ -39,9 +39,9 @@
       <a-entity
         id="quartetStation"
         gltf-model="#quartetModel"
-        position="0 -0.85 -6"
+        position="0 -1.05 -6.8"
         rotation="0 0 0"
-        scale="0.32 0.32 0.32"
+        scale="0.55 0.55 0.55"
         animation-mixer="loop: repeat"
         play-all-model-animations="timeScale: 1"
         visible="false"
@@ -50,9 +50,9 @@
       <a-entity
         id="quartetHotelTest"
         gltf-model="#quartetModel"
-        position="0 -0.85 -6"
+        position="0 -1.05 -6.8"
         rotation="0 0 0"
-        scale="0.32 0.32 0.32"
+        scale="0.55 0.55 0.55"
         animation-mixer="loop: repeat"
         play-all-model-animations="timeScale: 1"
         visible="false"
@@ -81,6 +81,6 @@
       <a-camera look-controls="enabled: false"></a-camera>
     </a-scene>
 
-    <script src="./main.js?v=10"></script>
+    <script src="./main.js?v=11"></script>
   </body>
 </html>
