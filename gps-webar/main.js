@@ -32,6 +32,7 @@ const arEntities = TARGETS.flatMap((target) => [
 let announced = false;
 let started = false;
 let activeTarget = null;
+let visibleStateKey = "";
 
 const runtimeAnimation = {
   quartetStation: null,
@@ -104,6 +105,17 @@ function speakArrival(targetName) {
 }
 
 function setVisible(activeTarget) {
+  const desiredKey = activeTarget
+    ? `${activeTarget.modelId}:${modelLoadState[activeTarget.modelId]}`
+    : "none";
+
+  if (desiredKey === visibleStateKey) {
+    outside.classList.toggle("hidden", Boolean(activeTarget));
+    return;
+  }
+
+  visibleStateKey = desiredKey;
+
   for (const entity of arEntities) {
     entity.setAttribute("visible", false);
   }
@@ -120,6 +132,23 @@ function setVisible(activeTarget) {
   outside.classList.toggle("hidden", Boolean(activeTarget));
 }
 
+function hideWebARBackdropNodes(model) {
+  const hiddenNameParts = [
+    "warm_concert_backdrop",
+    "subtle_backdrop_panel",
+  ];
+
+  model.traverse((node) => {
+    if (!node.name) {
+      return;
+    }
+
+    if (hiddenNameParts.some((namePart) => node.name.includes(namePart))) {
+      node.visible = false;
+    }
+  });
+}
+
 function updateByPosition(position) {
   const { latitude, longitude, accuracy } = position.coords;
   const nearest = TARGETS
@@ -133,7 +162,7 @@ function updateByPosition(position) {
   const roundedAccuracy = Math.round(accuracy || 0);
   const isInside = nearest.distance <= nearest.radiusMeters;
 
-  statusTitle.textContent = isInside ? "表示エリア内 / モデル表示中 v9" : "表示エリア外";
+  statusTitle.textContent = isInside ? "表示エリア内 / モデル表示中 v10" : "表示エリア外";
   distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
   outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
 
@@ -145,6 +174,8 @@ function updateByPosition(position) {
 }
 
 function collectRuntimeAnimationNodes(model) {
+  hideWebARBackdropNodes(model);
+
   const state = {
     bows: [],
     heads: [],
@@ -298,6 +329,8 @@ for (const target of TARGETS) {
   const model = document.getElementById(target.modelId);
   model?.addEventListener("model-error", () => {
     modelLoadState[target.modelId] = "error";
+    visibleStateKey = "";
+    setVisible(activeTarget);
     statusTitle.textContent = "モデル未読込";
     distanceText.textContent = "GLBを書き出してください: gps-webar/assets/nagai_station_quartet.glb";
   });
@@ -305,6 +338,8 @@ for (const target of TARGETS) {
   model?.addEventListener("model-loaded", () => {
     modelLoadState[target.modelId] = "loaded";
     runtimeAnimation[target.modelId] = collectRuntimeAnimationNodes(model.object3D);
+    visibleStateKey = "";
+    setVisible(activeTarget);
     if (!started) {
       const nodeCount = runtimeAnimation[target.modelId]
         ? runtimeAnimation[target.modelId].bows.length +
