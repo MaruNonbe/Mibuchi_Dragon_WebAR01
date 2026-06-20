@@ -1,3 +1,5 @@
+const HOME_STORAGE_KEY = "nagaiQuartetHomeTarget";
+
 const TARGETS = [
   {
     name: "長井駅",
@@ -19,6 +21,7 @@ const TARGETS = [
 
 const gate = document.getElementById("gate");
 const startButton = document.getElementById("startButton");
+const saveHomeButton = document.getElementById("saveHomeButton");
 const statusTitle = document.getElementById("statusTitle");
 const distanceText = document.getElementById("distanceText");
 const outside = document.getElementById("outside");
@@ -45,6 +48,45 @@ const modelLoadState = {
   quartetStation: "pending",
   quartetHotelTest: "pending",
 };
+
+function loadSavedHomeTarget() {
+  try {
+    const raw = window.localStorage.getItem(HOME_STORAGE_KEY);
+    if (!raw) {
+      return null;
+    }
+
+    const parsed = JSON.parse(raw);
+    if (typeof parsed.latitude !== "number" || typeof parsed.longitude !== "number") {
+      return null;
+    }
+
+    return {
+      name: "自宅テスト地点",
+      latitude: parsed.latitude,
+      longitude: parsed.longitude,
+      radiusMeters: parsed.radiusMeters || 100,
+      modelId: "quartetHotelTest",
+      fallbackId: "fallbackHotelTest",
+    };
+  } catch {
+    return null;
+  }
+}
+
+function addSavedHomeTarget() {
+  const savedHome = loadSavedHomeTarget();
+  if (!savedHome) {
+    return;
+  }
+
+  const exists = TARGETS.some((target) => target.name === savedHome.name);
+  if (!exists) {
+    TARGETS.push(savedHome);
+  }
+}
+
+addSavedHomeTarget();
 
 function distanceMeters(aLat, aLon, bLat, bLon) {
   const earthRadius = 6371000;
@@ -90,6 +132,48 @@ async function startCamera() {
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
   cameraFeed.srcObject = stream;
   await cameraFeed.play();
+}
+
+function getCurrentPosition(options) {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error("このブラウザはGeolocationに対応していません。"));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+  });
+}
+
+async function saveCurrentLocationAsHome() {
+  saveHomeButton.disabled = true;
+  saveHomeButton.textContent = "現在地を取得中...";
+
+  try {
+    const position = await getCurrentPosition({
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 15000,
+    });
+
+    const homeTarget = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude,
+      radiusMeters: 100,
+      savedAt: new Date().toISOString(),
+    };
+
+    window.localStorage.setItem(HOME_STORAGE_KEY, JSON.stringify(homeTarget));
+    addSavedHomeTarget();
+    statusTitle.textContent = "自宅テスト地点を保存";
+    distanceText.textContent = "この端末だけで半径100m表示に使います";
+    saveHomeButton.textContent = "自宅テスト地点を保存済み";
+  } catch (error) {
+    statusTitle.textContent = "自宅保存エラー";
+    distanceText.textContent = error.message || "現在地を保存できませんでした";
+    saveHomeButton.disabled = false;
+    saveHomeButton.textContent = "現在地を自宅テスト地点に保存";
+  }
 }
 
 function speakArrival(targetName) {
@@ -187,7 +271,7 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 安定表示 v17" : "表示エリア外";
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 安定表示 v18" : "表示エリア外";
     distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
     lastStatusUpdateMs = now;
@@ -393,4 +477,5 @@ for (const target of TARGETS) {
 }
 
 startButton.addEventListener("click", start);
+saveHomeButton.addEventListener("click", saveCurrentLocationAsHome);
 window.requestAnimationFrame(animateVisibleContent);
