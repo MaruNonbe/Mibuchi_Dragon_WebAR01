@@ -133,7 +133,7 @@ function updateByPosition(position) {
   const roundedAccuracy = Math.round(accuracy || 0);
   const isInside = nearest.distance <= nearest.radiusMeters;
 
-  statusTitle.textContent = isInside ? "表示エリア内" : "表示エリア外";
+  statusTitle.textContent = isInside ? "表示エリア内 / モデル表示中 v9" : "表示エリア外";
   distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m`;
   outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
 
