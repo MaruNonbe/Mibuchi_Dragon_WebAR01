@@ -22,12 +22,4 @@
 | 四季の郷駅 | 38.1858218 | 140.0776309 | ヒツジたちのトロンボーン隊 |
 | 荒砥駅 | 38.1879827 | 140.0975825 | 全員集合フィナーレ |
 
-現在のWebARは、駅ごとの演出案に応じて次の3種類のGLBを読み分けます。
-
-| 種類 | GLB |
-| --- | --- |
-| 弦楽 | `assets/nagai_station_strings.glb` |
-| 管楽 | `assets/nagai_station_winds.glb` |
-| 打楽器 | `assets/nagai_station_percussion.glb` |
-
-さらに細かく駅ごとの完全専用モデルにする場合は、駅別GLBを追加して `MODEL_DEFINITIONS` と各駅の `modelId` を分けます。
+現在のWebARは、各駅ごとに `assets/stations/` 配下の専用GLBを読み込みます。評価モードでは駅を切り替えた時だけ該当GLBを読み込むため、17駅分を一度にプリロードしない構成です。

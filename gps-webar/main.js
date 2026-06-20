@@ -1,63 +1,29 @@
 const HOME_STORAGE_KEY = "nagaiQuartetHomeTarget";
 const DEFAULT_RADIUS_METERS = 100;
 
-const MODEL_DEFINITIONS = {
-  strings: {
-    modelId: "quartetStrings",
-    fallbackId: "fallbackStrings",
-    assetPath: "gps-webar/assets/nagai_station_strings.glb",
-  },
-  winds: {
-    modelId: "quartetWinds",
-    fallbackId: "fallbackWinds",
-    assetPath: "gps-webar/assets/nagai_station_winds.glb",
-  },
-  percussion: {
-    modelId: "quartetPercussion",
-    fallbackId: "fallbackPercussion",
-    assetPath: "gps-webar/assets/nagai_station_percussion.glb",
-  },
-};
-
-const ENSEMBLE_MODEL_KEY = {
-  strings: "strings",
-  woodwinds: "winds",
-  brass: "winds",
-  percussion: "percussion",
-  jazz: "winds",
-  taiko: "percussion",
-  flute: "winds",
-  "low-brass": "winds",
-  clarinet: "winds",
-  piccolo: "winds",
-  sax: "winds",
-  handbell: "percussion",
-  horn: "winds",
-  marimba: "percussion",
-  trombone: "winds",
-  finale: "percussion",
-  test: "strings",
-  "home-test": "strings",
+const STATION_MODEL = {
+  modelId: "stationModel",
+  fallbackId: "fallbackStationModel",
 };
 
 const STATION_VARIANTS = [
-  { variantLabel: "きつねとウサギの弦楽四重奏", ensemble: "strings" },
-  { variantLabel: "ネコたちの木管アンサンブル", ensemble: "woodwinds" },
-  { variantLabel: "イヌたちの金管ファンファーレ", ensemble: "brass" },
-  { variantLabel: "リスたちの打楽器パレード", ensemble: "percussion" },
-  { variantLabel: "パンダとペンギンの駅前ジャズ", ensemble: "jazz" },
-  { variantLabel: "タヌキたちの和太鼓リズム", ensemble: "taiko" },
-  { variantLabel: "シカたちのフルート合奏", ensemble: "flute" },
-  { variantLabel: "クマたちの低音ブラス", ensemble: "low-brass" },
-  { variantLabel: "ウサギたちのクラリネット隊", ensemble: "clarinet" },
-  { variantLabel: "どうぶつ弦楽四重奏", ensemble: "strings" },
-  { variantLabel: "小鳥たちのピッコロ行進曲", ensemble: "piccolo" },
-  { variantLabel: "キツネたちのサックスバンド", ensemble: "sax" },
-  { variantLabel: "白ウサギのハンドベル隊", ensemble: "handbell" },
-  { variantLabel: "カモシカたちのホルン合奏", ensemble: "horn" },
-  { variantLabel: "カエルたちのマリンバ隊", ensemble: "marimba" },
-  { variantLabel: "ヒツジたちのトロンボーン隊", ensemble: "trombone" },
-  { variantLabel: "全員集合フィナーレ", ensemble: "finale" },
+  { variantLabel: "きつね・ウサギ・シカの弦楽四重奏", ensemble: "strings", modelPath: "./assets/stations/akayu_strings_fox_rabbit.glb" },
+  { variantLabel: "ネコと小鳥の木管アンサンブル", ensemble: "woodwinds", modelPath: "./assets/stations/nanyo_city_hall_cats_woodwinds.glb" },
+  { variantLabel: "イヌたちの金管ファンファーレ", ensemble: "brass", modelPath: "./assets/stations/miyauchi_dogs_brass.glb" },
+  { variantLabel: "リスとカエルの打楽器パレード", ensemble: "percussion", modelPath: "./assets/stations/orihata_squirrels_percussion.glb" },
+  { variantLabel: "パンダとペンギンの駅前ジャズ", ensemble: "jazz", modelPath: "./assets/stations/ringo_panda_penguin_jazz.glb" },
+  { variantLabel: "タヌキたちの太鼓リズム", ensemble: "taiko", modelPath: "./assets/stations/nishi_otsuka_tanuki_taiko.glb" },
+  { variantLabel: "シカと小鳥のフルート合奏", ensemble: "flute", modelPath: "./assets/stations/imaizumi_deer_flutes.glb" },
+  { variantLabel: "クマたちの低音ブラス", ensemble: "low-brass", modelPath: "./assets/stations/tokiniwa_bears_low_brass.glb" },
+  { variantLabel: "ウサギたちのクラリネット隊", ensemble: "clarinet", modelPath: "./assets/stations/minami_nagai_rabbit_clarinets.glb" },
+  { variantLabel: "どうぶつ弦楽四重奏", ensemble: "strings", modelPath: "./assets/stations/nagai_main_string_quartet.glb" },
+  { variantLabel: "小鳥たちのピッコロ行進曲", ensemble: "piccolo", modelPath: "./assets/stations/ayame_koen_birds_piccolo.glb" },
+  { variantLabel: "キツネたちのサックスバンド", ensemble: "sax", modelPath: "./assets/stations/uzen_narita_fox_sax_band.glb" },
+  { variantLabel: "白ウサギのハンドベル隊", ensemble: "handbell", modelPath: "./assets/stations/shirousagi_white_rabbit_bells.glb" },
+  { variantLabel: "カモシカたちのホルン合奏", ensemble: "horn", modelPath: "./assets/stations/koguwa_kamoshika_horns.glb" },
+  { variantLabel: "カエルたちのマリンバ隊", ensemble: "marimba", modelPath: "./assets/stations/ayukai_frogs_marimba.glb" },
+  { variantLabel: "ヒツジたちのトロンボーン隊", ensemble: "trombone", modelPath: "./assets/stations/shikinosato_sheep_trombones.glb" },
+  { variantLabel: "全員集合フィナーレ", ensemble: "finale", modelPath: "./assets/stations/arato_finale_all_stars.glb" },
 ];
 
 const FLOWER_NAGAI_STATIONS = [
@@ -84,7 +50,7 @@ const TARGETS = [
   ...FLOWER_NAGAI_STATIONS.map((station, index) => ({
     ...station,
     ...STATION_VARIANTS[index % STATION_VARIANTS.length],
-    ...MODEL_DEFINITIONS[ENSEMBLE_MODEL_KEY[STATION_VARIANTS[index % STATION_VARIANTS.length].ensemble]],
+    ...STATION_MODEL,
     radiusMeters: DEFAULT_RADIUS_METERS,
   })),
   {
@@ -92,7 +58,8 @@ const TARGETS = [
     latitude: 38.1013040,
     longitude: 140.0433785,
     radiusMeters: DEFAULT_RADIUS_METERS,
-    ...MODEL_DEFINITIONS.strings,
+    ...STATION_MODEL,
+    modelPath: "./assets/stations/nagai_main_string_quartet.glb",
     variantLabel: "検証用どうぶつアンサンブル",
     ensemble: "test",
   },
@@ -111,10 +78,9 @@ const previewStationSelect = document.getElementById("previewStationSelect");
 const previewPrev = document.getElementById("previewPrev");
 const previewNext = document.getElementById("previewNext");
 const gpsModeButton = document.getElementById("gpsModeButton");
-const arEntities = Object.values(MODEL_DEFINITIONS).flatMap((definition) => [
-  document.getElementById(definition.modelId),
-  document.getElementById(definition.fallbackId),
-]).filter(Boolean);
+const stationModel = document.getElementById(STATION_MODEL.modelId);
+const fallbackStationModel = document.getElementById(STATION_MODEL.fallbackId);
+const arEntities = [stationModel, fallbackStationModel].filter(Boolean);
 const stationTargets = TARGETS.slice(0, FLOWER_NAGAI_STATIONS.length);
 
 let announcedTargetName = "";
@@ -126,17 +92,9 @@ let hasLatchedVisibleTarget = false;
 let lastStatusUpdateMs = 0;
 let latestPosition = null;
 
-const runtimeAnimation = {
-  quartetStrings: null,
-  quartetWinds: null,
-  quartetPercussion: null,
-};
-
-const modelLoadState = {
-  quartetStrings: "pending",
-  quartetWinds: "pending",
-  quartetPercussion: "pending",
-};
+let runtimeAnimation = null;
+const modelLoadState = {};
+let activeModelPath = "";
 
 function loadSavedHomeTarget() {
   try {
@@ -155,7 +113,8 @@ function loadSavedHomeTarget() {
       latitude: parsed.latitude,
       longitude: parsed.longitude,
       radiusMeters: parsed.radiusMeters || DEFAULT_RADIUS_METERS,
-      ...MODEL_DEFINITIONS.strings,
+      ...STATION_MODEL,
+      modelPath: "./assets/stations/nagai_main_string_quartet.glb",
       variantLabel: "自宅検証用どうぶつアンサンブル",
       ensemble: "home-test",
     };
@@ -217,7 +176,7 @@ function updatePreviewStatus() {
     distancePart = `本来の駅まで約${Math.round(distance)}m / GPS精度 約${accuracy}m`;
   }
 
-  statusTitle.textContent = `評価モード / 駅別モデル v22`;
+  statusTitle.textContent = `評価モード / 駅別キャラ v23`;
   distanceText.textContent = `${previewTarget.name} / ${previewTarget.variantLabel} / ${distancePart}`;
 }
 
@@ -337,7 +296,7 @@ function speakArrival(target) {
 
 function setVisible(activeTarget) {
   const desiredKey = activeTarget
-    ? `${activeTarget.modelId}:${modelLoadState[activeTarget.modelId]}`
+    ? `${activeTarget.modelPath}:${modelLoadState[activeTarget.modelPath]}`
     : "none";
 
   if (desiredKey === visibleStateKey) {
@@ -352,12 +311,19 @@ function setVisible(activeTarget) {
   }
 
   if (activeTarget) {
-    const model = document.getElementById(activeTarget.modelId);
-    const fallback = document.getElementById(activeTarget.fallbackId);
-    const failed = modelLoadState[activeTarget.modelId] === "error";
+    const modelPath = `${activeTarget.modelPath}?v=23`;
+    const failed = modelLoadState[activeTarget.modelPath] === "error";
+    const loaded = modelLoadState[activeTarget.modelPath] === "loaded";
 
-    model?.setAttribute("visible", !failed);
-    fallback?.setAttribute("visible", failed);
+    if (activeModelPath !== activeTarget.modelPath) {
+      activeModelPath = activeTarget.modelPath;
+      runtimeAnimation = null;
+      modelLoadState[activeTarget.modelPath] = "pending";
+      stationModel?.setAttribute("gltf-model", modelPath);
+    }
+
+    stationModel?.setAttribute("visible", loaded && !failed);
+    fallbackStationModel?.setAttribute("visible", failed);
   }
 
   outside.classList.toggle("hidden", Boolean(activeTarget));
@@ -426,7 +392,7 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別モデル v21" : "表示エリア外";
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別キャラ v23" : "表示エリア外";
     const variantText = nearest.variantLabel ? ` / ${nearest.variantLabel}` : "";
     distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m${variantText}`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
@@ -562,17 +528,14 @@ function animateVisibleContent(timeMs) {
   const seconds = timeMs / 1000;
 
   if (activeTarget) {
-    const modelEntity = document.getElementById(activeTarget.modelId);
-    const fallbackEntity = document.getElementById(activeTarget.fallbackId);
-
-    if (modelEntity) {
-      modelEntity.object3D.position.y = -1.25;
-      modelEntity.object3D.rotation.y = 0;
-      animateRuntimeNodes(runtimeAnimation[activeTarget.modelId], seconds);
+    if (stationModel) {
+      stationModel.object3D.position.y = -1.25;
+      stationModel.object3D.rotation.y = 0;
+      animateRuntimeNodes(runtimeAnimation, seconds);
     }
 
-    if (fallbackEntity) {
-      fallbackEntity.object3D.rotation.z = Math.sin(seconds * 2.4) * 0.035;
+    if (fallbackStationModel) {
+      fallbackStationModel.object3D.rotation.z = Math.sin(seconds * 2.4) * 0.035;
     }
   }
 
@@ -628,37 +591,39 @@ async function start() {
   });
 }
 
-for (const definition of Object.values(MODEL_DEFINITIONS)) {
-  const model = document.getElementById(definition.modelId);
-  model?.addEventListener("model-error", () => {
-    modelLoadState[definition.modelId] = "error";
-    visibleStateKey = "";
-    setVisible(activeTarget);
-    statusTitle.textContent = "モデル未読込";
-    distanceText.textContent = `GLBを書き出してください: ${definition.assetPath}`;
-  });
+stationModel?.addEventListener("model-error", () => {
+  if (activeModelPath) {
+    modelLoadState[activeModelPath] = "error";
+  }
+  visibleStateKey = "";
+  setVisible(activeTarget);
+  statusTitle.textContent = "モデル未読込";
+  distanceText.textContent = activeModelPath
+    ? `GLBを確認してください: ${activeModelPath}`
+    : "駅別GLBを確認してください";
+});
 
-  model?.addEventListener("model-loaded", () => {
-    modelLoadState[definition.modelId] = "loaded";
-    runtimeAnimation[definition.modelId] = collectRuntimeAnimationNodes(model.object3D);
-    visibleStateKey = "";
-    setVisible(activeTarget);
-    if (!started) {
-      const animationState = runtimeAnimation[definition.modelId];
-      const nodeCount = animationState
-        ? animationState.bows.length +
-          animationState.winds.length +
-          animationState.percussion.length +
-          animationState.heads.length +
-          animationState.notes.length +
-          animationState.text.length +
-          animationState.waves.length
-        : 0;
-      statusTitle.textContent = `モデル読込済み v22`;
-      distanceText.textContent = `アニメ対象 ${nodeCount} 個 / 開始ボタンを押してください`;
-    }
-  });
-}
+stationModel?.addEventListener("model-loaded", () => {
+  if (activeModelPath) {
+    modelLoadState[activeModelPath] = "loaded";
+  }
+  runtimeAnimation = collectRuntimeAnimationNodes(stationModel.object3D);
+  visibleStateKey = "";
+  setVisible(activeTarget);
+  if (!started) {
+    const nodeCount = runtimeAnimation
+      ? runtimeAnimation.bows.length +
+        runtimeAnimation.winds.length +
+        runtimeAnimation.percussion.length +
+        runtimeAnimation.heads.length +
+        runtimeAnimation.notes.length +
+        runtimeAnimation.text.length +
+        runtimeAnimation.waves.length
+      : 0;
+    statusTitle.textContent = `モデル読込済み v23`;
+    distanceText.textContent = `アニメ対象 ${nodeCount} 個 / 開始ボタンを押してください`;
+  }
+});
 
 setupPreviewControls();
 previewStationSelect.addEventListener("change", () => {

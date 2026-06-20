@@ -50,6 +50,7 @@ MAT_TRAIN_GREEN = None
 MAT_BRASS = None
 MAT_SILVER = None
 MAT_DRUM = None
+MAT_SPECIES = {}
 JAPANESE_FONT = None
 
 
@@ -295,6 +296,48 @@ def create_face(parent, species, fur_mat, accent_mat):
             z = 1.80 + i * 0.035
             curve_between(f"cat_whisker_L_{i}", (-0.06, -0.35, z), (-0.32, -0.47, z + 0.02), MAT_DARK, 0.004, parent)
             curve_between(f"cat_whisker_R_{i}", (0.06, -0.35, z), (0.32, -0.47, z + 0.02), MAT_DARK, 0.004, parent)
+    elif species == "dog":
+        cone("dog_ear_L", (-0.22, -0.03, 1.98), 0.09, 0.035, 0.34, fur_mat, parent, rot=(0.75, 0.42, 0.18))
+        cone("dog_ear_R", (0.22, -0.03, 1.98), 0.09, 0.035, 0.34, fur_mat, parent, rot=(0.75, -0.42, -0.18))
+        cylinder_between("dog_tail", (0.0, 0.40, 1.02), (0.24, 0.70, 1.34), 0.055, fur_mat, parent)
+    elif species == "squirrel":
+        sphere("squirrel_ear_L", (-0.22, -0.02, 2.08), (0.080, 0.050, 0.105), fur_mat, parent)
+        sphere("squirrel_ear_R", (0.22, -0.02, 2.08), (0.080, 0.050, 0.105), fur_mat, parent)
+        cone("squirrel_tail", (0.0, 0.55, 1.30), 0.23, 0.11, 1.05, fur_mat, parent, rot=(0.70, 0.0, 0.0))
+        sphere("squirrel_tail_tip", (0.0, 0.70, 1.78), (0.16, 0.12, 0.18), accent_mat, parent)
+    elif species == "panda":
+        sphere("panda_ear_L", (-0.25, -0.02, 2.06), (0.11, 0.07, 0.11), MAT_DARK, parent)
+        sphere("panda_ear_R", (0.25, -0.02, 2.06), (0.11, 0.07, 0.11), MAT_DARK, parent)
+        sphere("panda_eye_patch_L", (-0.105, -0.283, 1.93), (0.075, 0.018, 0.060), MAT_DARK, parent, segments=16)
+        sphere("panda_eye_patch_R", (0.105, -0.283, 1.93), (0.075, 0.018, 0.060), MAT_DARK, parent, segments=16)
+    elif species == "penguin":
+        cone("penguin_beak", (0, -0.41, 1.83), 0.040, 0.012, 0.18, MAT_GOLD, parent, vertices=16, rot=(math.radians(90), 0, 0))
+        cylinder_between("penguin_flipper_L", (-0.26, -0.02, 1.32), (-0.52, -0.12, 1.02), 0.045, fur_mat, parent)
+        cylinder_between("penguin_flipper_R", (0.26, -0.02, 1.32), (0.52, -0.12, 1.02), 0.045, fur_mat, parent)
+    elif species == "tanuki":
+        cone("tanuki_ear_L", (-0.22, -0.02, 2.08), 0.11, 0.02, 0.26, fur_mat, parent, rot=(0.2, 0.45, 0.0))
+        cone("tanuki_ear_R", (0.22, -0.02, 2.08), 0.11, 0.02, 0.26, fur_mat, parent, rot=(0.2, -0.45, 0.0))
+        sphere("tanuki_mask_L", (-0.115, -0.285, 1.925), (0.075, 0.016, 0.055), MAT_DARK, parent, segments=16)
+        sphere("tanuki_mask_R", (0.115, -0.285, 1.925), (0.075, 0.016, 0.055), MAT_DARK, parent, segments=16)
+        sphere("tanuki_tail", (0.0, 0.48, 1.03), (0.16, 0.22, 0.18), fur_mat, parent)
+    elif species in {"deer", "kamoshika"}:
+        sphere(f"{species}_ear_L", (-0.25, -0.02, 2.02), (0.080, 0.045, 0.13), fur_mat, parent)
+        sphere(f"{species}_ear_R", (0.25, -0.02, 2.02), (0.080, 0.045, 0.13), fur_mat, parent)
+        for side, x in [("L", -0.12), ("R", 0.12)]:
+            cylinder_between(f"{species}_antler_{side}_main", (x, -0.01, 2.12), (x * 1.35, -0.02, 2.40), 0.018, MAT_WOOD_DARK, parent, vertices=10)
+            cylinder_between(f"{species}_antler_{side}_branch", (x * 1.20, -0.02, 2.28), (x * 1.90, -0.02, 2.36), 0.012, MAT_WOOD_DARK, parent, vertices=8)
+    elif species == "bird":
+        cone("bird_beak", (0, -0.41, 1.84), 0.045, 0.010, 0.20, MAT_GOLD, parent, vertices=16, rot=(math.radians(90), 0, 0))
+        cone("bird_crest", (0, -0.01, 2.17), 0.050, 0.010, 0.22, fur_mat, parent, vertices=12, rot=(0.25, 0, 0))
+    elif species == "frog":
+        sphere("frog_eye_bump_L", (-0.13, -0.10, 2.08), (0.095, 0.070, 0.080), fur_mat, parent)
+        sphere("frog_eye_bump_R", (0.13, -0.10, 2.08), (0.095, 0.070, 0.080), fur_mat, parent)
+        curve_between("frog_smile", (-0.13, -0.37, 1.78), (0.13, -0.37, 1.78), MAT_DARK, 0.006, parent)
+    elif species == "sheep":
+        for i, x in enumerate([-0.18, 0, 0.18]):
+            sphere(f"sheep_wool_top_{i}", (x, -0.02, 2.12), (0.10, 0.075, 0.09), accent_mat, parent, segments=16)
+        sphere("sheep_ear_L", (-0.25, -0.02, 2.00), (0.075, 0.045, 0.115), fur_mat, parent)
+        sphere("sheep_ear_R", (0.25, -0.02, 2.00), (0.075, 0.045, 0.115), fur_mat, parent)
     return head
 
 
@@ -678,6 +721,7 @@ def create_station_arrival_event():
 
 
 def setup_materials():
+    global MAT_SPECIES
     global MAT_FOX, MAT_RABBIT, MAT_BEAR, MAT_CAT, MAT_CREAM, MAT_DARK
     global MAT_PINK, MAT_WOOD, MAT_WOOD_DARK, MAT_STRING, MAT_BOW, MAT_STAGE, MAT_GOLD
     global MAT_STATION_BLUE, MAT_STATION_RED, MAT_WHITE, MAT_TRAIN_GREEN
@@ -703,6 +747,22 @@ def setup_materials():
     MAT_BRASS = make_mat("warm_brass_metal", (0.95, 0.62, 0.18, 1), 0.28, 0.55)
     MAT_SILVER = make_mat("soft_silver_metal", (0.78, 0.82, 0.86, 1), 0.22, 0.65)
     MAT_DRUM = make_mat("festival_drum_shell", (0.72, 0.16, 0.12, 1), 0.38)
+    MAT_SPECIES = {
+        "fox": MAT_FOX,
+        "rabbit": MAT_RABBIT,
+        "bear": MAT_BEAR,
+        "cat": MAT_CAT,
+        "dog": make_mat("dog_caramel_fur", (0.78, 0.48, 0.23, 1)),
+        "squirrel": make_mat("squirrel_cinnamon_fur", (0.82, 0.35, 0.12, 1)),
+        "panda": make_mat("panda_white_fur", (0.94, 0.91, 0.84, 1)),
+        "penguin": make_mat("penguin_blue_black", (0.05, 0.10, 0.14, 1)),
+        "tanuki": make_mat("tanuki_gray_brown_fur", (0.42, 0.34, 0.25, 1)),
+        "deer": make_mat("deer_warm_brown_fur", (0.63, 0.39, 0.18, 1)),
+        "bird": make_mat("bird_sky_blue_feathers", (0.32, 0.58, 0.82, 1)),
+        "kamoshika": make_mat("kamoshika_smoky_gray_fur", (0.48, 0.50, 0.47, 1)),
+        "frog": make_mat("frog_fresh_green_skin", (0.20, 0.62, 0.28, 1)),
+        "sheep": make_mat("sheep_warm_gray_face", (0.56, 0.52, 0.48, 1)),
+    }
 
 
 def setup_render():
@@ -749,14 +809,120 @@ VARIANT_CONFIGS = {
     },
 }
 
+STATION_VARIANT_CONFIGS = {
+    "akayu": ("akayu_strings_fox_rabbit.glb", [
+        ("fox", "violin", (-1.95, -0.62, 0), 28, 0),
+        ("rabbit", "violin", (1.95, -0.62, 0), -28, 12),
+        ("deer", "viola", (-1.35, 0.88, 0), 18, 24),
+        ("cat", "cello", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "nanyo_city_hall": ("nanyo_city_hall_cats_woodwinds.glb", [
+        ("cat", "flute", (-1.95, -0.62, 0), 26, 0),
+        ("cat", "clarinet", (1.95, -0.62, 0), -26, 12),
+        ("bird", "flute", (-1.35, 0.88, 0), 18, 24),
+        ("rabbit", "clarinet", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "miyauchi": ("miyauchi_dogs_brass.glb", [
+        ("dog", "trumpet", (-1.95, -0.62, 0), 26, 0),
+        ("dog", "trombone", (1.95, -0.62, 0), -26, 12),
+        ("bear", "trumpet", (-1.35, 0.88, 0), 18, 24),
+        ("fox", "trombone", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "orihata": ("orihata_squirrels_percussion.glb", [
+        ("squirrel", "snare", (-1.95, -0.62, 0), 26, 0),
+        ("squirrel", "tambourine", (1.95, -0.62, 0), -26, 12),
+        ("frog", "marimba", (-1.35, 0.88, 0), 18, 24),
+        ("tanuki", "bass_drum", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "ringo": ("ringo_panda_penguin_jazz.glb", [
+        ("panda", "trumpet", (-1.95, -0.62, 0), 26, 0),
+        ("penguin", "clarinet", (1.95, -0.62, 0), -26, 12),
+        ("cat", "flute", (-1.35, 0.88, 0), 18, 24),
+        ("bear", "trombone", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "nishi_otsuka": ("nishi_otsuka_tanuki_taiko.glb", [
+        ("tanuki", "bass_drum", (-1.95, -0.62, 0), 26, 0),
+        ("tanuki", "snare", (1.95, -0.62, 0), -26, 12),
+        ("fox", "tambourine", (-1.35, 0.88, 0), 18, 24),
+        ("rabbit", "marimba", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "imaizumi": ("imaizumi_deer_flutes.glb", [
+        ("deer", "flute", (-1.95, -0.62, 0), 26, 0),
+        ("deer", "clarinet", (1.95, -0.62, 0), -26, 12),
+        ("bird", "flute", (-1.35, 0.88, 0), 18, 24),
+        ("cat", "clarinet", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "tokiniwa": ("tokiniwa_bears_low_brass.glb", [
+        ("bear", "trombone", (-1.95, -0.62, 0), 26, 0),
+        ("bear", "trumpet", (1.95, -0.62, 0), -26, 12),
+        ("dog", "trombone", (-1.35, 0.88, 0), 18, 24),
+        ("panda", "trumpet", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "minami_nagai": ("minami_nagai_rabbit_clarinets.glb", [
+        ("rabbit", "clarinet", (-1.95, -0.62, 0), 26, 0),
+        ("rabbit", "flute", (1.95, -0.62, 0), -26, 12),
+        ("cat", "clarinet", (-1.35, 0.88, 0), 18, 24),
+        ("bird", "flute", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "nagai": ("nagai_main_string_quartet.glb", [
+        ("fox", "violin", (-1.95, -0.62, 0), 28, 0),
+        ("rabbit", "violin", (1.95, -0.62, 0), -28, 12),
+        ("bear", "viola", (-1.35, 0.88, 0), 18, 24),
+        ("cat", "cello", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "ayame_koen": ("ayame_koen_birds_piccolo.glb", [
+        ("bird", "flute", (-1.95, -0.62, 0), 26, 0),
+        ("bird", "clarinet", (1.95, -0.62, 0), -26, 12),
+        ("penguin", "flute", (-1.35, 0.88, 0), 18, 24),
+        ("rabbit", "clarinet", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "uzen_narita": ("uzen_narita_fox_sax_band.glb", [
+        ("fox", "trumpet", (-1.95, -0.62, 0), 26, 0),
+        ("fox", "clarinet", (1.95, -0.62, 0), -26, 12),
+        ("cat", "flute", (-1.35, 0.88, 0), 18, 24),
+        ("dog", "trombone", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "shirousagi": ("shirousagi_white_rabbit_bells.glb", [
+        ("rabbit", "tambourine", (-1.95, -0.62, 0), 26, 0),
+        ("rabbit", "snare", (1.95, -0.62, 0), -26, 12),
+        ("sheep", "marimba", (-1.35, 0.88, 0), 18, 24),
+        ("panda", "bass_drum", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "koguwa": ("koguwa_kamoshika_horns.glb", [
+        ("kamoshika", "trumpet", (-1.95, -0.62, 0), 26, 0),
+        ("kamoshika", "trombone", (1.95, -0.62, 0), -26, 12),
+        ("deer", "trumpet", (-1.35, 0.88, 0), 18, 24),
+        ("dog", "trombone", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "ayukai": ("ayukai_frogs_marimba.glb", [
+        ("frog", "marimba", (-1.95, -0.62, 0), 26, 0),
+        ("frog", "snare", (1.95, -0.62, 0), -26, 12),
+        ("bird", "tambourine", (-1.35, 0.88, 0), 18, 24),
+        ("tanuki", "bass_drum", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "shikinosato": ("shikinosato_sheep_trombones.glb", [
+        ("sheep", "trombone", (-1.95, -0.62, 0), 26, 0),
+        ("sheep", "trumpet", (1.95, -0.62, 0), -26, 12),
+        ("deer", "trombone", (-1.35, 0.88, 0), 18, 24),
+        ("panda", "trumpet", (1.35, 0.88, 0), -18, 36),
+    ]),
+    "arato": ("arato_finale_all_stars.glb", [
+        ("fox", "violin", (-1.95, -0.62, 0), 28, 0),
+        ("rabbit", "trumpet", (1.95, -0.62, 0), -28, 12),
+        ("bear", "bass_drum", (-1.35, 0.88, 0), 18, 24),
+        ("cat", "flute", (1.35, 0.88, 0), -18, 36),
+    ]),
+}
+
+for station_key, (filename, players) in STATION_VARIANT_CONFIGS.items():
+    VARIANT_CONFIGS[f"station_{station_key}"] = {
+        "filename": os.path.join("stations", filename),
+        "players": players,
+    }
+
 
 def species_material(species):
-    return {
-        "fox": MAT_FOX,
-        "rabbit": MAT_RABBIT,
-        "bear": MAT_BEAR,
-        "cat": MAT_CAT,
-    }[species]
+    return MAT_SPECIES[species]
 
 
 def resolve_variant_config(variant):
@@ -784,6 +950,7 @@ def export_webar_glb(filename):
     export_dir = os.path.join(base_dir, "gps-webar", "assets")
     os.makedirs(export_dir, exist_ok=True)
     export_path = os.path.join(export_dir, filename)
+    os.makedirs(os.path.dirname(export_path), exist_ok=True)
 
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.export_scene.gltf(
@@ -817,7 +984,12 @@ def build_scene(variant):
 
 def main():
     requested = os.environ.get("NAGAI_AR_VARIANT", "all")
-    variants = ["strings", "winds", "percussion"] if requested == "all" else [requested]
+    if requested == "all":
+        variants = ["strings", "winds", "percussion"]
+    elif requested == "station_all":
+        variants = [f"station_{key}" for key in STATION_VARIANT_CONFIGS.keys()]
+    else:
+        variants = [requested]
     for variant in variants:
         if variant not in VARIANT_CONFIGS:
             raise ValueError(f"Unknown NAGAI_AR_VARIANT: {variant}")
