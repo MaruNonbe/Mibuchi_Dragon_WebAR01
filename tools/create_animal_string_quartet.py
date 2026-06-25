@@ -651,17 +651,11 @@ def create_station_arrival_event(station_name="長井駅"):
     event = empty("flower_nagai_line_arrival_event")
     arrival_text = f"{station_name}到着"
 
-    # Platform edge and train front in the background: enough detail for WebAR without heavy geometry.
+    # Keep the platform cue low so children can stand visually between the animals.
     cube("platform_yellow_safety_line", (0, -2.05, 0.035), (2.8, 0.035, 0.018), MAT_GOLD, event)
-    cube("flower_nagai_train_body", (0, 1.33, 0.70), (1.65, 0.16, 0.52), MAT_WHITE, event)
-    cube("flower_nagai_train_window_band", (0, 1.16, 0.86), (1.36, 0.025, 0.16), MAT_STATION_BLUE, event)
-    cube("flower_nagai_train_lower_red_line", (0, 1.145, 0.47), (1.52, 0.018, 0.035), MAT_STATION_RED, event)
-    cube("flower_nagai_train_green_line", (0, 1.14, 0.39), (1.52, 0.018, 0.028), MAT_TRAIN_GREEN, event)
-    sphere("train_headlight_L", (-0.55, 1.12, 0.56), (0.055, 0.014, 0.055), MAT_GOLD, event, segments=16)
-    sphere("train_headlight_R", (0.55, 1.12, 0.56), (0.055, 0.014, 0.055), MAT_GOLD, event, segments=16)
 
     # Station sign: each station GLB carries its own station name for WebAR preview checks.
-    sign = empty("nagai_station_sign_group", loc=(0, 0.98, 1.72), parent=event)
+    sign = empty("nagai_station_sign_group", loc=(0, 1.04, 2.38), parent=event)
     cube("nagai_station_sign_board", (0, 0, 0), (1.15, 0.035, 0.30), MAT_WHITE, sign)
     cube("nagai_station_sign_top_line", (0, -0.04, 0.25), (1.12, 0.012, 0.025), MAT_STATION_BLUE, sign)
     cube("nagai_station_sign_bottom_line", (0, -0.04, -0.25), (1.12, 0.012, 0.025), MAT_STATION_RED, sign)
@@ -696,7 +690,7 @@ def create_station_arrival_event(station_name="長井駅"):
     animate_dancing_text(announcement, phase=0, bounce=0.045, twist=0.035)
 
     # Dancing title characters are separated so each letter can move independently.
-    title_group = empty("dancing_title_nagai_arrival", loc=(0, -1.48, 2.72), parent=event)
+    title_group = empty("dancing_title_nagai_arrival", loc=(0, -1.48, 3.02), parent=event)
     chars = list(arrival_text)
     spacing = 0.30
     start_x = -spacing * (len(chars) - 1) * 0.5
@@ -714,12 +708,12 @@ def create_station_arrival_event(station_name="長井駅"):
         animate_dancing_text(obj, phase=i * 5, bounce=0.16, twist=0.13)
 
     # A marked open spot for the WebAR viewer/player to stand between the quartet members.
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.48, minor_radius=0.012, major_segments=96, minor_segments=8, location=(0, -0.30, 0.045))
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.68, minor_radius=0.014, major_segments=96, minor_segments=8, location=(0, -0.22, 0.045))
     spot = bpy.context.object
     spot.name = "web_ar_player_standing_spot_between_animals"
     spot.data.materials.append(MAT_GOLD)
     spot.parent = event
-    text_object("web_ar_center_label", "ここで一緒に演奏", (0, -0.30, 0.075), 0.075, MAT_CREAM, event, rot=(math.radians(90), 0, 0))
+    text_object("web_ar_center_label", "ここで一緒に演奏", (0, -0.22, 0.075), 0.075, MAT_CREAM, event, rot=(math.radians(90), 0, 0))
 
 
 def setup_materials():
@@ -909,20 +903,20 @@ STATION_VARIANT_CONFIGS = {
         ("panda", "trumpet", (1.35, 0.88, 0), -18, 36),
     ]),
     "arato": ("arato_finale_all_stars.glb", "荒砥駅", [
-        ("fox", "violin", (-1.95, -0.62, 0), 28, 0, 0.78),
-        ("rabbit", "trumpet", (1.95, -0.62, 0), -28, 12, 0.78),
-        ("bear", "bass_drum", (-0.72, 0.28, 0), 12, 24, 0.70),
-        ("cat", "flute", (0.72, 0.28, 0), -12, 36, 0.70),
-        ("dog", "trombone", (-2.45, 0.42, 0), 20, 48, 0.66),
-        ("squirrel", "tambourine", (2.45, 0.42, 0), -20, 60, 0.66),
-        ("frog", "marimba", (-1.55, 1.02, 0), 13, 72, 0.62),
-        ("tanuki", "snare", (1.55, 1.02, 0), -13, 84, 0.62),
-        ("deer", "viola", (-2.55, 1.86, 0), 13, 96, 0.58),
-        ("bird", "flute", (-1.50, 2.00, 0), 8, 108, 0.58),
-        ("panda", "trumpet", (-0.50, 2.10, 0), 3, 120, 0.58),
-        ("penguin", "clarinet", (0.50, 2.10, 0), -3, 132, 0.58),
-        ("kamoshika", "trombone", (1.50, 2.00, 0), -8, 144, 0.58),
-        ("sheep", "bass_drum", (2.55, 1.86, 0), -13, 156, 0.58),
+        ("fox", "violin", (-2.25, -0.58, 0), 30, 0, 0.74),
+        ("rabbit", "trumpet", (2.25, -0.58, 0), -30, 12, 0.74),
+        ("bear", "bass_drum", (-1.35, 0.42, 0), 14, 24, 0.64),
+        ("cat", "flute", (1.35, 0.42, 0), -14, 36, 0.64),
+        ("dog", "trombone", (-2.70, 0.42, 0), 22, 48, 0.62),
+        ("squirrel", "tambourine", (2.70, 0.42, 0), -22, 60, 0.62),
+        ("frog", "marimba", (-1.85, 1.18, 0), 15, 72, 0.58),
+        ("tanuki", "snare", (1.85, 1.18, 0), -15, 84, 0.58),
+        ("deer", "viola", (-2.75, 1.86, 0), 14, 96, 0.54),
+        ("bird", "flute", (-1.68, 2.05, 0), 9, 108, 0.54),
+        ("panda", "trumpet", (-0.62, 2.18, 0), 4, 120, 0.54),
+        ("penguin", "clarinet", (0.62, 2.18, 0), -4, 132, 0.54),
+        ("kamoshika", "trombone", (1.68, 2.05, 0), -9, 144, 0.54),
+        ("sheep", "bass_drum", (2.75, 1.86, 0), -14, 156, 0.54),
     ]),
 }
 

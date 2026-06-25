@@ -644,13 +644,13 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.17,
-        "instrumentVsStand": 0.3276,
-        "bowVsStand": 0.2769
+        "playerVsStand": 0.0122,
+        "instrumentVsStand": 0.1419,
+        "bowVsStand": 0.0961
       },
       "bowHandMaxDistanceMeters": {
-        "fox_bow_anim": 0.4374,
-        "deer_bow_anim": 0.3253
+        "fox_bow_anim": 0.415,
+        "deer_bow_anim": 0.3028
       },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
