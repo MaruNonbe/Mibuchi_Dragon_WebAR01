@@ -145,6 +145,24 @@ button.secondary {
   font-size: 12px;
 }
 
+.music-button {
+  position: fixed;
+  right: 12px;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 66px);
+  z-index: 23;
+  width: 78px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: rgba(7, 27, 32, 0.82);
+  color: #fff;
+  font-size: 13px;
+}
+
+.music-button.is-playing {
+  background: #ffd36a;
+  color: #172025;
+}
+
 .status {
   position: fixed;
   top: max(12px, env(safe-area-inset-top));
