@@ -1,0 +1,645 @@
+{
+  "checkedFrameRange": [
+    1,
+    160
+  ],
+  "frameStep": 8,
+  "webMapping": [
+    {
+      "expectedStation": "赤湯駅",
+      "actualStation": "赤湯駅",
+      "expectedVariantLabel": "きつね・ウサギ・シカの弦楽四重奏",
+      "actualVariantLabel": "きつね・ウサギ・シカの弦楽四重奏",
+      "expectedFile": "akayu_strings_fox_rabbit.glb",
+      "actualFile": "akayu_strings_fox_rabbit.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "南陽市役所駅",
+      "actualStation": "南陽市役所駅",
+      "expectedVariantLabel": "ネコと小鳥の木管アンサンブル",
+      "actualVariantLabel": "ネコと小鳥の木管アンサンブル",
+      "expectedFile": "nanyo_city_hall_cats_woodwinds.glb",
+      "actualFile": "nanyo_city_hall_cats_woodwinds.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "宮内駅",
+      "actualStation": "宮内駅",
+      "expectedVariantLabel": "イヌたちの金管ファンファーレ",
+      "actualVariantLabel": "イヌたちの金管ファンファーレ",
+      "expectedFile": "miyauchi_dogs_brass.glb",
+      "actualFile": "miyauchi_dogs_brass.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "おりはた駅",
+      "actualStation": "おりはた駅",
+      "expectedVariantLabel": "リスとカエルの打楽器パレード",
+      "actualVariantLabel": "リスとカエルの打楽器パレード",
+      "expectedFile": "orihata_squirrels_percussion.glb",
+      "actualFile": "orihata_squirrels_percussion.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "梨郷駅",
+      "actualStation": "梨郷駅",
+      "expectedVariantLabel": "パンダとペンギンの駅前ジャズ",
+      "actualVariantLabel": "パンダとペンギンの駅前ジャズ",
+      "expectedFile": "ringo_panda_penguin_jazz.glb",
+      "actualFile": "ringo_panda_penguin_jazz.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "西大塚駅",
+      "actualStation": "西大塚駅",
+      "expectedVariantLabel": "タヌキたちの太鼓リズム",
+      "actualVariantLabel": "タヌキたちの太鼓リズム",
+      "expectedFile": "nishi_otsuka_tanuki_taiko.glb",
+      "actualFile": "nishi_otsuka_tanuki_taiko.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "今泉駅",
+      "actualStation": "今泉駅",
+      "expectedVariantLabel": "シカと小鳥のフルート合奏",
+      "actualVariantLabel": "シカと小鳥のフルート合奏",
+      "expectedFile": "imaizumi_deer_flutes.glb",
+      "actualFile": "imaizumi_deer_flutes.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "時庭駅",
+      "actualStation": "時庭駅",
+      "expectedVariantLabel": "クマたちの低音ブラス",
+      "actualVariantLabel": "クマたちの低音ブラス",
+      "expectedFile": "tokiniwa_bears_low_brass.glb",
+      "actualFile": "tokiniwa_bears_low_brass.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "南長井駅",
+      "actualStation": "南長井駅",
+      "expectedVariantLabel": "ウサギたちのクラリネット隊",
+      "actualVariantLabel": "ウサギたちのクラリネット隊",
+      "expectedFile": "minami_nagai_rabbit_clarinets.glb",
+      "actualFile": "minami_nagai_rabbit_clarinets.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "長井駅",
+      "actualStation": "長井駅",
+      "expectedVariantLabel": "どうぶつ弦楽四重奏",
+      "actualVariantLabel": "どうぶつ弦楽四重奏",
+      "expectedFile": "nagai_main_string_quartet.glb",
+      "actualFile": "nagai_main_string_quartet.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "あやめ公園駅",
+      "actualStation": "あやめ公園駅",
+      "expectedVariantLabel": "小鳥たちのピッコロ行進曲",
+      "actualVariantLabel": "小鳥たちのピッコロ行進曲",
+      "expectedFile": "ayame_koen_birds_piccolo.glb",
+      "actualFile": "ayame_koen_birds_piccolo.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "羽前成田駅",
+      "actualStation": "羽前成田駅",
+      "expectedVariantLabel": "キツネたちのサックスバンド",
+      "actualVariantLabel": "キツネたちのサックスバンド",
+      "expectedFile": "uzen_narita_fox_sax_band.glb",
+      "actualFile": "uzen_narita_fox_sax_band.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "白兎駅",
+      "actualStation": "白兎駅",
+      "expectedVariantLabel": "白ウサギのハンドベル隊",
+      "actualVariantLabel": "白ウサギのハンドベル隊",
+      "expectedFile": "shirousagi_white_rabbit_bells.glb",
+      "actualFile": "shirousagi_white_rabbit_bells.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "蚕桑駅",
+      "actualStation": "蚕桑駅",
+      "expectedVariantLabel": "カモシカたちのホルン合奏",
+      "actualVariantLabel": "カモシカたちのホルン合奏",
+      "expectedFile": "koguwa_kamoshika_horns.glb",
+      "actualFile": "koguwa_kamoshika_horns.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "鮎貝駅",
+      "actualStation": "鮎貝駅",
+      "expectedVariantLabel": "カエルたちのマリンバ隊",
+      "actualVariantLabel": "カエルたちのマリンバ隊",
+      "expectedFile": "ayukai_frogs_marimba.glb",
+      "actualFile": "ayukai_frogs_marimba.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "四季の郷駅",
+      "actualStation": "四季の郷駅",
+      "expectedVariantLabel": "ヒツジたちのトロンボーン隊",
+      "actualVariantLabel": "ヒツジたちのトロンボーン隊",
+      "expectedFile": "shikinosato_sheep_trombones.glb",
+      "actualFile": "shikinosato_sheep_trombones.glb",
+      "ok": true
+    },
+    {
+      "expectedStation": "荒砥駅",
+      "actualStation": "荒砥駅",
+      "expectedVariantLabel": "全員集合フィナーレ",
+      "actualVariantLabel": "全員集合フィナーレ",
+      "expectedFile": "arato_finale_all_stars.glb",
+      "actualFile": "arato_finale_all_stars.glb",
+      "ok": true
+    }
+  ],
+  "stations": [
+    {
+      "station": "赤湯駅",
+      "variantLabel": "きつね・ウサギ・シカの弦楽四重奏",
+      "file": "akayu_strings_fox_rabbit.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "fox",
+        "rabbit",
+        "deer",
+        "cat"
+      ],
+      "expectedInstruments": [
+        "violin",
+        "violin",
+        "viola",
+        "cello"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2714,
+        "instrumentVsStand": 0.1888,
+        "bowVsStand": 0.4089
+      },
+      "bowHandMaxDistanceMeters": {
+        "fox_bow_anim": 0.5608,
+        "rabbit_bow_anim": 0.5608,
+        "deer_bow_anim": 0.5608,
+        "cat_bow_anim": 0.64
+      },
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "南陽市役所駅",
+      "variantLabel": "ネコと小鳥の木管アンサンブル",
+      "file": "nanyo_city_hall_cats_woodwinds.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "cat",
+        "cat",
+        "bird",
+        "rabbit"
+      ],
+      "expectedInstruments": [
+        "flute",
+        "clarinet",
+        "flute",
+        "clarinet"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.3367
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "宮内駅",
+      "variantLabel": "イヌたちの金管ファンファーレ",
+      "file": "miyauchi_dogs_brass.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "dog",
+        "dog",
+        "bear",
+        "fox"
+      ],
+      "expectedInstruments": [
+        "trumpet",
+        "trombone",
+        "trumpet",
+        "trombone"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.2055
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "おりはた駅",
+      "variantLabel": "リスとカエルの打楽器パレード",
+      "file": "orihata_squirrels_percussion.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "squirrel",
+        "squirrel",
+        "frog",
+        "tanuki"
+      ],
+      "expectedInstruments": [
+        "snare",
+        "tambourine",
+        "marimba",
+        "bass_drum"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.547
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "梨郷駅",
+      "variantLabel": "パンダとペンギンの駅前ジャズ",
+      "file": "ringo_panda_penguin_jazz.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "panda",
+        "penguin",
+        "cat",
+        "bear"
+      ],
+      "expectedInstruments": [
+        "trumpet",
+        "clarinet",
+        "flute",
+        "trombone"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.3367
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "西大塚駅",
+      "variantLabel": "タヌキたちの太鼓リズム",
+      "file": "nishi_otsuka_tanuki_taiko.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "tanuki",
+        "tanuki",
+        "fox",
+        "rabbit"
+      ],
+      "expectedInstruments": [
+        "bass_drum",
+        "snare",
+        "tambourine",
+        "marimba"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.4231
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "今泉駅",
+      "variantLabel": "シカと小鳥のフルート合奏",
+      "file": "imaizumi_deer_flutes.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "deer",
+        "deer",
+        "bird",
+        "cat"
+      ],
+      "expectedInstruments": [
+        "flute",
+        "clarinet",
+        "flute",
+        "clarinet"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.3367
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "時庭駅",
+      "variantLabel": "クマたちの低音ブラス",
+      "file": "tokiniwa_bears_low_brass.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "bear",
+        "bear",
+        "dog",
+        "panda"
+      ],
+      "expectedInstruments": [
+        "trombone",
+        "trumpet",
+        "trombone",
+        "trumpet"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.274
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "南長井駅",
+      "variantLabel": "ウサギたちのクラリネット隊",
+      "file": "minami_nagai_rabbit_clarinets.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "rabbit",
+        "rabbit",
+        "cat",
+        "bird"
+      ],
+      "expectedInstruments": [
+        "clarinet",
+        "flute",
+        "clarinet",
+        "flute"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.4497
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "長井駅",
+      "variantLabel": "どうぶつ弦楽四重奏",
+      "file": "nagai_main_string_quartet.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "fox",
+        "rabbit",
+        "bear",
+        "cat"
+      ],
+      "expectedInstruments": [
+        "violin",
+        "violin",
+        "viola",
+        "cello"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2714,
+        "instrumentVsStand": 0.1888,
+        "bowVsStand": 0.4089
+      },
+      "bowHandMaxDistanceMeters": {
+        "fox_bow_anim": 0.5608,
+        "rabbit_bow_anim": 0.5608,
+        "bear_bow_anim": 0.5608,
+        "cat_bow_anim": 0.64
+      },
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "あやめ公園駅",
+      "variantLabel": "小鳥たちのピッコロ行進曲",
+      "file": "ayame_koen_birds_piccolo.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "bird",
+        "bird",
+        "penguin",
+        "rabbit"
+      ],
+      "expectedInstruments": [
+        "flute",
+        "clarinet",
+        "flute",
+        "clarinet"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.3367
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "羽前成田駅",
+      "variantLabel": "キツネたちのサックスバンド",
+      "file": "uzen_narita_fox_sax_band.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "fox",
+        "fox",
+        "cat",
+        "dog"
+      ],
+      "expectedInstruments": [
+        "trumpet",
+        "clarinet",
+        "flute",
+        "trombone"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.3367
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "白兎駅",
+      "variantLabel": "白ウサギのハンドベル隊",
+      "file": "shirousagi_white_rabbit_bells.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "rabbit",
+        "rabbit",
+        "sheep",
+        "panda"
+      ],
+      "expectedInstruments": [
+        "tambourine",
+        "snare",
+        "marimba",
+        "bass_drum"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.5291
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "蚕桑駅",
+      "variantLabel": "カモシカたちのホルン合奏",
+      "file": "koguwa_kamoshika_horns.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "kamoshika",
+        "kamoshika",
+        "deer",
+        "dog"
+      ],
+      "expectedInstruments": [
+        "trumpet",
+        "trombone",
+        "trumpet",
+        "trombone"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.2055
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "鮎貝駅",
+      "variantLabel": "カエルたちのマリンバ隊",
+      "file": "ayukai_frogs_marimba.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "frog",
+        "frog",
+        "bird",
+        "tanuki"
+      ],
+      "expectedInstruments": [
+        "marimba",
+        "snare",
+        "tambourine",
+        "bass_drum"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.2731
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "四季の郷駅",
+      "variantLabel": "ヒツジたちのトロンボーン隊",
+      "file": "shikinosato_sheep_trombones.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "sheep",
+        "sheep",
+        "deer",
+        "panda"
+      ],
+      "expectedInstruments": [
+        "trombone",
+        "trumpet",
+        "trombone",
+        "trumpet"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2752,
+        "instrumentVsStand": 0.274
+      },
+      "bowHandMaxDistanceMeters": {},
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    },
+    {
+      "station": "荒砥駅",
+      "variantLabel": "全員集合フィナーレ",
+      "file": "arato_finale_all_stars.glb",
+      "fileExists": true,
+      "expectedSpecies": [
+        "fox",
+        "rabbit",
+        "bear",
+        "cat"
+      ],
+      "expectedInstruments": [
+        "violin",
+        "trumpet",
+        "bass_drum",
+        "flute"
+      ],
+      "errors": [],
+      "warnings": [],
+      "clearanceMeters": {
+        "playerVsStand": 0.2714,
+        "instrumentVsStand": 0.2066,
+        "bowVsStand": 0.4382
+      },
+      "bowHandMaxDistanceMeters": {
+        "fox_bow_anim": 0.5608
+      },
+      "station_label_object_exists": true,
+      "arrival_chars_in_object_names": true
+    }
+  ],
+  "summary": {
+    "stationCount": 17,
+    "mappingErrors": 0,
+    "modelErrors": 0,
+    "modelWarnings": 0,
+    "ok": true
+  }
+}

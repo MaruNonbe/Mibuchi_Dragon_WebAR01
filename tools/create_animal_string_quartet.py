@@ -588,10 +588,10 @@ def create_stage():
 
     # Music sheets are on each stand's local -Y side, so rotate that side toward the player.
     stand_specs = [
-        ("fox", (-0.92, -1.05), (-1.55, -0.62)),
-        ("rabbit", (0.92, -1.05), (1.55, -0.62)),
-        ("bear", (-0.88, 0.23), (-1.55, 0.88)),
-        ("cat", (0.88, 0.23), (1.55, 0.88)),
+        ("fox", (-1.65, -2.05), (-2.65, -0.62)),
+        ("rabbit", (1.65, -2.05), (2.65, -0.62)),
+        ("bear", (-2.35, 1.20), (-1.35, 0.88)),
+        ("cat", (2.35, 1.20), (1.35, 0.88)),
     ]
     for i, (player_name, stand_xy, player_xy) in enumerate(stand_specs):
         x, y = stand_xy
@@ -646,8 +646,9 @@ def create_backdrop():
         cylinder(f"subtle_backdrop_panel_{i}", (x, 1.80, 2.05), 0.018, 3.4, MAT_GOLD, vertices=16, rot=(math.radians(90), 0, 0))
 
 
-def create_station_arrival_event():
+def create_station_arrival_event(station_name="長井駅"):
     event = empty("flower_nagai_line_arrival_event")
+    arrival_text = f"{station_name}到着"
 
     # Platform edge and train front in the background: enough detail for WebAR without heavy geometry.
     cube("platform_yellow_safety_line", (0, -2.05, 0.035), (2.8, 0.035, 0.018), MAT_GOLD, event)
@@ -658,12 +659,12 @@ def create_station_arrival_event():
     sphere("train_headlight_L", (-0.55, 1.12, 0.56), (0.055, 0.014, 0.055), MAT_GOLD, event, segments=16)
     sphere("train_headlight_R", (0.55, 1.12, 0.56), (0.055, 0.014, 0.055), MAT_GOLD, event, segments=16)
 
-    # Station sign: Japanese text is intentionally used because the scene is for Nagai Station.
+    # Station sign: each station GLB carries its own station name for WebAR preview checks.
     sign = empty("nagai_station_sign_group", loc=(0, 0.98, 1.72), parent=event)
     cube("nagai_station_sign_board", (0, 0, 0), (1.15, 0.035, 0.30), MAT_WHITE, sign)
     cube("nagai_station_sign_top_line", (0, -0.04, 0.25), (1.12, 0.012, 0.025), MAT_STATION_BLUE, sign)
     cube("nagai_station_sign_bottom_line", (0, -0.04, -0.25), (1.12, 0.012, 0.025), MAT_STATION_RED, sign)
-    text_object("station_name_nagai", "長井駅", (0, -0.085, 0.045), 0.20, MAT_DARK, sign, rot=(math.radians(90), 0, 0))
+    text_object("station_name_label", station_name, (0, -0.085, 0.045), 0.20, MAT_DARK, sign, rot=(math.radians(90), 0, 0))
     text_object("station_line_flower_nagai", "フラワー長井線", (0, -0.085, -0.135), 0.065, MAT_STATION_BLUE, sign, rot=(math.radians(90), 0, 0))
 
     # Announcement speaker and sound-wave rings.
@@ -684,7 +685,7 @@ def create_station_arrival_event():
 
     announcement = text_object(
         "announcement_caption",
-        "アナウンス: 長井駅到着",
+        f"アナウンス: {arrival_text}",
         (0, -1.72, 2.28),
         0.13,
         MAT_CREAM,
@@ -695,7 +696,7 @@ def create_station_arrival_event():
 
     # Dancing title characters are separated so each letter can move independently.
     title_group = empty("dancing_title_nagai_arrival", loc=(0, -1.48, 2.72), parent=event)
-    chars = list("長井駅到着")
+    chars = list(arrival_text)
     spacing = 0.30
     start_x = -spacing * (len(chars) - 1) * 0.5
     for i, char in enumerate(chars):
@@ -810,103 +811,103 @@ VARIANT_CONFIGS = {
 }
 
 STATION_VARIANT_CONFIGS = {
-    "akayu": ("akayu_strings_fox_rabbit.glb", [
+    "akayu": ("akayu_strings_fox_rabbit.glb", "赤湯駅", [
         ("fox", "violin", (-1.95, -0.62, 0), 28, 0),
         ("rabbit", "violin", (1.95, -0.62, 0), -28, 12),
         ("deer", "viola", (-1.35, 0.88, 0), 18, 24),
         ("cat", "cello", (1.35, 0.88, 0), -18, 36),
     ]),
-    "nanyo_city_hall": ("nanyo_city_hall_cats_woodwinds.glb", [
+    "nanyo_city_hall": ("nanyo_city_hall_cats_woodwinds.glb", "南陽市役所駅", [
         ("cat", "flute", (-1.95, -0.62, 0), 26, 0),
         ("cat", "clarinet", (1.95, -0.62, 0), -26, 12),
         ("bird", "flute", (-1.35, 0.88, 0), 18, 24),
         ("rabbit", "clarinet", (1.35, 0.88, 0), -18, 36),
     ]),
-    "miyauchi": ("miyauchi_dogs_brass.glb", [
+    "miyauchi": ("miyauchi_dogs_brass.glb", "宮内駅", [
         ("dog", "trumpet", (-1.95, -0.62, 0), 26, 0),
         ("dog", "trombone", (1.95, -0.62, 0), -26, 12),
         ("bear", "trumpet", (-1.35, 0.88, 0), 18, 24),
         ("fox", "trombone", (1.35, 0.88, 0), -18, 36),
     ]),
-    "orihata": ("orihata_squirrels_percussion.glb", [
+    "orihata": ("orihata_squirrels_percussion.glb", "おりはた駅", [
         ("squirrel", "snare", (-1.95, -0.62, 0), 26, 0),
         ("squirrel", "tambourine", (1.95, -0.62, 0), -26, 12),
         ("frog", "marimba", (-1.35, 0.88, 0), 18, 24),
         ("tanuki", "bass_drum", (1.35, 0.88, 0), -18, 36),
     ]),
-    "ringo": ("ringo_panda_penguin_jazz.glb", [
+    "ringo": ("ringo_panda_penguin_jazz.glb", "梨郷駅", [
         ("panda", "trumpet", (-1.95, -0.62, 0), 26, 0),
         ("penguin", "clarinet", (1.95, -0.62, 0), -26, 12),
         ("cat", "flute", (-1.35, 0.88, 0), 18, 24),
         ("bear", "trombone", (1.35, 0.88, 0), -18, 36),
     ]),
-    "nishi_otsuka": ("nishi_otsuka_tanuki_taiko.glb", [
+    "nishi_otsuka": ("nishi_otsuka_tanuki_taiko.glb", "西大塚駅", [
         ("tanuki", "bass_drum", (-1.95, -0.62, 0), 26, 0),
         ("tanuki", "snare", (1.95, -0.62, 0), -26, 12),
         ("fox", "tambourine", (-1.35, 0.88, 0), 18, 24),
         ("rabbit", "marimba", (1.35, 0.88, 0), -18, 36),
     ]),
-    "imaizumi": ("imaizumi_deer_flutes.glb", [
+    "imaizumi": ("imaizumi_deer_flutes.glb", "今泉駅", [
         ("deer", "flute", (-1.95, -0.62, 0), 26, 0),
         ("deer", "clarinet", (1.95, -0.62, 0), -26, 12),
         ("bird", "flute", (-1.35, 0.88, 0), 18, 24),
         ("cat", "clarinet", (1.35, 0.88, 0), -18, 36),
     ]),
-    "tokiniwa": ("tokiniwa_bears_low_brass.glb", [
+    "tokiniwa": ("tokiniwa_bears_low_brass.glb", "時庭駅", [
         ("bear", "trombone", (-1.95, -0.62, 0), 26, 0),
         ("bear", "trumpet", (1.95, -0.62, 0), -26, 12),
         ("dog", "trombone", (-1.35, 0.88, 0), 18, 24),
         ("panda", "trumpet", (1.35, 0.88, 0), -18, 36),
     ]),
-    "minami_nagai": ("minami_nagai_rabbit_clarinets.glb", [
+    "minami_nagai": ("minami_nagai_rabbit_clarinets.glb", "南長井駅", [
         ("rabbit", "clarinet", (-1.95, -0.62, 0), 26, 0),
         ("rabbit", "flute", (1.95, -0.62, 0), -26, 12),
         ("cat", "clarinet", (-1.35, 0.88, 0), 18, 24),
         ("bird", "flute", (1.35, 0.88, 0), -18, 36),
     ]),
-    "nagai": ("nagai_main_string_quartet.glb", [
+    "nagai": ("nagai_main_string_quartet.glb", "長井駅", [
         ("fox", "violin", (-1.95, -0.62, 0), 28, 0),
         ("rabbit", "violin", (1.95, -0.62, 0), -28, 12),
         ("bear", "viola", (-1.35, 0.88, 0), 18, 24),
         ("cat", "cello", (1.35, 0.88, 0), -18, 36),
     ]),
-    "ayame_koen": ("ayame_koen_birds_piccolo.glb", [
+    "ayame_koen": ("ayame_koen_birds_piccolo.glb", "あやめ公園駅", [
         ("bird", "flute", (-1.95, -0.62, 0), 26, 0),
         ("bird", "clarinet", (1.95, -0.62, 0), -26, 12),
         ("penguin", "flute", (-1.35, 0.88, 0), 18, 24),
         ("rabbit", "clarinet", (1.35, 0.88, 0), -18, 36),
     ]),
-    "uzen_narita": ("uzen_narita_fox_sax_band.glb", [
+    "uzen_narita": ("uzen_narita_fox_sax_band.glb", "羽前成田駅", [
         ("fox", "trumpet", (-1.95, -0.62, 0), 26, 0),
         ("fox", "clarinet", (1.95, -0.62, 0), -26, 12),
         ("cat", "flute", (-1.35, 0.88, 0), 18, 24),
         ("dog", "trombone", (1.35, 0.88, 0), -18, 36),
     ]),
-    "shirousagi": ("shirousagi_white_rabbit_bells.glb", [
+    "shirousagi": ("shirousagi_white_rabbit_bells.glb", "白兎駅", [
         ("rabbit", "tambourine", (-1.95, -0.62, 0), 26, 0),
         ("rabbit", "snare", (1.95, -0.62, 0), -26, 12),
         ("sheep", "marimba", (-1.35, 0.88, 0), 18, 24),
         ("panda", "bass_drum", (1.35, 0.88, 0), -18, 36),
     ]),
-    "koguwa": ("koguwa_kamoshika_horns.glb", [
+    "koguwa": ("koguwa_kamoshika_horns.glb", "蚕桑駅", [
         ("kamoshika", "trumpet", (-1.95, -0.62, 0), 26, 0),
         ("kamoshika", "trombone", (1.95, -0.62, 0), -26, 12),
         ("deer", "trumpet", (-1.35, 0.88, 0), 18, 24),
         ("dog", "trombone", (1.35, 0.88, 0), -18, 36),
     ]),
-    "ayukai": ("ayukai_frogs_marimba.glb", [
+    "ayukai": ("ayukai_frogs_marimba.glb", "鮎貝駅", [
         ("frog", "marimba", (-1.95, -0.62, 0), 26, 0),
         ("frog", "snare", (1.95, -0.62, 0), -26, 12),
         ("bird", "tambourine", (-1.35, 0.88, 0), 18, 24),
         ("tanuki", "bass_drum", (1.35, 0.88, 0), -18, 36),
     ]),
-    "shikinosato": ("shikinosato_sheep_trombones.glb", [
+    "shikinosato": ("shikinosato_sheep_trombones.glb", "四季の郷駅", [
         ("sheep", "trombone", (-1.95, -0.62, 0), 26, 0),
         ("sheep", "trumpet", (1.95, -0.62, 0), -26, 12),
         ("deer", "trombone", (-1.35, 0.88, 0), 18, 24),
         ("panda", "trumpet", (1.35, 0.88, 0), -18, 36),
     ]),
-    "arato": ("arato_finale_all_stars.glb", [
+    "arato": ("arato_finale_all_stars.glb", "荒砥駅", [
         ("fox", "violin", (-1.95, -0.62, 0), 28, 0),
         ("rabbit", "trumpet", (1.95, -0.62, 0), -28, 12),
         ("bear", "bass_drum", (-1.35, 0.88, 0), 18, 24),
@@ -914,9 +915,10 @@ STATION_VARIANT_CONFIGS = {
     ]),
 }
 
-for station_key, (filename, players) in STATION_VARIANT_CONFIGS.items():
+for station_key, (filename, station_name, players) in STATION_VARIANT_CONFIGS.items():
     VARIANT_CONFIGS[f"station_{station_key}"] = {
         "filename": os.path.join("stations", filename),
+        "station_name": station_name,
         "players": players,
     }
 
@@ -929,6 +931,7 @@ def resolve_variant_config(variant):
     config = VARIANT_CONFIGS[variant]
     return {
         "filename": config["filename"],
+        "station_name": config.get("station_name", "長井駅"),
         "players": [
             (species, species_material(species), MAT_CREAM, instrument, loc, rot_z, phase)
             for species, instrument, loc, rot_z, phase in config["players"]
@@ -970,7 +973,7 @@ def build_scene(variant):
     setup_render()
     create_stage()
     create_backdrop()
-    create_station_arrival_event()
+    create_station_arrival_event(config["station_name"])
 
     for player in config["players"]:
         create_character(*player)
