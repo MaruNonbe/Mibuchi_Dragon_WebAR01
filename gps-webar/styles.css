@@ -163,6 +163,97 @@ button.secondary {
   color: #172025;
 }
 
+.photo-guide-panel {
+  position: fixed;
+  left: 12px;
+  bottom: calc(max(12px, env(safe-area-inset-bottom)) + 66px);
+  z-index: 23;
+  display: grid;
+  grid-template-columns: 42px 42px 86px;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(7, 27, 32, 0.74);
+  backdrop-filter: blur(8px);
+}
+
+.guide-button {
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+  font-size: 13px;
+}
+
+.guide-button.wide {
+  width: 86px;
+}
+
+.guide-button.is-active {
+  background: #ffd36a;
+  color: #172025;
+}
+
+.child-guide-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 19;
+  pointer-events: none;
+}
+
+.child-guide-frame {
+  position: absolute;
+  left: 50%;
+  bottom: 22%;
+  width: min(34vw, 150px);
+  height: min(46vh, 360px);
+  transform: translateX(-50%);
+  border: 2px dashed rgba(255, 211, 106, 0.92);
+  border-radius: 999px 999px 24px 24px;
+  box-shadow: 0 0 0 999px rgba(7, 27, 32, 0.06);
+}
+
+.child-guide-head {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  width: 34%;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  border: 2px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+}
+
+.child-guide-body {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  width: 54%;
+  height: 50%;
+  transform: translateX(-50%);
+  border: 2px solid rgba(255, 255, 255, 0.56);
+  border-top: 0;
+  border-radius: 0 0 28px 28px;
+}
+
+.child-guide-feet {
+  position: absolute;
+  left: 50%;
+  bottom: calc(18% - 18px);
+  display: flex;
+  gap: 16px;
+  transform: translateX(-50%);
+}
+
+.child-guide-feet span {
+  width: 42px;
+  height: 18px;
+  border: 2px solid rgba(255, 211, 106, 0.92);
+  border-radius: 50%;
+  background: rgba(255, 211, 106, 0.16);
+}
+
 .status {
   position: fixed;
   top: max(12px, env(safe-area-inset-top));

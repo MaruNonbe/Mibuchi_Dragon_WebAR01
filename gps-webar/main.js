@@ -79,6 +79,11 @@ const previewPrev = document.getElementById("previewPrev");
 const previewNext = document.getElementById("previewNext");
 const gpsModeButton = document.getElementById("gpsModeButton");
 const musicButton = document.getElementById("musicButton");
+const photoGuidePanel = document.getElementById("photoGuidePanel");
+const modelSmallerButton = document.getElementById("modelSmallerButton");
+const modelLargerButton = document.getElementById("modelLargerButton");
+const childGuideButton = document.getElementById("childGuideButton");
+const childGuideOverlay = document.getElementById("childGuideOverlay");
 const stationModel = document.getElementById(STATION_MODEL.modelId);
 const fallbackStationModel = document.getElementById(STATION_MODEL.fallbackId);
 const arEntities = [stationModel, fallbackStationModel].filter(Boolean);
@@ -102,6 +107,8 @@ let musicPlaying = false;
 let nextMusicTime = 0;
 let musicStep = 0;
 let musicNoiseBuffer = null;
+let modelScaleIndex = 1;
+let childGuideVisible = true;
 
 const MUSIC_BPM = 112;
 const MUSIC_STEP_SECONDS = 60 / MUSIC_BPM / 2;
@@ -110,6 +117,7 @@ const MUSIC_SCHEDULE_MS = 90;
 const MUSIC_SCALE_MIDI = [60, 62, 64, 67, 69, 72, 74, 76];
 const MUSIC_MELODY = [0, 2, 4, 5, 4, 2, 1, 2, 0, 2, 4, 7, 6, 4, 2, 1];
 const MUSIC_CHORD_ROOTS = [60, 67, 69, 65, 60, 67, 65, 67];
+const MODEL_SCALE_OPTIONS = [0.65, 0.80, 0.95, 1.10];
 
 function loadSavedHomeTarget() {
   try {
@@ -273,6 +281,43 @@ function updateMusicButton() {
   musicButton.classList.toggle("is-playing", musicPlaying);
 }
 
+function currentModelScale() {
+  return MODEL_SCALE_OPTIONS[modelScaleIndex] || 0.80;
+}
+
+function applyModelScale() {
+  const scale = currentModelScale();
+  if (stationModel?.object3D) {
+    stationModel.object3D.scale.set(scale, scale, scale);
+  }
+}
+
+function updatePhotoGuideControls() {
+  if (modelSmallerButton) {
+    modelSmallerButton.disabled = modelScaleIndex <= 0;
+  }
+  if (modelLargerButton) {
+    modelLargerButton.disabled = modelScaleIndex >= MODEL_SCALE_OPTIONS.length - 1;
+  }
+  childGuideButton?.classList.toggle("is-active", childGuideVisible);
+  childGuideOverlay?.classList.toggle("hidden", !childGuideVisible || !activeTarget);
+}
+
+function adjustModelScale(delta) {
+  const nextIndex = Math.min(Math.max(modelScaleIndex + delta, 0), MODEL_SCALE_OPTIONS.length - 1);
+  if (nextIndex === modelScaleIndex) {
+    return;
+  }
+  modelScaleIndex = nextIndex;
+  applyModelScale();
+  updatePhotoGuideControls();
+}
+
+function toggleChildGuide() {
+  childGuideVisible = !childGuideVisible;
+  updatePhotoGuideControls();
+}
+
 async function toggleMusic() {
   const ctx = ensureAudioContext();
   if (ctx.state === "suspended") {
@@ -334,7 +379,7 @@ function updatePreviewStatus() {
     distancePart = `本来の駅まで約${Math.round(distance)}m / GPS精度 約${accuracy}m`;
   }
 
-  statusTitle.textContent = `評価モード / 駅別キャラ v25`;
+  statusTitle.textContent = `評価モード / 駅別キャラ v26`;
   distanceText.textContent = `${previewTarget.name} / ${previewTarget.variantLabel} / ${distancePart}`;
 }
 
@@ -459,7 +504,7 @@ function setVisible(activeTarget) {
   }
 
   if (activeTarget) {
-    const modelPath = `${activeTarget.modelPath}?v=25`;
+    const modelPath = `${activeTarget.modelPath}?v=26`;
     const failed = modelLoadState[activeTarget.modelPath] === "error";
     const loaded = modelLoadState[activeTarget.modelPath] === "loaded";
 
@@ -475,6 +520,7 @@ function setVisible(activeTarget) {
   }
 
   outside.classList.toggle("hidden", Boolean(activeTarget));
+  updatePhotoGuideControls();
 }
 
 function hideWebARBackdropNodes(model) {
@@ -540,7 +586,7 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別キャラ v25" : "表示エリア外";
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別キャラ v26" : "表示エリア外";
     const variantText = nearest.variantLabel ? ` / ${nearest.variantLabel}` : "";
     distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m${variantText}`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
@@ -679,6 +725,7 @@ function animateVisibleContent(timeMs) {
     if (stationModel) {
       stationModel.object3D.position.y = -1.25;
       stationModel.object3D.rotation.y = 0;
+      applyModelScale();
       animateRuntimeNodes(runtimeAnimation, seconds);
     }
 
@@ -726,6 +773,7 @@ async function start() {
   gate.classList.add("hidden");
   previewPanel.classList.remove("hidden");
   musicButton?.classList.remove("hidden");
+  photoGuidePanel?.classList.remove("hidden");
   activatePreviewTarget(Number(previewStationSelect.value || 0));
 
   if (!navigator.geolocation) {
@@ -769,7 +817,7 @@ stationModel?.addEventListener("model-loaded", () => {
         runtimeAnimation.text.length +
         runtimeAnimation.waves.length
       : 0;
-    statusTitle.textContent = `モデル読込済み v25`;
+    statusTitle.textContent = `モデル読込済み v26`;
     distanceText.textContent = `アニメ対象 ${nodeCount} 個 / 開始ボタンを押してください`;
   }
 });
@@ -786,7 +834,11 @@ previewNext.addEventListener("click", () => {
 });
 gpsModeButton.addEventListener("click", clearPreviewTarget);
 musicButton?.addEventListener("click", toggleMusic);
+modelSmallerButton?.addEventListener("click", () => adjustModelScale(-1));
+modelLargerButton?.addEventListener("click", () => adjustModelScale(1));
+childGuideButton?.addEventListener("click", toggleChildGuide);
 startButton.addEventListener("click", start);
 saveHomeButton.addEventListener("click", saveCurrentLocationAsHome);
 updateMusicButton();
+updatePhotoGuideControls();
 window.requestAnimationFrame(animateVisibleContent);

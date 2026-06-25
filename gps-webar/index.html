@@ -7,8 +7,8 @@
     <title>フラワー長井線 到着 GPS WebAR</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.4/dist/aframe-extras.min.js"></script>
-    <script src="./animation-player.js?v=25"></script>
-    <link rel="stylesheet" href="./styles.css?v=25" />
+    <script src="./animation-player.js?v=26"></script>
+    <link rel="stylesheet" href="./styles.css?v=26" />
   </head>
   <body>
     <video id="cameraFeed" class="camera-feed" autoplay playsinline muted></video>
@@ -34,6 +34,23 @@
     </div>
 
     <button id="musicButton" class="music-button hidden" type="button">音楽</button>
+
+    <div id="photoGuidePanel" class="photo-guide-panel hidden">
+      <button id="modelSmallerButton" class="guide-button" type="button" aria-label="キャラクターを小さく">小</button>
+      <button id="modelLargerButton" class="guide-button" type="button" aria-label="キャラクターを大きく">大</button>
+      <button id="childGuideButton" class="guide-button wide" type="button">立ち位置</button>
+    </div>
+
+    <div id="childGuideOverlay" class="child-guide-overlay hidden" aria-hidden="true">
+      <div class="child-guide-frame">
+        <div class="child-guide-head"></div>
+        <div class="child-guide-body"></div>
+      </div>
+      <div class="child-guide-feet">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
 
     <div id="outside" class="outside hidden">
       <strong>フラワー長井線の駅に近づくと表示されます</strong>
@@ -69,6 +86,6 @@
       <a-camera look-controls="enabled: false"></a-camera>
     </a-scene>
 
-    <script src="./main.js?v=25"></script>
+    <script src="./main.js?v=26"></script>
   </body>
 </html>
