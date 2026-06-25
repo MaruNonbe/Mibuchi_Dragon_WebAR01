@@ -114,6 +114,7 @@ def is_instrument_or_effect_name(name):
         or "_bow_anim" in name
         or "_note_" in name
         or "_mallet_" in name
+        or "_stick_" in name
     )
 
 
@@ -165,9 +166,28 @@ def instrument_roots():
         name = obj.name
         if obj.parent is not None and any(f"_{kind}" in name for kind in INSTRUMENT_KINDS) and obj.type == "EMPTY":
             roots.append(obj)
-        elif "_mallet_" in name and obj.type == "MESH":
+        elif ("_mallet_" in name or "_stick_" in name) and obj.type in {"MESH", "EMPTY"}:
             roots.append(obj)
     return roots
+
+
+def find_nearest_paw(target_obj, side=None):
+    best = None
+    best_distance = 10**9
+    for paw in bpy.context.scene.objects:
+        if side == "L":
+            paw_name = "left_paw"
+        elif side == "R":
+            paw_name = "right_paw"
+        else:
+            paw_name = "_paw"
+        if paw_name not in paw.name:
+            continue
+        distance = (paw.matrix_world.translation - target_obj.matrix_world.translation).length
+        if distance < best_distance:
+            best = paw
+            best_distance = distance
+    return best, best_distance
 
 
 def find_nearest_right_paw(bow):
@@ -177,6 +197,32 @@ def find_nearest_right_paw(bow):
         if "right_paw" not in obj.name:
             continue
         distance = (obj.matrix_world.translation - bow.matrix_world.translation).length
+        if distance < best_distance:
+            best = obj
+            best_distance = distance
+    return best, best_distance
+
+
+def wind_mouthpiece_world(inst):
+    name = inst.name
+    if "_flute_" in name:
+        local = Vector((0.0, -0.018, 0.018))
+    elif "_clarinet_" in name or "_trumpet_" in name:
+        local = Vector((-0.48, 0.0, 0.0))
+    elif "_trombone_" in name:
+        local = Vector((-0.56, 0.0, 0.01))
+    else:
+        return inst.matrix_world.translation
+    return inst.matrix_world @ local
+
+
+def find_nearest_nose(point):
+    best = None
+    best_distance = 10**9
+    for obj in bpy.context.scene.objects:
+        if "_nose" not in obj.name:
+            continue
+        distance = (obj.matrix_world.translation - point).length
         if distance < best_distance:
             best = obj
             best_distance = distance
@@ -205,6 +251,8 @@ def inspect_station(station_name, variant_label, filename, expected_species, exp
         "warnings": [],
         "clearanceMeters": {},
         "bowHandMaxDistanceMeters": {},
+        "percussionStickHandMaxDistanceMeters": {},
+        "windMouthMaxDistanceMeters": {},
     }
     if not path.exists():
         result["errors"].append("GLB file is missing.")
@@ -231,6 +279,8 @@ def inspect_station(station_name, variant_label, filename, expected_species, exp
     stands = roots_matching(lambda n: n.endswith("_music_stand") or "_music_stand." in n)
     instruments = instrument_roots()
     bows = roots_matching(lambda n: "_bow_anim" in n)
+    percussion_sticks = roots_matching(lambda n: "_stick_" in n and n.endswith("_hand_anim"))
+    wind_instruments = roots_matching(lambda n: "_wind_anim" in n)
 
     if len(players) != len(expected_species):
         result["errors"].append(f"Expected {len(expected_species)} character roots, found {len(players)}.")
@@ -281,6 +331,22 @@ def inspect_station(station_name, variant_label, filename, expected_species, exp
             result["bowHandMaxDistanceMeters"][key] = max(result["bowHandMaxDistanceMeters"].get(key, 0), round(distance, 4))
             if paw is None or distance > 0.82:
                 result["errors"].append(f"Bow is not linked closely enough to a right hand at frame {frame}: {bow.name}, distance={distance:.3f}m")
+
+        for stick in percussion_sticks:
+            side = "L" if "_stick_L_" in stick.name else "R" if "_stick_R_" in stick.name else None
+            paw, distance = find_nearest_paw(stick, side=side)
+            key = stick.name
+            result["percussionStickHandMaxDistanceMeters"][key] = max(result["percussionStickHandMaxDistanceMeters"].get(key, 0), round(distance, 4))
+            if paw is None or distance > 0.14:
+                result["errors"].append(f"Percussion stick is not held closely enough at frame {frame}: {stick.name}, distance={distance:.3f}m")
+
+        for inst in wind_instruments:
+            mouth_point = wind_mouthpiece_world(inst)
+            nose, distance = find_nearest_nose(mouth_point)
+            key = inst.name
+            result["windMouthMaxDistanceMeters"][key] = max(result["windMouthMaxDistanceMeters"].get(key, 0), round(distance, 4))
+            if nose is None or distance > 0.46:
+                result["errors"].append(f"Wind instrument mouthpiece is too far from the mouth at frame {frame}: {inst.name}, distance={distance:.3f}m")
 
     result["clearanceMeters"] = {key: round(value, 4) for key, value in min_gaps.items() if value < 90}
     if collision_events:

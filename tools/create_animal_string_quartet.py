@@ -352,7 +352,10 @@ def create_body(parent, species, fur_mat, accent_mat):
     sphere(f"{species}_foot_R", (0.20, -0.12, 0.18), (0.11, 0.18, 0.055), fur_mat, parent)
 
 
-def create_arms(parent, species, fur_mat, cello=False):
+def create_arms(parent, species, fur_mat, instrument=None):
+    wind = instrument in {"flute", "clarinet", "trumpet", "trombone"}
+    percussion = instrument in {"snare", "tambourine", "marimba", "bass_drum"}
+    cello = instrument == "cello"
     if cello:
         cylinder_between(f"{species}_left_upper_arm", (-0.24, -0.03, 1.45), (-0.43, -0.25, 1.11), 0.045, fur_mat, parent)
         cylinder_between(f"{species}_left_forearm", (-0.43, -0.25, 1.11), (-0.20, -0.46, 0.96), 0.040, fur_mat, parent)
@@ -360,6 +363,20 @@ def create_arms(parent, species, fur_mat, cello=False):
         cylinder_between(f"{species}_right_forearm", (0.48, -0.20, 1.14), (0.62, -0.82, 1.06), 0.040, fur_mat, parent)
         sphere(f"{species}_left_paw", (-0.20, -0.46, 0.96), (0.06, 0.055, 0.06), fur_mat, parent)
         sphere(f"{species}_right_paw", (0.62, -0.82, 1.06), (0.06, 0.055, 0.06), fur_mat, parent)
+    elif wind:
+        cylinder_between(f"{species}_left_upper_arm", (-0.24, -0.03, 1.42), (-0.38, -0.30, 1.55), 0.045, fur_mat, parent)
+        cylinder_between(f"{species}_left_forearm", (-0.38, -0.30, 1.55), (-0.22, -0.56, 1.68), 0.040, fur_mat, parent)
+        cylinder_between(f"{species}_right_upper_arm", (0.24, -0.03, 1.42), (0.38, -0.30, 1.55), 0.045, fur_mat, parent)
+        cylinder_between(f"{species}_right_forearm", (0.38, -0.30, 1.55), (0.22, -0.56, 1.68), 0.040, fur_mat, parent)
+        sphere(f"{species}_left_paw", (-0.22, -0.56, 1.68), (0.06, 0.055, 0.06), fur_mat, parent)
+        sphere(f"{species}_right_paw", (0.22, -0.56, 1.68), (0.06, 0.055, 0.06), fur_mat, parent)
+    elif percussion:
+        cylinder_between(f"{species}_left_upper_arm", (-0.24, -0.03, 1.42), (-0.40, -0.25, 1.28), 0.045, fur_mat, parent)
+        cylinder_between(f"{species}_left_forearm", (-0.40, -0.25, 1.28), (-0.24, -0.54, 1.34), 0.040, fur_mat, parent)
+        cylinder_between(f"{species}_right_upper_arm", (0.24, -0.03, 1.42), (0.40, -0.25, 1.28), 0.045, fur_mat, parent)
+        cylinder_between(f"{species}_right_forearm", (0.40, -0.25, 1.28), (0.24, -0.54, 1.34), 0.040, fur_mat, parent)
+        sphere(f"{species}_left_paw", (-0.24, -0.54, 1.34), (0.06, 0.055, 0.06), fur_mat, parent)
+        sphere(f"{species}_right_paw", (0.24, -0.54, 1.34), (0.06, 0.055, 0.06), fur_mat, parent)
     else:
         cylinder_between(f"{species}_left_upper_arm", (-0.24, -0.03, 1.42), (-0.47, -0.24, 1.30), 0.045, fur_mat, parent)
         cylinder_between(f"{species}_left_forearm", (-0.47, -0.24, 1.30), (-0.22, -0.47, 1.43), 0.040, fur_mat, parent)
@@ -410,22 +427,28 @@ def create_string_instrument(parent, name, kind):
 
 def create_wind_instrument(parent, name, kind, phase=0):
     inst = empty(f"{name}_{kind}_wind_anim", parent=parent)
-    inst.location = (0.04, -0.56, 1.47)
-    inst.rotation_euler = (math.radians(82), 0, math.radians(-6))
+    inst.location = (0.00, -0.61, 1.70)
+    inst.rotation_euler = (math.radians(88), 0, 0)
 
     if kind == "flute":
+        inst.location = (0.00, -0.60, 1.74)
+        inst.rotation_euler = (math.radians(92), 0, math.radians(2))
         cylinder_between(f"{name}_flute_body", (-0.46, 0, 0), (0.46, 0, 0), 0.030, MAT_SILVER, inst, vertices=24)
+        cylinder_between(f"{name}_flute_lip_plate", (-0.09, -0.018, 0.018), (0.05, -0.018, 0.018), 0.014, MAT_GOLD, inst, vertices=16)
         for i, x in enumerate([-0.28, -0.16, -0.04, 0.08, 0.20, 0.32]):
             sphere(f"{name}_flute_key_{i}", (x, -0.032, 0.025), (0.026, 0.010, 0.026), MAT_DARK, inst, segments=12)
     elif kind == "clarinet":
+        inst.location = (0.48, -0.43, 1.82)
+        inst.rotation_euler = (math.radians(112), 0, math.radians(-8))
         cylinder_between(f"{name}_clarinet_body", (-0.42, 0, 0), (0.38, 0, 0), 0.036, MAT_DARK, inst, vertices=24)
         cone(f"{name}_clarinet_bell", (0.48, 0, 0), 0.075, 0.036, 0.16, MAT_DARK, inst, vertices=24, rot=(0, math.radians(90), 0))
         cube(f"{name}_clarinet_reed", (-0.48, 0.015, 0), (0.055, 0.010, 0.018), MAT_WOOD_DARK, inst)
         for i, x in enumerate([-0.22, -0.09, 0.04, 0.17, 0.30]):
             sphere(f"{name}_clarinet_key_{i}", (x, -0.038, 0.028), (0.023, 0.008, 0.023), MAT_SILVER, inst, segments=12)
     elif kind == "trumpet":
-        inst.location = (0.08, -0.56, 1.43)
-        inst.rotation_euler = (math.radians(88), 0, math.radians(-2))
+        inst.location = (0.48, -0.43, 1.82)
+        inst.rotation_euler = (math.radians(90), 0, math.radians(-2))
+        cylinder_between(f"{name}_trumpet_mouthpiece", (-0.48, 0, 0), (-0.35, 0, 0), 0.020, MAT_SILVER, inst, vertices=20)
         cylinder_between(f"{name}_trumpet_pipe", (-0.35, 0, 0), (0.28, 0, 0), 0.030, MAT_BRASS, inst, vertices=24)
         cone(f"{name}_trumpet_bell", (0.48, 0, 0), 0.18, 0.04, 0.28, MAT_BRASS, inst, vertices=32, rot=(0, math.radians(90), 0))
         for i, x in enumerate([-0.10, 0.02, 0.14]):
@@ -437,8 +460,9 @@ def create_wind_instrument(parent, name, kind, phase=0):
         loop.rotation_euler = (math.radians(90), 0, 0)
         loop.data.materials.append(MAT_BRASS)
     else:
-        inst.location = (0.05, -0.50, 1.34)
-        inst.rotation_euler = (math.radians(85), 0, math.radians(-8))
+        inst.location = (0.56, -0.43, 1.82)
+        inst.rotation_euler = (math.radians(92), 0, math.radians(-8))
+        cylinder_between(f"{name}_trombone_mouthpiece", (-0.56, 0, 0.01), (-0.44, -0.01, 0.03), 0.022, MAT_SILVER, inst, vertices=20)
         cylinder_between(f"{name}_trombone_slide_outer", (-0.44, -0.04, 0.05), (0.42, -0.04, 0.05), 0.018, MAT_BRASS, inst, vertices=16)
         cylinder_between(f"{name}_trombone_slide_inner", (-0.44, 0.04, -0.05), (0.42, 0.04, -0.05), 0.018, MAT_BRASS, inst, vertices=16)
         cone(f"{name}_trombone_bell", (0.55, 0, 0.08), 0.16, 0.045, 0.25, MAT_BRASS, inst, vertices=32, rot=(0, math.radians(90), 0))
@@ -449,6 +473,33 @@ def create_wind_instrument(parent, name, kind, phase=0):
         inst.keyframe_insert(data_path="location", frame=frame + phase)
     finalize_animation(inst)
     return inst
+
+
+def percussion_hit_target(kind, side):
+    x = -0.11 if side == "L" else 0.11
+    if kind == "marimba":
+        return (x * 1.9, -0.72, 1.18)
+    if kind == "bass_drum":
+        return (x * 1.1, -0.73, 1.02)
+    if kind == "tambourine":
+        return (0.18 if side == "R" else -0.18, -0.55, 1.43)
+    return (x, -0.68, 1.18)
+
+
+def create_percussion_sticks(parent, name, kind, phase=0):
+    for side, paw in [("L", (-0.24, -0.54, 1.34)), ("R", (0.24, -0.54, 1.34))]:
+        target = Vector(percussion_hit_target(kind, side))
+        paw_vec = Vector(paw)
+        local_target = target - paw_vec
+        stick = empty(f"{name}_{kind}_stick_{side}_hand_anim", loc=paw, parent=parent)
+        cylinder_between(f"{name}_{kind}_stick_{side}", (0, 0, 0), local_target, 0.012, MAT_BOW, stick, vertices=12)
+        sphere(f"{name}_{kind}_stick_tip_{side}", local_target, (0.035, 0.035, 0.035), MAT_GOLD, stick, segments=12)
+        base_rot = stick.rotation_euler.copy()
+        swing = 0.22 if side == "L" else -0.22
+        for frame, rx, rz in [(1, -0.18, 0), (32, 0.10, swing), (64, -0.10, -swing * 0.5), (96, 0.12, swing * 0.8), (128, -0.16, -swing * 0.4), (160, -0.18, 0)]:
+            stick.rotation_euler = (base_rot.x + rx, base_rot.y, base_rot.z + rz)
+            stick.keyframe_insert(data_path="rotation_euler", frame=frame + phase)
+        finalize_animation(stick)
 
 
 def create_percussion_instrument(parent, name, kind, phase=0):
@@ -481,9 +532,7 @@ def create_percussion_instrument(parent, name, kind, phase=0):
         cylinder(f"{name}_bass_drum_shell", (0, 0, 0), 0.34, 0.20, MAT_DRUM, inst, vertices=48, rot=(math.radians(90), 0, 0))
         cylinder(f"{name}_bass_drum_head", (0, -0.105, 0), 0.345, 0.012, MAT_CREAM, inst, vertices=48, rot=(math.radians(90), 0, 0))
 
-    for side, x in [("L", -0.14), ("R", 0.14)]:
-        cylinder_between(f"{name}_{kind}_mallet_{side}", (x, -0.42, 1.36), (x * 0.5, -0.78, 1.62), 0.010, MAT_BOW, parent, vertices=12)
-        sphere(f"{name}_{kind}_mallet_head_{side}", (x * 0.5, -0.78, 1.62), (0.040, 0.040, 0.040), MAT_GOLD, parent, segments=12)
+    create_percussion_sticks(parent, name, kind, phase=phase)
 
     base_rot = inst.rotation_euler.copy()
     for frame, rz in [(1, -0.05), (38, 0.06), (76, -0.04), (114, 0.05), (160, -0.05)]:
@@ -563,7 +612,7 @@ def create_character(species, fur_mat, accent_mat, instrument, loc, rot_z, phase
     root.scale = (scale, scale, scale)
     create_body(root, species, fur_mat, accent_mat)
     head = create_face(root, species, fur_mat, accent_mat)
-    create_arms(root, species, fur_mat, cello=(instrument == "cello"))
+    create_arms(root, species, fur_mat, instrument=instrument)
     create_instrument(root, species, instrument, phase=phase)
     if instrument in {"violin", "viola", "cello"}:
         create_bow(root, species, cello=(instrument == "cello"), phase=phase)

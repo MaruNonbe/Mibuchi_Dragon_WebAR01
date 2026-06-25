@@ -190,6 +190,8 @@
         "deer_bow_anim": 0.5608,
         "cat_bow_anim": 0.64
       },
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {},
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -213,10 +215,17 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
-        "instrumentVsStand": 0.3367
+        "playerVsStand": 0.5691,
+        "instrumentVsStand": 0.59
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {
+        "cat_flute_wind_anim": 0.2834,
+        "cat_clarinet_wind_anim": 0.0208,
+        "bird_flute_wind_anim": 0.2834,
+        "rabbit_clarinet_wind_anim": 0.0208
+      },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -240,10 +249,17 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
-        "instrumentVsStand": 0.2055
+        "playerVsStand": 0.5691,
+        "instrumentVsStand": 0.6571
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {
+        "dog_trumpet_wind_anim": 0.0569,
+        "dog_trombone_wind_anim": 0.0208,
+        "bear_trumpet_wind_anim": 0.0569,
+        "fox_trombone_wind_anim": 0.0208
+      },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -267,10 +283,21 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
+        "playerVsStand": 0.5747,
         "instrumentVsStand": 0.547
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {
+        "squirrel_snare_stick_L_hand_anim": 0,
+        "squirrel_snare_stick_R_hand_anim": 0,
+        "squirrel_tambourine_stick_L_hand_anim": 0,
+        "squirrel_tambourine_stick_R_hand_anim": 0,
+        "frog_marimba_stick_L_hand_anim": 0,
+        "frog_marimba_stick_R_hand_anim": 0,
+        "tanuki_bass_drum_stick_L_hand_anim": 0,
+        "tanuki_bass_drum_stick_R_hand_anim": 0
+      },
+      "windMouthMaxDistanceMeters": {},
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -294,10 +321,17 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
-        "instrumentVsStand": 0.3367
+        "playerVsStand": 0.5578,
+        "instrumentVsStand": 0.6993
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {
+        "panda_trumpet_wind_anim": 0.0569,
+        "penguin_clarinet_wind_anim": 0.0208,
+        "cat_flute_wind_anim": 0.2834,
+        "bear_trombone_wind_anim": 0.0208
+      },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -321,10 +355,21 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
+        "playerVsStand": 0.5747,
         "instrumentVsStand": 0.4231
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {
+        "tanuki_bass_drum_stick_L_hand_anim": 0,
+        "tanuki_bass_drum_stick_R_hand_anim": 0,
+        "tanuki_snare_stick_L_hand_anim": 0,
+        "tanuki_snare_stick_R_hand_anim": 0,
+        "fox_tambourine_stick_L_hand_anim": 0,
+        "fox_tambourine_stick_R_hand_anim": 0,
+        "rabbit_marimba_stick_L_hand_anim": 0,
+        "rabbit_marimba_stick_R_hand_anim": 0
+      },
+      "windMouthMaxDistanceMeters": {},
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -348,10 +393,17 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
-        "instrumentVsStand": 0.3367
+        "playerVsStand": 0.5691,
+        "instrumentVsStand": 0.59
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {
+        "deer_flute_wind_anim": 0.2834,
+        "deer_clarinet_wind_anim": 0.0208,
+        "bird_flute_wind_anim": 0.2834,
+        "cat_clarinet_wind_anim": 0.0208
+      },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -375,10 +427,17 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
-        "instrumentVsStand": 0.274
+        "playerVsStand": 0.5691,
+        "instrumentVsStand": 0.6551
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {
+        "bear_trombone_wind_anim": 0.0208,
+        "bear_trumpet_wind_anim": 0.0569,
+        "dog_trombone_wind_anim": 0.0208,
+        "panda_trumpet_wind_anim": 0.0569
+      },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -402,10 +461,17 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
-        "instrumentVsStand": 0.4497
+        "playerVsStand": 0.5691,
+        "instrumentVsStand": 0.6098
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {
+        "rabbit_clarinet_wind_anim": 0.0208,
+        "rabbit_flute_wind_anim": 0.2834,
+        "cat_clarinet_wind_anim": 0.0208,
+        "bird_flute_wind_anim": 0.2834
+      },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -439,6 +505,8 @@
         "bear_bow_anim": 0.5608,
         "cat_bow_anim": 0.64
       },
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {},
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -462,10 +530,17 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
-        "instrumentVsStand": 0.3367
+        "playerVsStand": 0.5691,
+        "instrumentVsStand": 0.59
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {
+        "bird_flute_wind_anim": 0.2834,
+        "bird_clarinet_wind_anim": 0.0208,
+        "penguin_flute_wind_anim": 0.2834,
+        "rabbit_clarinet_wind_anim": 0.0208
+      },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -489,10 +564,17 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
-        "instrumentVsStand": 0.3367
+        "playerVsStand": 0.5691,
+        "instrumentVsStand": 0.6993
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {
+        "fox_trumpet_wind_anim": 0.0569,
+        "fox_clarinet_wind_anim": 0.0208,
+        "cat_flute_wind_anim": 0.2834,
+        "dog_trombone_wind_anim": 0.0208
+      },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -516,10 +598,21 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
+        "playerVsStand": 0.5747,
         "instrumentVsStand": 0.5291
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {
+        "rabbit_tambourine_stick_L_hand_anim": 0,
+        "rabbit_tambourine_stick_R_hand_anim": 0,
+        "rabbit_snare_stick_L_hand_anim": 0,
+        "rabbit_snare_stick_R_hand_anim": 0,
+        "sheep_marimba_stick_L_hand_anim": 0,
+        "sheep_marimba_stick_R_hand_anim": 0,
+        "panda_bass_drum_stick_L_hand_anim": 0,
+        "panda_bass_drum_stick_R_hand_anim": 0
+      },
+      "windMouthMaxDistanceMeters": {},
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -543,10 +636,17 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
-        "instrumentVsStand": 0.2055
+        "playerVsStand": 0.5691,
+        "instrumentVsStand": 0.6571
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {
+        "kamoshika_trumpet_wind_anim": 0.0569,
+        "kamoshika_trombone_wind_anim": 0.0208,
+        "deer_trumpet_wind_anim": 0.0569,
+        "dog_trombone_wind_anim": 0.0208
+      },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -570,10 +670,21 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
+        "playerVsStand": 0.5747,
         "instrumentVsStand": 0.2731
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {
+        "frog_marimba_stick_L_hand_anim": 0,
+        "frog_marimba_stick_R_hand_anim": 0,
+        "frog_snare_stick_L_hand_anim": 0,
+        "frog_snare_stick_R_hand_anim": 0,
+        "bird_tambourine_stick_L_hand_anim": 0,
+        "bird_tambourine_stick_R_hand_anim": 0,
+        "tanuki_bass_drum_stick_L_hand_anim": 0,
+        "tanuki_bass_drum_stick_R_hand_anim": 0
+      },
+      "windMouthMaxDistanceMeters": {},
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -597,10 +708,17 @@
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2752,
-        "instrumentVsStand": 0.274
+        "playerVsStand": 0.5691,
+        "instrumentVsStand": 0.6551
       },
       "bowHandMaxDistanceMeters": {},
+      "percussionStickHandMaxDistanceMeters": {},
+      "windMouthMaxDistanceMeters": {
+        "sheep_trombone_wind_anim": 0.0208,
+        "sheep_trumpet_wind_anim": 0.0569,
+        "deer_trombone_wind_anim": 0.0208,
+        "panda_trumpet_wind_anim": 0.0569
+      },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
     },
@@ -651,6 +769,27 @@
       "bowHandMaxDistanceMeters": {
         "fox_bow_anim": 0.415,
         "deer_bow_anim": 0.3028
+      },
+      "percussionStickHandMaxDistanceMeters": {
+        "bear_bass_drum_stick_L_hand_anim": 0,
+        "bear_bass_drum_stick_R_hand_anim": 0,
+        "squirrel_tambourine_stick_L_hand_anim": 0,
+        "squirrel_tambourine_stick_R_hand_anim": 0,
+        "frog_marimba_stick_L_hand_anim": 0,
+        "frog_marimba_stick_R_hand_anim": 0,
+        "tanuki_snare_stick_L_hand_anim": 0,
+        "tanuki_snare_stick_R_hand_anim": 0,
+        "sheep_bass_drum_stick_L_hand_anim": 0,
+        "sheep_bass_drum_stick_R_hand_anim": 0
+      },
+      "windMouthMaxDistanceMeters": {
+        "rabbit_trumpet_wind_anim": 0.0421,
+        "cat_flute_wind_anim": 0.1814,
+        "dog_trombone_wind_anim": 0.0129,
+        "bird_flute_wind_anim": 0.153,
+        "panda_trumpet_wind_anim": 0.0307,
+        "penguin_clarinet_wind_anim": 0.0112,
+        "kamoshika_trombone_wind_anim": 0.0113
       },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true
