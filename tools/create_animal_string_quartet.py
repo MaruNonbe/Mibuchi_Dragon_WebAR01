@@ -558,8 +558,9 @@ def add_music_notes(parent, name, phase=0):
     return notes
 
 
-def create_character(species, fur_mat, accent_mat, instrument, loc, rot_z, phase):
+def create_character(species, fur_mat, accent_mat, instrument, loc, rot_z, phase, scale=1.0):
     root = empty(f"{species}_quartet_player", loc=loc, rot=(0, 0, math.radians(rot_z)))
+    root.scale = (scale, scale, scale)
     create_body(root, species, fur_mat, accent_mat)
     head = create_face(root, species, fur_mat, accent_mat)
     create_arms(root, species, fur_mat, cello=(instrument == "cello"))
@@ -590,8 +591,8 @@ def create_stage():
     stand_specs = [
         ("fox", (-1.65, -2.05), (-2.65, -0.62)),
         ("rabbit", (1.65, -2.05), (2.65, -0.62)),
-        ("bear", (-2.35, 1.20), (-1.35, 0.88)),
-        ("cat", (2.35, 1.20), (1.35, 0.88)),
+        ("bear", (-3.15, 1.45), (-1.35, 0.88)),
+        ("cat", (3.15, 1.45), (1.35, 0.88)),
     ]
     for i, (player_name, stand_xy, player_xy) in enumerate(stand_specs):
         x, y = stand_xy
@@ -908,10 +909,20 @@ STATION_VARIANT_CONFIGS = {
         ("panda", "trumpet", (1.35, 0.88, 0), -18, 36),
     ]),
     "arato": ("arato_finale_all_stars.glb", "荒砥駅", [
-        ("fox", "violin", (-1.95, -0.62, 0), 28, 0),
-        ("rabbit", "trumpet", (1.95, -0.62, 0), -28, 12),
-        ("bear", "bass_drum", (-1.35, 0.88, 0), 18, 24),
-        ("cat", "flute", (1.35, 0.88, 0), -18, 36),
+        ("fox", "violin", (-1.95, -0.62, 0), 28, 0, 0.78),
+        ("rabbit", "trumpet", (1.95, -0.62, 0), -28, 12, 0.78),
+        ("bear", "bass_drum", (-0.72, 0.28, 0), 12, 24, 0.70),
+        ("cat", "flute", (0.72, 0.28, 0), -12, 36, 0.70),
+        ("dog", "trombone", (-2.45, 0.42, 0), 20, 48, 0.66),
+        ("squirrel", "tambourine", (2.45, 0.42, 0), -20, 60, 0.66),
+        ("frog", "marimba", (-1.55, 1.02, 0), 13, 72, 0.62),
+        ("tanuki", "snare", (1.55, 1.02, 0), -13, 84, 0.62),
+        ("deer", "viola", (-2.55, 1.86, 0), 13, 96, 0.58),
+        ("bird", "flute", (-1.50, 2.00, 0), 8, 108, 0.58),
+        ("panda", "trumpet", (-0.50, 2.10, 0), 3, 120, 0.58),
+        ("penguin", "clarinet", (0.50, 2.10, 0), -3, 132, 0.58),
+        ("kamoshika", "trombone", (1.50, 2.00, 0), -8, 144, 0.58),
+        ("sheep", "bass_drum", (2.55, 1.86, 0), -13, 156, 0.58),
     ]),
 }
 
@@ -933,8 +944,17 @@ def resolve_variant_config(variant):
         "filename": config["filename"],
         "station_name": config.get("station_name", "長井駅"),
         "players": [
-            (species, species_material(species), MAT_CREAM, instrument, loc, rot_z, phase)
-            for species, instrument, loc, rot_z, phase in config["players"]
+            (
+                entry[0],
+                species_material(entry[0]),
+                MAT_CREAM,
+                entry[1],
+                entry[2],
+                entry[3],
+                entry[4],
+                entry[5] if len(entry) > 5 else 1.0,
+            )
+            for entry in config["players"]
         ],
     }
 

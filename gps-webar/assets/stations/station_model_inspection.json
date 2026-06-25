@@ -613,23 +613,44 @@
         "fox",
         "rabbit",
         "bear",
-        "cat"
+        "cat",
+        "dog",
+        "squirrel",
+        "frog",
+        "tanuki",
+        "deer",
+        "bird",
+        "panda",
+        "penguin",
+        "kamoshika",
+        "sheep"
       ],
       "expectedInstruments": [
         "violin",
         "trumpet",
         "bass_drum",
-        "flute"
+        "flute",
+        "trombone",
+        "tambourine",
+        "marimba",
+        "snare",
+        "viola",
+        "flute",
+        "trumpet",
+        "clarinet",
+        "trombone",
+        "bass_drum"
       ],
       "errors": [],
       "warnings": [],
       "clearanceMeters": {
-        "playerVsStand": 0.2714,
-        "instrumentVsStand": 0.2066,
-        "bowVsStand": 0.4382
+        "playerVsStand": 0.17,
+        "instrumentVsStand": 0.3276,
+        "bowVsStand": 0.2769
       },
       "bowHandMaxDistanceMeters": {
-        "fox_bow_anim": 0.5608
+        "fox_bow_anim": 0.4374,
+        "deer_bow_anim": 0.3253
       },
       "station_label_object_exists": true,
       "arrival_chars_in_object_names": true

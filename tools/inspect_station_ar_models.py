@@ -34,7 +34,7 @@ EXPECTED_STATIONS = [
     ("蚕桑駅", "カモシカたちのホルン合奏", "koguwa_kamoshika_horns.glb", ["kamoshika", "kamoshika", "deer", "dog"], ["trumpet", "trombone", "trumpet", "trombone"]),
     ("鮎貝駅", "カエルたちのマリンバ隊", "ayukai_frogs_marimba.glb", ["frog", "frog", "bird", "tanuki"], ["marimba", "snare", "tambourine", "bass_drum"]),
     ("四季の郷駅", "ヒツジたちのトロンボーン隊", "shikinosato_sheep_trombones.glb", ["sheep", "sheep", "deer", "panda"], ["trombone", "trumpet", "trombone", "trumpet"]),
-    ("荒砥駅", "全員集合フィナーレ", "arato_finale_all_stars.glb", ["fox", "rabbit", "bear", "cat"], ["violin", "trumpet", "bass_drum", "flute"]),
+    ("荒砥駅", "全員集合フィナーレ", "arato_finale_all_stars.glb", ["fox", "rabbit", "bear", "cat", "dog", "squirrel", "frog", "tanuki", "deer", "bird", "panda", "penguin", "kamoshika", "sheep"], ["violin", "trumpet", "bass_drum", "flute", "trombone", "tambourine", "marimba", "snare", "viola", "flute", "trumpet", "clarinet", "trombone", "bass_drum"]),
 ]
 
 INSTRUMENT_KINDS = {
@@ -232,8 +232,8 @@ def inspect_station(station_name, variant_label, filename, expected_species, exp
     instruments = instrument_roots()
     bows = roots_matching(lambda n: "_bow_anim" in n)
 
-    if len(players) != 4:
-        result["errors"].append(f"Expected 4 character roots, found {len(players)}.")
+    if len(players) != len(expected_species):
+        result["errors"].append(f"Expected {len(expected_species)} character roots, found {len(players)}.")
     if len(stands) != 4:
         result["errors"].append(f"Expected 4 music stands, found {len(stands)}.")
 
