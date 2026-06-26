@@ -397,7 +397,7 @@ def create_string_instrument(parent, name, kind):
         inst.rotation_euler = (math.radians(80), 0, math.radians(-8))
         scale = 1.12
     else:
-        inst.location = (0.03, -0.46, 0.92)
+        inst.location = (0.03, -0.46, 1.06)
         inst.rotation_euler = (math.radians(88), 0, math.radians(-2))
         scale = 1.55
 
@@ -553,7 +553,7 @@ def create_instrument(parent, name, kind, phase=0):
 def create_bow(parent, name, cello=False, phase=0):
     bow = empty(f"{name}_bow_anim", parent=parent)
     if cello:
-        bow.location = (0.12, -0.82, 1.06)
+        bow.location = (0.12, -0.82, 1.20)
         bow.rotation_euler = (math.radians(88), 0, math.radians(-2))
         length = 1.02
     else:

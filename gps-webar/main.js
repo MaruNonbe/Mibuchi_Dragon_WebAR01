@@ -279,7 +279,7 @@ function updatePreviewStatus() {
     distancePart = `本来の駅まで約${Math.round(distance)}m / GPS精度 約${accuracy}m`;
   }
 
-  statusTitle.textContent = `評価モード / 駅別キャラ v27`;
+  statusTitle.textContent = `評価モード / 駅別キャラ v28`;
   distanceText.textContent = `${previewTarget.name} / ${previewTarget.variantLabel} / ${distancePart}`;
 }
 
@@ -404,7 +404,7 @@ function setVisible(activeTarget) {
   }
 
   if (activeTarget) {
-    const modelPath = `${activeTarget.modelPath}?v=27`;
+    const modelPath = `${activeTarget.modelPath}?v=28`;
     const failed = modelLoadState[activeTarget.modelPath] === "error";
     const loaded = modelLoadState[activeTarget.modelPath] === "loaded";
 
@@ -494,7 +494,7 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別キャラ v27" : "表示エリア外";
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別キャラ v28" : "表示エリア外";
     const variantText = nearest.variantLabel ? ` / ${nearest.variantLabel}` : "";
     distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m${variantText}`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
@@ -725,7 +725,7 @@ stationModel?.addEventListener("model-loaded", () => {
         runtimeAnimation.text.length +
         runtimeAnimation.waves.length
       : 0;
-    statusTitle.textContent = `モデル読込済み v27`;
+    statusTitle.textContent = `モデル読込済み v28`;
     distanceText.textContent = `アニメ対象 ${nodeCount} 個 / 開始ボタンを押してください`;
   }
 });
