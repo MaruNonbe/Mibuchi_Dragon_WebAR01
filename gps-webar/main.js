@@ -7,23 +7,23 @@ const STATION_MODEL = {
 };
 
 const STATION_VARIANTS = [
-  { variantLabel: "きつね・ウサギ・シカの弦楽四重奏", ensemble: "strings", modelPath: "./assets/stations/akayu_strings_fox_rabbit.glb" },
-  { variantLabel: "ネコと小鳥の木管アンサンブル", ensemble: "woodwinds", modelPath: "./assets/stations/nanyo_city_hall_cats_woodwinds.glb" },
-  { variantLabel: "イヌたちの金管ファンファーレ", ensemble: "brass", modelPath: "./assets/stations/miyauchi_dogs_brass.glb" },
-  { variantLabel: "リスとカエルの打楽器パレード", ensemble: "percussion", modelPath: "./assets/stations/orihata_squirrels_percussion.glb" },
-  { variantLabel: "パンダとペンギンの駅前ジャズ", ensemble: "jazz", modelPath: "./assets/stations/ringo_panda_penguin_jazz.glb" },
-  { variantLabel: "タヌキたちの太鼓リズム", ensemble: "taiko", modelPath: "./assets/stations/nishi_otsuka_tanuki_taiko.glb" },
-  { variantLabel: "シカと小鳥のフルート合奏", ensemble: "flute", modelPath: "./assets/stations/imaizumi_deer_flutes.glb" },
-  { variantLabel: "クマたちの低音ブラス", ensemble: "low-brass", modelPath: "./assets/stations/tokiniwa_bears_low_brass.glb" },
-  { variantLabel: "ウサギたちのクラリネット隊", ensemble: "clarinet", modelPath: "./assets/stations/minami_nagai_rabbit_clarinets.glb" },
-  { variantLabel: "どうぶつ弦楽四重奏", ensemble: "strings", modelPath: "./assets/stations/nagai_main_string_quartet.glb" },
-  { variantLabel: "小鳥たちのピッコロ行進曲", ensemble: "piccolo", modelPath: "./assets/stations/ayame_koen_birds_piccolo.glb" },
-  { variantLabel: "キツネたちのサックスバンド", ensemble: "sax", modelPath: "./assets/stations/uzen_narita_fox_sax_band.glb" },
-  { variantLabel: "白ウサギのハンドベル隊", ensemble: "handbell", modelPath: "./assets/stations/shirousagi_white_rabbit_bells.glb" },
-  { variantLabel: "カモシカたちのホルン合奏", ensemble: "horn", modelPath: "./assets/stations/koguwa_kamoshika_horns.glb" },
-  { variantLabel: "カエルたちのマリンバ隊", ensemble: "marimba", modelPath: "./assets/stations/ayukai_frogs_marimba.glb" },
-  { variantLabel: "ヒツジたちのトロンボーン隊", ensemble: "trombone", modelPath: "./assets/stations/shikinosato_sheep_trombones.glb" },
-  { variantLabel: "全員集合フィナーレ", ensemble: "finale", modelPath: "./assets/stations/arato_finale_all_stars.glb" },
+  { variantLabel: "きつね・ウサギ・シカの弦楽四重奏", ensemble: "strings", modelPath: "./assets/stations/akayu_strings_fox_rabbit.glb", musicPath: "./assets/music/morning_at_akayu.mp3" },
+  { variantLabel: "ネコと小鳥の木管アンサンブル", ensemble: "woodwinds", modelPath: "./assets/stations/nanyo_city_hall_cats_woodwinds.glb", musicPath: "./assets/music/Morning_On_Platform_Six.mp3" },
+  { variantLabel: "イヌたちの金管ファンファーレ", ensemble: "brass", modelPath: "./assets/stations/miyauchi_dogs_brass.glb", musicPath: "./assets/music/tuba_promenade.mp3" },
+  { variantLabel: "リスとカエルの打楽器パレード", ensemble: "percussion", modelPath: "./assets/stations/orihata_squirrels_percussion.glb", musicPath: "./assets/music/platform_shuffle.mp3" },
+  { variantLabel: "パンダとペンギンの駅前ジャズ", ensemble: "jazz", modelPath: "./assets/stations/ringo_panda_penguin_jazz.glb", musicPath: "./assets/music/the_eight-fifteen.mp3" },
+  { variantLabel: "タヌキたちの太鼓リズム", ensemble: "taiko", modelPath: "./assets/stations/nishi_otsuka_tanuki_taiko.glb", musicPath: "./assets/music/the_iron_engine_s_homecoming.mp3" },
+  { variantLabel: "シカと小鳥のフルート合奏", ensemble: "flute", modelPath: "./assets/stations/imaizumi_deer_flutes.glb", musicPath: "./assets/music/platform_of_the_golden_hour.mp3" },
+  { variantLabel: "クマたちの低音ブラス", ensemble: "low-brass", modelPath: "./assets/stations/tokiniwa_bears_low_brass.glb", musicPath: "./assets/music/midnight_terminal.mp3" },
+  { variantLabel: "ウサギたちのクラリネット隊", ensemble: "clarinet", modelPath: "./assets/stations/minami_nagai_rabbit_clarinets.glb", musicPath: "./assets/music/the_morning_arrival.mp3" },
+  { variantLabel: "どうぶつ弦楽四重奏", ensemble: "strings", modelPath: "./assets/stations/nagai_main_string_quartet.glb", musicPath: "./assets/music/arrival_at_terminal_one.mp3" },
+  { variantLabel: "小鳥たちのピッコロ行進曲", ensemble: "piccolo", modelPath: "./assets/stations/ayame_koen_birds_piccolo.glb", musicPath: "./assets/music/the_gate_of_petals.mp3" },
+  { variantLabel: "キツネたちのサックスバンド", ensemble: "sax", modelPath: "./assets/stations/uzen_narita_fox_sax_band.glb", musicPath: "./assets/music/the_train_to_akayu.mp3" },
+  { variantLabel: "白ウサギのハンドベル隊", ensemble: "handbell", modelPath: "./assets/stations/shirousagi_white_rabbit_bells.glb", musicPath: "./assets/music/arrivals_at_platform_4.mp3" },
+  { variantLabel: "カモシカたちのホルン合奏", ensemble: "horn", modelPath: "./assets/stations/koguwa_kamoshika_horns.glb", musicPath: "./assets/music/gateway_to_the_sovereign_city.mp3" },
+  { variantLabel: "カエルたちのマリンバ隊", ensemble: "marimba", modelPath: "./assets/stations/ayukai_frogs_marimba.glb", musicPath: "./assets/music/First_Train_of_the_Day.mp3" },
+  { variantLabel: "ヒツジたちのトロンボーン隊", ensemble: "trombone", modelPath: "./assets/stations/shikinosato_sheep_trombones.glb", musicPath: "./assets/music/arrival_at_the_last_station.mp3" },
+  { variantLabel: "全員集合フィナーレ", ensemble: "finale", modelPath: "./assets/stations/arato_finale_all_stars.glb", musicPath: "./assets/music/grand_curtain_call.mp3" },
 ];
 
 const FLOWER_NAGAI_STATIONS = [
@@ -60,6 +60,7 @@ const TARGETS = [
     radiusMeters: DEFAULT_RADIUS_METERS,
     ...STATION_MODEL,
     modelPath: "./assets/stations/nagai_main_string_quartet.glb",
+    musicPath: "./assets/music/arrival_at_terminal_one.mp3",
     variantLabel: "検証用どうぶつアンサンブル",
     ensemble: "test",
   },
@@ -101,22 +102,12 @@ let latestPosition = null;
 let runtimeAnimation = null;
 const modelLoadState = {};
 let activeModelPath = "";
-let audioContext = null;
-let musicTimer = null;
+let stationAudio = null;
 let musicPlaying = false;
-let nextMusicTime = 0;
-let musicStep = 0;
-let musicNoiseBuffer = null;
 let modelScaleIndex = 1;
 let childGuideVisible = true;
 
-const MUSIC_BPM = 112;
-const MUSIC_STEP_SECONDS = 60 / MUSIC_BPM / 2;
-const MUSIC_LOOKAHEAD_SECONDS = 0.45;
-const MUSIC_SCHEDULE_MS = 90;
-const MUSIC_SCALE_MIDI = [60, 62, 64, 67, 69, 72, 74, 76];
-const MUSIC_MELODY = [0, 2, 4, 5, 4, 2, 1, 2, 0, 2, 4, 7, 6, 4, 2, 1];
-const MUSIC_CHORD_ROOTS = [60, 67, 69, 65, 60, 67, 65, 67];
+const DEFAULT_MUSIC_PATH = "./assets/music/arrival_at_terminal_one.mp3";
 const MODEL_SCALE_OPTIONS = [0.65, 0.80, 0.95, 1.10];
 
 function loadSavedHomeTarget() {
@@ -138,6 +129,7 @@ function loadSavedHomeTarget() {
       radiusMeters: parsed.radiusMeters || DEFAULT_RADIUS_METERS,
       ...STATION_MODEL,
       modelPath: "./assets/stations/nagai_main_string_quartet.glb",
+      musicPath: "./assets/music/arrival_at_terminal_one.mp3",
       variantLabel: "自宅検証用どうぶつアンサンブル",
       ensemble: "home-test",
     };
@@ -160,125 +152,36 @@ function addSavedHomeTarget() {
 
 addSavedHomeTarget();
 
-function midiToFrequency(note) {
-  return 440 * Math.pow(2, (note - 69) / 12);
-}
-
-function ensureAudioContext() {
-  if (!audioContext) {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    audioContext = new AudioContextClass();
-  }
-  if (!musicNoiseBuffer) {
-    const length = audioContext.sampleRate * 0.28;
-    musicNoiseBuffer = audioContext.createBuffer(1, length, audioContext.sampleRate);
-    const data = musicNoiseBuffer.getChannelData(0);
-    for (let i = 0; i < length; i += 1) {
-      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2.4);
-    }
-  }
-  return audioContext;
-}
-
-function ensembleSound(target) {
-  const ensemble = target?.ensemble || "strings";
-  if (["woodwinds", "flute", "clarinet", "piccolo"].includes(ensemble)) {
-    return { melody: "triangle", harmony: "sine", bass: "triangle", percussion: false, brightness: 0.34 };
-  }
-  if (["brass", "low-brass", "horn", "trombone", "sax"].includes(ensemble)) {
-    return { melody: "sawtooth", harmony: "triangle", bass: "sawtooth", percussion: false, brightness: 0.25 };
-  }
-  if (["percussion", "taiko", "handbell", "marimba"].includes(ensemble)) {
-    return { melody: "sine", harmony: "triangle", bass: "sine", percussion: true, brightness: 0.42 };
-  }
-  if (ensemble === "finale" || ensemble === "jazz") {
-    return { melody: "triangle", harmony: "sawtooth", bass: "triangle", percussion: true, brightness: 0.32 };
-  }
-  return { melody: "triangle", harmony: "sine", bass: "triangle", percussion: false, brightness: 0.30 };
-}
-
-function playTone(time, frequency, duration, type, gainValue) {
-  const ctx = ensureAudioContext();
-  const oscillator = ctx.createOscillator();
-  const gain = ctx.createGain();
-  const filter = ctx.createBiquadFilter();
-
-  oscillator.type = type;
-  oscillator.frequency.setValueAtTime(frequency, time);
-  filter.type = "lowpass";
-  filter.frequency.setValueAtTime(1800 + frequency * 1.8, time);
-  gain.gain.setValueAtTime(0.0001, time);
-  gain.gain.exponentialRampToValueAtTime(Math.max(gainValue, 0.0001), time + 0.025);
-  gain.gain.exponentialRampToValueAtTime(0.0001, time + duration);
-
-  oscillator.connect(filter);
-  filter.connect(gain);
-  gain.connect(ctx.destination);
-  oscillator.start(time);
-  oscillator.stop(time + duration + 0.05);
-}
-
-function playNoise(time, gainValue) {
-  const ctx = ensureAudioContext();
-  const source = ctx.createBufferSource();
-  const gain = ctx.createGain();
-  const filter = ctx.createBiquadFilter();
-
-  source.buffer = musicNoiseBuffer;
-  filter.type = "bandpass";
-  filter.frequency.setValueAtTime(900, time);
-  filter.Q.setValueAtTime(0.8, time);
-  gain.gain.setValueAtTime(gainValue, time);
-  gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.12);
-
-  source.connect(filter);
-  filter.connect(gain);
-  gain.connect(ctx.destination);
-  source.start(time);
-}
-
-function scheduleMusicStep(step, time) {
-  const sound = ensembleSound(activeTarget);
-  const melodyNote = MUSIC_SCALE_MIDI[MUSIC_MELODY[step % MUSIC_MELODY.length] % MUSIC_SCALE_MIDI.length];
-  const chordRoot = MUSIC_CHORD_ROOTS[Math.floor(step / 2) % MUSIC_CHORD_ROOTS.length];
-  const accent = step % 8 === 0 ? 1.15 : 1.0;
-
-  playTone(time, midiToFrequency(melodyNote + 12), MUSIC_STEP_SECONDS * 1.7, sound.melody, 0.045 * accent);
-
-  if (step % 2 === 0) {
-    playTone(time, midiToFrequency(chordRoot), MUSIC_STEP_SECONDS * 1.9, sound.bass, 0.026);
-  }
-
-  if (step % 4 === 0) {
-    playTone(time + 0.01, midiToFrequency(chordRoot + 7), MUSIC_STEP_SECONDS * 2.6, sound.harmony, 0.018 * sound.brightness);
-    playTone(time + 0.02, midiToFrequency(chordRoot + 12), MUSIC_STEP_SECONDS * 2.6, sound.harmony, 0.014 * sound.brightness);
-  }
-
-  if (sound.percussion) {
-    if (step % 4 === 0) {
-      playTone(time, midiToFrequency(48), 0.09, "sine", 0.055);
-    }
-    if (step % 4 === 2) {
-      playNoise(time, 0.022);
-    }
-  }
-}
-
-function musicScheduler() {
-  const ctx = ensureAudioContext();
-  while (nextMusicTime < ctx.currentTime + MUSIC_LOOKAHEAD_SECONDS) {
-    scheduleMusicStep(musicStep, nextMusicTime);
-    nextMusicTime += MUSIC_STEP_SECONDS;
-    musicStep += 1;
-  }
-}
-
 function updateMusicButton() {
   if (!musicButton) {
     return;
   }
   musicButton.textContent = musicPlaying ? "音楽ON" : "音楽";
   musicButton.classList.toggle("is-playing", musicPlaying);
+}
+
+function getActiveMusicPath() {
+  return activeTarget?.musicPath || DEFAULT_MUSIC_PATH;
+}
+
+function ensureStationAudio() {
+  if (!stationAudio) {
+    stationAudio = new Audio();
+    stationAudio.loop = true;
+    stationAudio.preload = "auto";
+    stationAudio.volume = 0.72;
+  }
+  return stationAudio;
+}
+
+function syncMusicSource() {
+  const audio = ensureStationAudio();
+  const nextUrl = new URL(getActiveMusicPath(), window.location.href).href;
+  if (audio.src !== nextUrl) {
+    audio.src = nextUrl;
+    audio.load();
+  }
+  return audio;
 }
 
 function currentModelScale() {
@@ -319,24 +222,21 @@ function toggleChildGuide() {
 }
 
 async function toggleMusic() {
-  const ctx = ensureAudioContext();
-  if (ctx.state === "suspended") {
-    await ctx.resume();
-  }
-
+  const audio = syncMusicSource();
   if (musicPlaying) {
-    window.clearInterval(musicTimer);
-    musicTimer = null;
+    audio.pause();
     musicPlaying = false;
     updateMusicButton();
     return;
   }
 
-  nextMusicTime = ctx.currentTime + 0.08;
-  musicStep = 0;
-  musicScheduler();
-  musicTimer = window.setInterval(musicScheduler, MUSIC_SCHEDULE_MS);
-  musicPlaying = true;
+  try {
+    await audio.play();
+    musicPlaying = true;
+  } catch (error) {
+    musicPlaying = false;
+    console.warn("Music playback was blocked or failed.", error);
+  }
   updateMusicButton();
 }
 
@@ -379,7 +279,7 @@ function updatePreviewStatus() {
     distancePart = `本来の駅まで約${Math.round(distance)}m / GPS精度 約${accuracy}m`;
   }
 
-  statusTitle.textContent = `評価モード / 駅別キャラ v26`;
+  statusTitle.textContent = `評価モード / 駅別キャラ v27`;
   distanceText.textContent = `${previewTarget.name} / ${previewTarget.variantLabel} / ${distancePart}`;
 }
 
@@ -489,7 +389,7 @@ function speakArrival(target) {
 
 function setVisible(activeTarget) {
   const desiredKey = activeTarget
-    ? `${activeTarget.modelPath}:${modelLoadState[activeTarget.modelPath]}`
+    ? `${activeTarget.modelPath}:${activeTarget.musicPath || DEFAULT_MUSIC_PATH}:${modelLoadState[activeTarget.modelPath]}`
     : "none";
 
   if (desiredKey === visibleStateKey) {
@@ -504,9 +404,17 @@ function setVisible(activeTarget) {
   }
 
   if (activeTarget) {
-    const modelPath = `${activeTarget.modelPath}?v=26`;
+    const modelPath = `${activeTarget.modelPath}?v=27`;
     const failed = modelLoadState[activeTarget.modelPath] === "error";
     const loaded = modelLoadState[activeTarget.modelPath] === "loaded";
+
+    if (musicPlaying) {
+      syncMusicSource().play().catch((error) => {
+        musicPlaying = false;
+        updateMusicButton();
+        console.warn("Music playback was blocked or failed.", error);
+      });
+    }
 
     if (activeModelPath !== activeTarget.modelPath) {
       activeModelPath = activeTarget.modelPath;
@@ -586,7 +494,7 @@ function updateByPosition(position) {
   const shouldShow = hasLatchedVisibleTarget || isInside;
 
   if (now - lastStatusUpdateMs > 1500) {
-    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別キャラ v26" : "表示エリア外";
+    statusTitle.textContent = shouldShow ? "表示エリア内 / 駅別キャラ v27" : "表示エリア外";
     const variantText = nearest.variantLabel ? ` / ${nearest.variantLabel}` : "";
     distanceText.textContent = `${nearest.name}まで約${roundedDistance}m / GPS精度 約${roundedAccuracy}m${variantText}`;
     outsideDistance.textContent = `${nearest.name}まで約${roundedDistance}mです。半径${nearest.radiusMeters}m以内で表示されます。`;
@@ -817,7 +725,7 @@ stationModel?.addEventListener("model-loaded", () => {
         runtimeAnimation.text.length +
         runtimeAnimation.waves.length
       : 0;
-    statusTitle.textContent = `モデル読込済み v26`;
+    statusTitle.textContent = `モデル読込済み v27`;
     distanceText.textContent = `アニメ対象 ${nodeCount} 個 / 開始ボタンを押してください`;
   }
 });
