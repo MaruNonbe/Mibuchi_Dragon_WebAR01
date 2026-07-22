@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#082223">
-  <meta name="description" content="三淵渓谷の龍伝説をスマートフォンブラウザで体験するWebARプレビュー">
+  <meta name="description" content="三淵渓谷の龍伝説をスマートフォンブラウザで体験するWebARプレビュー。龍と一緒に記念撮影ができます。">
   <meta property="og:title" content="Mibuchi Dragon WebAR">
-  <meta property="og:description" content="iPhone Safari / Android Chrome対応の龍ARプレビュー">
+  <meta property="og:description" content="龍を呼び出してポーズを取らせ、カメラと合成して記念撮影できます。">
   <meta property="og:image" content="assets/images/thumbnail.jpg">
-  <title>Mibuchi Dragon WebAR</title>
+  <title>Mibuchi Dragon WebAR - 記念撮影</title>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
     :root {
@@ -22,82 +22,126 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      color: var(--text);
+      background: #04191a;
     }
 
     body {
-      margin: 0;
-      min-height: 100vh;
       background:
         linear-gradient(180deg, rgba(6, 26, 28, 0.72), rgba(6, 26, 28, 0.95)),
         url("assets/images/thumbnail.jpg") center / cover no-repeat;
-      color: var(--text);
+      transition: background-color 0.3s ease;
+    }
+
+    /* カメラ起動中は背景画像を消してカメラ映像を見せる */
+    body.camera-active {
+      background: #000;
+    }
+
+    .stage {
+      position: fixed;
+      inset: 0;
       overflow: hidden;
     }
 
-    main {
-      display: grid;
-      grid-template-rows: 1fr auto;
-      min-height: 100vh;
-      min-height: 100dvh;
+    #cameraFeed {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      background: #000;
+    }
+
+    body.camera-active #cameraFeed { display: block; }
+
+    .dragon-wrap {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(0.55);
+      transform-origin: 50% 78%;
+      transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.2, 1.4, 0.4, 1);
+      pointer-events: none;
+    }
+
+    .dragon-wrap.is-visible {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
     }
 
     model-viewer {
       width: 100%;
       height: 100%;
-      min-height: 58vh;
       background: transparent;
       --poster-color: transparent;
       --progress-bar-color: var(--accent);
       --progress-mask: rgba(6, 26, 28, 0.45);
     }
 
+    .flash {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 40;
+    }
+    .flash.flash-active { animation: flashPop 0.28s ease-out; }
+    @keyframes flashPop {
+      0% { opacity: 0.9; }
+      100% { opacity: 0; }
+    }
+
+    .topbar {
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top));
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 14px;
+      z-index: 20;
+      pointer-events: none;
+    }
+    .topbar button {
+      pointer-events: auto;
+    }
+
     .hud {
       position: fixed;
       inset: auto 0 0 0;
-      padding: 18px max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+      padding: 14px max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
       background: linear-gradient(180deg, transparent, rgba(4, 14, 15, 0.72) 18%, rgba(4, 14, 15, 0.94));
-      pointer-events: none;
+      z-index: 20;
     }
 
     .hud-inner {
       display: grid;
-      gap: 14px;
+      gap: 12px;
       max-width: 920px;
       margin: 0 auto;
-      padding: 16px;
+      padding: 14px;
       border: 1px solid var(--line);
       background: var(--panel);
       backdrop-filter: blur(12px);
       border-radius: 8px;
-      pointer-events: auto;
     }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(24px, 5vw, 44px);
-      line-height: 1.05;
-      letter-spacing: 0;
-    }
+    h1 { margin: 0; font-size: clamp(20px, 4.6vw, 32px); line-height: 1.1; }
+    p { margin: 0; color: var(--muted); line-height: 1.5; font-size: 14px; }
 
-    p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: 15px;
-    }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 
-    .model-switcher,
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-
-    button,
-    a.action {
+    button, a.action {
       appearance: none;
       border: 1px solid rgba(217, 255, 244, 0.3);
       border-radius: 8px;
@@ -110,36 +154,50 @@
       text-decoration: none;
       cursor: pointer;
     }
+    button:hover, a.action:hover { background: rgba(102, 217, 190, 0.22); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
 
-    button:hover,
-    a.action:hover {
-      background: rgba(102, 217, 190, 0.22);
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(6, 20, 21, 0.55);
+      border-color: rgba(217, 255, 244, 0.28);
+      font-size: 18px;
     }
 
-    .model-button[aria-pressed="true"] {
+    .pose-btn[aria-pressed="true"] {
       background: #e8fff7;
       border-color: rgba(232, 255, 247, 0.85);
       color: #062123;
     }
 
-    .status {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .ar-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      padding: 0 16px;
-      border-radius: 8px;
-      border: 1px solid rgba(217, 255, 244, 0.46);
+    .cta-primary {
       background: #e8fff7;
       color: #062123;
       font-weight: 750;
       box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
     }
+
+    .shutter {
+      width: 66px;
+      height: 66px;
+      border-radius: 999px;
+      background: #fff;
+      border: 4px solid rgba(232, 255, 247, 0.55);
+      box-shadow: 0 6px 22px rgba(0,0,0,0.35);
+      padding: 0;
+      align-self: center;
+    }
+    .shutter:active { transform: scale(0.92); }
+
+    .capture-row { justify-content: center; }
+
+    .status { font-size: 13px; color: var(--muted); }
 
     .unsupported {
       display: none;
@@ -150,62 +208,108 @@
       background: rgba(70, 47, 0, 0.28);
       font-size: 13px;
     }
+    model-viewer[ar-status="failed"] ~ .hud .unsupported { display: block; }
 
-    model-viewer[ar-status="failed"] + .hud .unsupported {
-      display: block;
+    [hidden] { display: none !important; }
+
+    /* 撮影結果モーダル */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 12, 13, 0.92);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 20px;
     }
+    .modal img {
+      max-width: min(92vw, 520px);
+      max-height: 62vh;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+    .modal .row { justify-content: center; }
   </style>
 </head>
 <body>
-  <main>
-    <model-viewer
-      id="dragonViewer"
-      src="assets/dragon_web_flight.glb"
-      ios-src="assets/dragon_web_flight.usdz"
-      poster="assets/images/thumbnail.jpg"
-      alt="三淵渓谷の龍モデル"
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      ar-placement="floor"
-      ar-scale="fixed"
-      camera-controls
-      touch-action="pan-y"
-      autoplay
-      animation-name="Flight_Loop_12s"
-      auto-rotate
-      auto-rotate-delay="1200"
-      rotation-per-second="18deg"
-      shadow-intensity="0.7"
-      shadow-softness="0.55"
-      exposure="1.05"
-      environment-image="neutral"
-      camera-orbit="35deg 68deg 8m"
-      min-camera-orbit="auto auto 3m"
-      max-camera-orbit="auto auto 26m"
-      field-of-view="35deg"
-      reveal="auto">
-      <button slot="ar-button" class="ar-button">ARで龍を見る</button>
-    </model-viewer>
+  <div class="stage">
+    <video id="cameraFeed" autoplay muted playsinline></video>
 
-    <section class="hud" aria-label="三淵渓谷 龍 WebAR">
-      <div class="hud-inner">
-        <div>
-          <h1>三淵渓谷 龍 WebAR</h1>
-          <p>表示する龍を選んでから、ARボタンで現実空間に配置できます。iPhoneはSafari、AndroidはChromeで開いてください。</p>
-        </div>
-        <div class="unsupported">AR表示を開始できませんでした。HTTPSで公開されているか、端末がAR表示に対応しているか確認してください。</div>
-        <div class="model-switcher" aria-label="龍モデル選択">
-          <button class="model-button" type="button" data-model="flight" aria-pressed="true">飛行する龍</button>
-          <button class="model-button" type="button" data-model="giant" aria-pressed="false">巨大な龍</button>
-        </div>
-        <div class="actions">
-          <button id="audioButton" type="button">飛行音を再生</button>
-          <a id="downloadLink" class="action" href="assets/dragon_web_flight.glb" download>GLBを確認</a>
-        </div>
-        <div id="status" class="status">飛行する龍を読み込み中です。</div>
+    <div class="dragon-wrap" id="dragonWrap">
+      <model-viewer
+        id="dragonViewer"
+        src="assets/dragon_web_flight.glb"
+        ios-src="assets/dragon_web_flight.usdz"
+        poster="assets/images/thumbnail.jpg"
+        alt="三淵渓谷の龍モデル"
+        ar
+        ar-modes="webxr scene-viewer quick-look"
+        ar-placement="floor"
+        ar-scale="fixed"
+        camera-controls
+        touch-action="pan-y"
+        animation-name="Flight_Loop_12s"
+        shadow-intensity="0.7"
+        shadow-softness="0.55"
+        exposure="1.05"
+        environment-image="neutral"
+        camera-orbit="35deg 68deg 8m"
+        min-camera-orbit="auto auto 3m"
+        max-camera-orbit="auto auto 26m"
+        field-of-view="35deg"
+        reveal="auto">
+        <button slot="ar-button" class="ar-button icon-btn" title="端末のAR機能で見る">AR</button>
+      </model-viewer>
+    </div>
+  </div>
+
+  <div class="flash" id="flashEl"></div>
+
+  <div class="topbar">
+    <button class="icon-btn" id="flipCameraBtn" title="カメラ切替" hidden>⟲</button>
+    <button class="icon-btn" id="stopCameraBtn" title="カメラを終了" hidden>✕</button>
+  </div>
+
+  <section class="hud" aria-label="三淵渓谷 龍 記念撮影">
+    <div class="hud-inner">
+      <div>
+        <h1>三淵渓谷 龍と記念撮影</h1>
+        <p id="introText">「龍を呼ぶ」をタップすると、カメラが起動して龍が現れます。ポーズを選んでシャッターを押してください。</p>
       </div>
-    </section>
-  </main>
+
+      <div class="unsupported">AR表示を開始できませんでした。HTTPSで公開されているか、端末がAR表示に対応しているか確認してください。</div>
+
+      <div class="row" id="callRow">
+        <button class="cta-primary" id="callDragonBtn">龍を呼ぶ</button>
+      </div>
+
+      <div class="row" id="poseBar" hidden aria-label="ポーズ選択"></div>
+
+      <div class="row capture-row" id="captureRow" hidden>
+        <button class="shutter" id="shutterBtn" title="撮影する" aria-label="撮影する"></button>
+      </div>
+
+      <div class="row">
+        <button id="audioButton" type="button">飛行音を再生</button>
+        <a id="downloadLink" class="action" href="assets/dragon_web_flight.glb" download>GLBを確認</a>
+      </div>
+
+      <div id="status" class="status">龍を呼ぶ準備ができています。</div>
+    </div>
+  </section>
+
+  <div class="modal" id="previewModal" hidden>
+    <img id="previewImg" alt="撮影した写真">
+    <div class="row">
+      <a id="downloadPhotoBtn" class="action cta-primary" download="mibuchi-dragon.png">写真を保存</a>
+      <button id="sharePhotoBtn">共有する</button>
+      <button id="retakeBtn">撮り直す</button>
+    </div>
+  </div>
 
   <audio id="dragonAudio" preload="none" loop>
     <source src="assets/audio/dragon_flight.mp3" type="audio/mpeg">
@@ -214,91 +318,298 @@
 
   <script>
     const viewer = document.querySelector("#dragonViewer");
+    const dragonWrap = document.querySelector("#dragonWrap");
     const status = document.querySelector("#status");
+    const introText = document.querySelector("#introText");
     const audio = document.querySelector("#dragonAudio");
     const audioButton = document.querySelector("#audioButton");
     const downloadLink = document.querySelector("#downloadLink");
-    const modelButtons = Array.from(document.querySelectorAll(".model-button"));
 
+    const video = document.querySelector("#cameraFeed");
+    const flashEl = document.querySelector("#flashEl");
+    const callRow = document.querySelector("#callRow");
+    const callDragonBtn = document.querySelector("#callDragonBtn");
+    const poseBar = document.querySelector("#poseBar");
+    const captureRow = document.querySelector("#captureRow");
+    const shutterBtn = document.querySelector("#shutterBtn");
+    const flipCameraBtn = document.querySelector("#flipCameraBtn");
+    const stopCameraBtn = document.querySelector("#stopCameraBtn");
+
+    const previewModal = document.querySelector("#previewModal");
+    const previewImg = document.querySelector("#previewImg");
+    const downloadPhotoBtn = document.querySelector("#downloadPhotoBtn");
+    const sharePhotoBtn = document.querySelector("#sharePhotoBtn");
+    const retakeBtn = document.querySelector("#retakeBtn");
+
+    // --- モデル / ポーズ定義 -------------------------------------------------
+    // key: 内部識別子 / label: ボタン表示名 / model: 読み込む龍モデル (flight or giant)
+    // animation: 再生するアニメーションクリップ名 / hold: true なら1回再生後その姿勢で静止
     const models = {
       flight: {
-        label: "飛行する龍",
         src: "assets/dragon_web_flight.glb",
         iosSrc: "assets/dragon_web_flight.usdz",
-        animation: "Flight_Loop_12s",
         orbit: "35deg 68deg 8m",
         maxOrbit: "auto auto 26m"
       },
       giant: {
-        label: "巨大な龍",
         src: "assets/dragon_web_giant_approach.glb",
         iosSrc: "assets/dragon_web_giant_approach.usdz",
-        animation: "Giant_Approach_Overhead_Circle",
         orbit: "35deg 70deg 14m",
         maxOrbit: "auto auto 40m"
       }
     };
 
+    // 実際のGLBに含まれるアニメーションクリップ名に合わせて調整してください。
+    // 同じモデルに複数のクリップがある場合、下記に追加すればポーズボタンが増えます。
+    const posePresets = [
+      { key: "flight-loop", label: "飛行ポーズ", model: "flight", animation: "Flight_Loop_12s", hold: false },
+      { key: "giant-approach", label: "見下ろすポーズ", model: "giant", animation: "Giant_Approach_Overhead_Circle", hold: true }
+    ];
+
     let currentModelKey = "flight";
+    let currentPoseKey = null;
+    let dragonAppeared = false;
+    let cameraStream = null;
+    let cameraStarted = false;
+    let facingMode = "environment";
 
-    async function playAvailableAnimation() {
-      const model = models[currentModelKey];
-      const animations = viewer.availableAnimations || [];
-      console.log("[WEBAR_ANIMATIONS]", model.label, animations);
-
-      if (model.animation && animations.includes(model.animation)) {
-        viewer.animationName = model.animation;
-        await viewer.play({ repetitions: Infinity });
-        status.textContent = `${model.label}の準備ができました。再生中: ${model.animation}`;
-        return;
-      }
-
-      if (animations.length > 0) {
-        viewer.animationName = animations[0];
-        await viewer.play({ repetitions: Infinity });
-        status.textContent = `${model.label}の準備ができました。再生中: ${animations[0]}`;
-        return;
-      }
-
-      viewer.animationName = "";
-      status.textContent = `${model.label}の準備ができました。`;
-    }
-
-    function setModel(key) {
-      const model = models[key];
-      if (!model || key === currentModelKey) {
-        return;
-      }
-
-      currentModelKey = key;
-      modelButtons.forEach((button) => {
-        button.setAttribute("aria-pressed", String(button.dataset.model === key));
+    // --- モデル読み込み --------------------------------------------------------
+    function loadModel(key) {
+      return new Promise((resolve) => {
+        const model = models[key];
+        currentModelKey = key;
+        viewer.addEventListener("load", resolve, { once: true });
+        viewer.pause();
+        viewer.src = model.src;
+        viewer.setAttribute("ios-src", model.iosSrc);
+        viewer.setAttribute("camera-orbit", model.orbit);
+        viewer.setAttribute("max-camera-orbit", model.maxOrbit);
+        downloadLink.href = model.src;
       });
-
-      status.textContent = `${model.label}を読み込み中です。`;
-      viewer.pause();
-      viewer.src = model.src;
-      viewer.setAttribute("ios-src", model.iosSrc);
-      viewer.setAttribute("camera-orbit", model.orbit);
-      viewer.setAttribute("max-camera-orbit", model.maxOrbit);
-      viewer.setAttribute("animation-name", model.animation);
-      downloadLink.href = model.src;
     }
 
-    modelButtons.forEach((button) => {
-      button.addEventListener("click", () => setModel(button.dataset.model));
-    });
+    async function playPose(pose) {
+      if (pose.model !== currentModelKey) {
+        status.textContent = `${pose.label} を読み込み中です。`;
+        await loadModel(pose.model);
+      }
+      const animations = viewer.availableAnimations || [];
+      const animName = animations.includes(pose.animation) ? pose.animation : animations[0];
 
-    viewer.addEventListener("load", playAvailableAnimation);
+      highlightPoseButton(pose.key);
+      currentPoseKey = pose.key;
+
+      if (!animName) {
+        status.textContent = `${pose.label} を表示中です（アニメーションなし）。`;
+        return;
+      }
+
+      viewer.animationName = animName;
+      if (pose.hold) {
+        const onFinished = () => viewer.pause();
+        viewer.addEventListener("finished", onFinished, { once: true });
+        await viewer.play({ repetitions: 1 });
+        // finished イベントが発火しない環境向けの保険
+        window.setTimeout(() => {
+          if (viewer.animationName === animName) viewer.pause();
+        }, Math.max((viewer.duration || 2) * 1000 + 150, 400));
+      } else {
+        await viewer.play({ repetitions: Infinity });
+      }
+      status.textContent = `${pose.label} で撮影できます。`;
+    }
+
+    function highlightPoseButton(key) {
+      poseBar.querySelectorAll(".pose-btn").forEach((btn) => {
+        btn.setAttribute("aria-pressed", String(btn.dataset.key === key));
+      });
+    }
+
+    function buildPoseBar() {
+      poseBar.innerHTML = "";
+      posePresets.forEach((pose) => {
+        const btn = document.createElement("button");
+        btn.className = "pose-btn";
+        btn.type = "button";
+        btn.textContent = pose.label;
+        btn.dataset.key = pose.key;
+        btn.setAttribute("aria-pressed", "false");
+        btn.addEventListener("click", () => playPose(pose));
+        poseBar.appendChild(btn);
+      });
+    }
+
+    // --- カメラ制御 --------------------------------------------------------
+    async function startCamera() {
+      try {
+        if (cameraStream) {
+          cameraStream.getTracks().forEach((t) => t.stop());
+        }
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode, width: { ideal: 1920 }, height: { ideal: 1080 } },
+          audio: false
+        });
+        video.srcObject = cameraStream;
+        await video.play();
+        document.body.classList.add("camera-active");
+        cameraStarted = true;
+        flipCameraBtn.hidden = false;
+        stopCameraBtn.hidden = false;
+        return true;
+      } catch (err) {
+        status.textContent = "カメラを起動できませんでした。ブラウザのカメラ許可設定をご確認ください。";
+        return false;
+      }
+    }
+
+    function stopCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach((t) => t.stop());
+        cameraStream = null;
+      }
+      cameraStarted = false;
+      document.body.classList.remove("camera-active");
+      flipCameraBtn.hidden = true;
+      stopCameraBtn.hidden = true;
+      dragonWrap.classList.remove("is-visible");
+      dragonAppeared = false;
+      callRow.hidden = false;
+      poseBar.hidden = true;
+      captureRow.hidden = true;
+      introText.textContent = "「龍を呼ぶ」をタップすると、カメラが起動して龍が現れます。ポーズを選んでシャッターを押してください。";
+      status.textContent = "龍を呼ぶ準備ができています。";
+    }
+
+    async function flipCamera() {
+      facingMode = facingMode === "environment" ? "user" : "environment";
+      if (cameraStarted) await startCamera();
+    }
+
+    // --- 龍を呼ぶ ------------------------------------------------------------
+    async function callDragon() {
+      callDragonBtn.disabled = true;
+      const ok = cameraStarted || (await startCamera());
+      if (!ok) {
+        callDragonBtn.disabled = false;
+        return;
+      }
+      dragonWrap.classList.add("is-visible");
+      dragonAppeared = true;
+      callRow.hidden = true;
+      poseBar.hidden = false;
+      captureRow.hidden = false;
+      introText.textContent = "ポーズを選んで、龍と一緒に写真を撮りましょう。";
+      await playPose(posePresets[0]);
+      callDragonBtn.disabled = false;
+    }
+
+    // --- 撮影（カメラ映像 + 3Dモデルの合成） -------------------------------------
+    function drawCover(ctx, media, mediaW, mediaH, cw, ch, mirror) {
+      const mediaRatio = mediaW / mediaH;
+      const canvasRatio = cw / ch;
+      let sx, sy, sw, sh;
+      if (mediaRatio > canvasRatio) {
+        sh = mediaH;
+        sw = sh * canvasRatio;
+        sy = 0;
+        sx = (mediaW - sw) / 2;
+      } else {
+        sw = mediaW;
+        sh = sw / canvasRatio;
+        sx = 0;
+        sy = (mediaH - sh) / 2;
+      }
+      ctx.save();
+      if (mirror) {
+        ctx.translate(cw, 0);
+        ctx.scale(-1, 1);
+      }
+      ctx.drawImage(media, sx, sy, sw, sh, 0, 0, cw, ch);
+      ctx.restore();
+    }
+
+    async function capturePhoto() {
+      if (!cameraStarted || !dragonAppeared) return;
+      shutterBtn.disabled = true;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cw = Math.round(window.innerWidth * dpr);
+      const ch = Math.round(window.innerHeight * dpr);
+      const canvas = document.createElement("canvas");
+      canvas.width = cw;
+      canvas.height = ch;
+      const ctx = canvas.getContext("2d");
+
+      if (video.videoWidth) {
+        drawCover(ctx, video, video.videoWidth, video.videoHeight, cw, ch, facingMode === "user");
+      }
+
+      try {
+        const blob = await viewer.toBlob({ mimeType: "image/png", idealAspect: false });
+        const bitmap = await createImageBitmap(blob);
+        ctx.drawImage(bitmap, 0, 0, cw, ch);
+      } catch (err) {
+        console.warn("モデルの合成に失敗しました", err);
+      }
+
+      flashEl.classList.add("flash-active");
+      window.setTimeout(() => flashEl.classList.remove("flash-active"), 260);
+
+      canvas.toBlob((blob) => showPreview(canvas, blob), "image/png");
+      shutterBtn.disabled = false;
+    }
+
+    let lastPhotoBlob = null;
+
+    function showPreview(canvas, blob) {
+      lastPhotoBlob = blob;
+      const url = URL.createObjectURL(blob);
+      previewImg.src = url;
+      downloadPhotoBtn.href = url;
+      previewModal.hidden = false;
+    }
+
+    function closePreview() {
+      previewModal.hidden = true;
+      if (previewImg.src) URL.revokeObjectURL(previewImg.src);
+      previewImg.src = "";
+    }
+
+    async function sharePhoto() {
+      if (!lastPhotoBlob) return;
+      const file = new File([lastPhotoBlob], "mibuchi-dragon.png", { type: "image/png" });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "三淵渓谷 龍と記念撮影",
+            text: "三淵渓谷の龍と撮影しました"
+          });
+        } catch (err) {
+          // ユーザーがキャンセルした場合などは無視
+        }
+      } else {
+        alert("この端末・ブラウザは画像の直接共有に対応していません。「写真を保存」からご利用ください。");
+      }
+    }
+
+    // --- イベント登録 -----------------------------------------------------
+    buildPoseBar();
+
+    callDragonBtn.addEventListener("click", callDragon);
+    shutterBtn.addEventListener("click", capturePhoto);
+    flipCameraBtn.addEventListener("click", flipCamera);
+    stopCameraBtn.addEventListener("click", stopCamera);
+    retakeBtn.addEventListener("click", closePreview);
+    sharePhotoBtn.addEventListener("click", sharePhoto);
 
     viewer.addEventListener("error", () => {
-      const model = models[currentModelKey];
-      status.textContent = `${model.src} / ${model.iosSrc} を assets フォルダーに配置してください。`;
+      status.textContent = "モデルファイルを assets フォルダーに配置してください。";
     });
 
     viewer.addEventListener("ar-status", (event) => {
       if (event.detail.status === "session-started") {
-        status.textContent = "AR表示中です。周囲の安全を確認して体験してください。";
+        status.textContent = "端末のAR表示中です。周囲の安全を確認して体験してください。";
       }
     });
 
@@ -307,16 +618,19 @@
         if (audio.paused) {
           await audio.play();
           audioButton.textContent = "飛行音を停止";
-          status.textContent = "飛行音を再生しています。";
         } else {
           audio.pause();
           audioButton.textContent = "飛行音を再生";
-          status.textContent = "飛行音を停止しました。";
         }
       } catch (error) {
         status.textContent = "音声ファイルを確認してください。dragon_flight.mp3 または dragon_flight.wav が必要です。";
       }
     });
+
+    // 初期モデルの availableAnimations を確認しておく（コンソール確認用）
+    viewer.addEventListener("load", () => {
+      console.log("[MODEL_ANIMATIONS]", currentModelKey, viewer.availableAnimations);
+    }, { once: true });
   </script>
 </body>
 </html>
